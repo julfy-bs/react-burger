@@ -1,0 +1,25 @@
+.link {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 40px;
+  box-sizing: border-box;
+  color: var(--colors-button-inactive);
+  cursor: pointer;
+  display: flex;
+  margin: 0;
+  text-decoration: none;
+  transition: color .25s ease, opacity .25s ease;
+}
+
+.link:hover {
+  opacity: .8;
+}
+
+.link_active {
+  color: var(--text-primary-color);
+}
+
+.link_active:hover {
+  cursor: default;
+  opacity: 1;
+}
