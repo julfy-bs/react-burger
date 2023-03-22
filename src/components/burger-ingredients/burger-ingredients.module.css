@@ -13,10 +13,21 @@
   list-style: none;
   margin: 40px 0 0;
   padding: 0;
+  max-height: 756px;
+  overflow-y: scroll;
+  box-sizing: border-box;
 }
 
-.ingredients__title {
+.ingredients::-webkit-scrollbar {
+  width: 8px;
+}
 
+.ingredients::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.ingredients::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
 }
 
 .ingredients__column {
@@ -36,39 +47,4 @@
   list-style: none;
   margin: 0;
   padding: 0 24px;
-}
-
-.ingredients__item {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  justify-content: space-between;
-  min-height: 208px;
-  position: relative;
-}
-
-.ingredients__image {
-  display: block;
-  max-height: 120px;
-  max-width: 240px;
-  object-fit: cover;
-  object-position: center;
-  width: 100%;
-}
-
-.ingredients__price {
-  align-items: center;
-  display: flex;
-  gap: 9px;
-  font-size: 28px;
-  line-height: 24px;
-}
-
-.ingredients__name {
-  max-width: 272px;
-  min-height: 48px;
-  overflow: hidden;
-  text-align: center;
-  width: 100%;
 }
