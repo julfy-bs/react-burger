@@ -1,49 +1,41 @@
 import React, { Component } from 'react';
 import headerStyles from './header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
+import HeaderLink from '../header-link/header-link.jsx';
 
 class Header extends Component {
 
   render() {
     return (
       <header
-        className={`${headerStyles.header} text text_type_main-default pt-4 pb-4`}
+        className={
+          clsx(headerStyles.header, 'text', 'text_type_main-default', 'pt-4', 'pb-4')
+        }
       >
-        <div className={headerStyles.content}>
+        <div className={clsx(headerStyles.content)}>
           <nav>
-            <ul className={headerStyles.navigation}>
+            <ul className={clsx(headerStyles.navigation)}>
               <li>
-                <a
-                  href="/#"
-                  className={`${headerStyles.link} ${headerStyles.link_active} pt-4 pr-5 pb-4 pl-5`}
-                >
+                <HeaderLink text={'Конструктор'} active={true}>
                   <BurgerIcon type="primary"/>
-                  <span className={`ml-2`}>Конструктор</span>
-                </a>
+                </HeaderLink>
               </li>
               <li>
-                <a
-                  href="/#"
-                  className={`${headerStyles.link} pt-4 pr-5 pb-4 pl-5`}
-                >
+                <HeaderLink text={'Лента заказов'}>
                   <ListIcon type="secondary"/>
-                  <span className={`ml-2`}>Лента заказов</span>
-                </a>
+                </HeaderLink>
               </li>
             </ul>
           </nav>
 
-          <div className={`${headerStyles.logo}`}>
+          <div className={clsx(headerStyles.logo)}>
             <Logo></Logo>
           </div>
-          <div className={`${headerStyles.profile}`}>
-            <a
-              href="/#"
-              className={`${headerStyles.link} pt-4 pr-5 pb-4 pl-5`}
-            >
+          <div className={clsx(headerStyles.profile)}>
+            <HeaderLink text={'Лента заказов'}>
               <ProfileIcon type="secondary"/>
-              <span className={`ml-2`}>Личный кабинет</span>
-            </a>
+            </HeaderLink>
           </div>
         </div>
       </header>
