@@ -63,7 +63,7 @@ class BurgerIngredients extends Component {
           }
         </ul>
         <ul
-          className={clsx('mt-10', styles.ingredients)}
+          className={clsx(styles.ingredients)}
         >
           {
             this.props.data.map((component, index) => (
