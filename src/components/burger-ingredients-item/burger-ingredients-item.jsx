@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './burger-ingredients-item.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ingredientType } from '../../utils/types.js';
 
 class BurgerIngredientsItem extends Component {
   render() {
     return (
       <li
-        key={this.props.ingredient._id}
         className={clsx(styles.ingredients__item)}
       >
         <Counter
@@ -53,20 +52,7 @@ class BurgerIngredientsItem extends Component {
 }
 
 BurgerIngredientsItem.propTypes = {
-  ingredient: PropTypes.exact({
-    '_id': PropTypes.string.isRequired,
-    'name': PropTypes.string.isRequired,
-    'type': PropTypes.oneOf(['main', 'bun', 'sauce']),
-    'proteins': PropTypes.number.isRequired,
-    'fat': PropTypes.number.isRequired,
-    'carbohydrates': PropTypes.number.isRequired,
-    'calories': PropTypes.number.isRequired,
-    'price': PropTypes.number.isRequired,
-    'image': PropTypes.string.isRequired,
-    'image_mobile': PropTypes.string.isRequired,
-    'image_large': PropTypes.string.isRequired,
-    '__v': PropTypes.number.isRequired
-  })
+  ingredient: ingredientType.isRequired
 };
 
 export default BurgerIngredientsItem;

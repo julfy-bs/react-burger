@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import styles from './burger-ingredients.module.css';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item.jsx';
+import styles from './burger-ingredients.module.css';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { componentType } from '../../utils/types.js';
 
 class BurgerIngredients extends Component {
 
@@ -47,9 +48,9 @@ class BurgerIngredients extends Component {
           className={clsx(styles.tabs_list)}
         >
           {
-            this.state.tabs.map((tab, index) => (
+            this.state.tabs.map(tab => (
               <li
-                key={index}
+                key={tab.value}
               >
                 <Tab
                   value={tab.value}
@@ -94,13 +95,11 @@ class BurgerIngredients extends Component {
 }
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-  loading: PropTypes.bool
+  data: PropTypes.arrayOf(componentType),
 };
 
 BurgerIngredients.defaultProps = {
   data: [],
-  loading: true
 };
 
 export default BurgerIngredients;

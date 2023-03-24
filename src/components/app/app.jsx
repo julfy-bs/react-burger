@@ -4,6 +4,7 @@ import Header from '../header/header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
 import clsx from 'clsx';
 import { data } from '../../utils/data.js';
+import { cart } from '../../utils/cart.js';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 
 class App extends Component {
@@ -11,7 +12,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
       components: [
         {
           name: 'Булки',
@@ -30,137 +30,7 @@ class App extends Component {
         }
       ],
       componentsIdsMap: [],
-      cart: {
-        price: 0,
-        bun: {
-          "_id":"60666c42cc7b410027a1a9b2",
-          "name":"Флюоресцентная булка R2-D3",
-          "type":"bun",
-          "proteins":44,
-          "fat":26,
-          "carbohydrates":85,
-          "calories":643,
-          "price":988,
-          "image":"https://code.s3.yandex.net/react/code/bun-01.png",
-          "image_mobile":"https://code.s3.yandex.net/react/code/bun-01-mobile.png",
-          "image_large":"https://code.s3.yandex.net/react/code/bun-01-large.png",
-          "__v":0
-        },
-        ingredients: [
-          {
-            "_id":"60666c42cc7b410027a1a9bf",
-            "name":"Сыр с астероидной плесенью",
-            "type":"main",
-            "proteins":84,
-            "fat":48,
-            "carbohydrates":420,
-            "calories":3377,
-            "price":4142,
-            "image":"https://code.s3.yandex.net/react/code/cheese.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/cheese-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/cheese-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9b3",
-            "name":"Филе Люминесцентного тетраодонтимформа",
-            "type":"main",
-            "proteins":44,
-            "fat":26,
-            "carbohydrates":85,
-            "calories":643,
-            "price":988,
-            "image":"https://code.s3.yandex.net/react/code/meat-03.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/meat-03-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/meat-03-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9bf",
-            "name":"Сыр с астероидной плесенью",
-            "type":"main",
-            "proteins":84,
-            "fat":48,
-            "carbohydrates":420,
-            "calories":3377,
-            "price":4142,
-            "image":"https://code.s3.yandex.net/react/code/cheese.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/cheese-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/cheese-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9b3",
-            "name":"Филе Люминесцентного тетраодонтимформа",
-            "type":"main",
-            "proteins":44,
-            "fat":26,
-            "carbohydrates":85,
-            "calories":643,
-            "price":988,
-            "image":"https://code.s3.yandex.net/react/code/meat-03.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/meat-03-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/meat-03-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9bf",
-            "name":"Сыр с астероидной плесенью",
-            "type":"main",
-            "proteins":84,
-            "fat":48,
-            "carbohydrates":420,
-            "calories":3377,
-            "price":4142,
-            "image":"https://code.s3.yandex.net/react/code/cheese.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/cheese-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/cheese-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9b3",
-            "name":"Филе Люминесцентного тетраодонтимформа",
-            "type":"main",
-            "proteins":44,
-            "fat":26,
-            "carbohydrates":85,
-            "calories":643,
-            "price":988,
-            "image":"https://code.s3.yandex.net/react/code/meat-03.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/meat-03-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/meat-03-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9bf",
-            "name":"Сыр с астероидной плесенью",
-            "type":"main",
-            "proteins":84,
-            "fat":48,
-            "carbohydrates":420,
-            "calories":3377,
-            "price":4142,
-            "image":"https://code.s3.yandex.net/react/code/cheese.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/cheese-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/cheese-large.png",
-            "__v":0
-          },
-          {
-            "_id":"60666c42cc7b410027a1a9b3",
-            "name":"Филе Люминесцентного тетраодонтимформа",
-            "type":"main",
-            "proteins":44,
-            "fat":26,
-            "carbohydrates":85,
-            "calories":643,
-            "price":988,
-            "image":"https://code.s3.yandex.net/react/code/meat-03.png",
-            "image_mobile":"https://code.s3.yandex.net/react/code/meat-03-mobile.png",
-            "image_large":"https://code.s3.yandex.net/react/code/meat-03-large.png",
-            "__v":0
-          }
-        ]
-      }
+      cart: cart
     };
   }
 
@@ -193,7 +63,7 @@ class App extends Component {
         <Header/>
         <main className={clsx(appStyles.main, 'pb-10')}>
           <div className={clsx(appStyles.main_container)}>
-            <BurgerIngredients data={this.state.components} loading={this.state.loading}/>
+            <BurgerIngredients data={this.state.components}/>
             <BurgerConstructor cart={this.state.cart} />
           </div>
         </main>

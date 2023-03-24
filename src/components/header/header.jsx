@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import headerStyles from './header.module.css';
-import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
+import React, { Component } from 'react';
+import styles from './header.module.css';
+import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import HeaderLink from '../header-link/header-link.jsx';
 
 class Header extends Component {
@@ -10,12 +10,12 @@ class Header extends Component {
     return (
       <header
         className={
-          clsx(headerStyles.header, 'text', 'text_type_main-default', 'pt-4', 'pb-4')
+          clsx(styles.header, 'text', 'text_type_main-default', 'pt-4', 'pb-4')
         }
       >
-        <div className={clsx(headerStyles.content)}>
+        <div className={clsx(styles.content)}>
           <nav>
-            <ul className={clsx(headerStyles.navigation)}>
+            <ul className={clsx(styles.navigation)}>
               <li>
                 <HeaderLink text={'Конструктор'} active={true}>
                   <BurgerIcon type="primary"/>
@@ -29,10 +29,10 @@ class Header extends Component {
             </ul>
           </nav>
 
-          <div className={clsx(headerStyles.logo)}>
+          <div className={clsx(styles.logo)}>
             <Logo></Logo>
           </div>
-          <div className={clsx(headerStyles.profile)}>
+          <div className={clsx(styles.profile)}>
             <HeaderLink text={'Лента заказов'}>
               <ProfileIcon type="secondary"/>
             </HeaderLink>
