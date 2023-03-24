@@ -1,22 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import headerLinkStyles from './header-link.module.css';
+import styles from './header-link.module.css';
+import PropTypes from 'prop-types';
 
-class HeaderLink extends Component {
-  render() {
-    return (
-      <a href="/#"
-         className={
-           clsx(headerLinkStyles.link, this.props.active && headerLinkStyles.link_active, 'pt-4', 'pr-5', 'pb-4', 'pl-5')
-         }
-      >
-        {this.props.children}
-        <span className={clsx('ml-2')}>{this.props.text}</span>
-      </a>
-    );
-  }
+const HeaderLink = (props) => {
+  return (
+    <a href="/#"
+       className={
+         clsx(styles.link, props.active && styles.link_active, 'pt-4', 'pr-5', 'pb-4', 'pl-5')
+       }
+    >
+      {props.children}
+      <span className={clsx('ml-2')}>{props.text}</span>
+    </a>
+  );
 }
+
 
 HeaderLink.propTypes = {
   text: PropTypes.string.isRequired,

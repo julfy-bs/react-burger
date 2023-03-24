@@ -1,4 +1,4 @@
-export const cart = {
+export const cartData = {
   price: 0,
     bun: {
     "_id":"60666c42cc7b410027a1a9b2",
