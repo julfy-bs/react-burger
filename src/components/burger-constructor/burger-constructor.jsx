@@ -17,7 +17,7 @@ class BurgerConstructor extends Component {
               extraClass={clsx(styles.cart__bun)}
               type={'top'}
               isLocked={true}
-              text={this.props.cart.bun.name}
+              text={`${this.props.cart.bun.name} (верх)`}
               price={this.props.cart.bun.price}
               thumbnail={this.props.cart.bun.image}
             />
@@ -48,7 +48,7 @@ class BurgerConstructor extends Component {
               extraClass={clsx(styles.cart__bun)}
               type={'bottom'}
               isLocked={true}
-              text={this.props.cart.bun.name}
+              text={`${this.props.cart.bun.name} (низ)`}
               price={this.props.cart.bun.price}
               thumbnail={this.props.cart.bun.image}
             />
