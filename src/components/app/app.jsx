@@ -6,8 +6,8 @@ import Header from '../header/header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 
-import { ingredientsData } from '../../utils/data.js';
 import { cartData } from '../../utils/cart.js';
+import { getIngredients } from '../../api/getIngredients.js';
 
 const App = () => {
   const [components, setComponents] = useState([
@@ -28,19 +28,30 @@ const App = () => {
     }
   ]);
   const [cart] = useState(cartData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => createBurgerComponentsArray(ingredientsData), [ingredientsData]);
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // loading: true;
+        const { data } = await getIngredients();
+        configureIngredientsArray(data);
+      } catch (e) {
+        // user error;
+        throw new Error(e);
+      } finally {
+        //   loading: false;
+      }
+    };
+    void loadData();
+  });
 
-  const createBurgerComponentsArray = (data) => {
+  const configureIngredientsArray = (data) => {
     const updatedComponents = [...components];
     data.forEach(ingredient => {
-      updatedComponents.forEach((component, index) =>
-        (!updatedComponents[index].items.includes(ingredient)
-          && component.type === ingredient.type)
-          ? updatedComponents[index].items.push(ingredient)
-          : null
-      );
+      updatedComponents.forEach((component) =>
+        (component.type === ingredient.type && !component.items.find(item => item._id === ingredient._id))
+          ? component.items.push(ingredient)
+          : null);
     });
     setComponents(updatedComponents);
   };
