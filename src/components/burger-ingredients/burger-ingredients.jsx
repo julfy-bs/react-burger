@@ -2,30 +2,14 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item.jsx';
 import { componentType } from '../../utils/types.js';
+import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs.jsx';
+import { ingredientTabs } from '../../utils/config.js';
 
 const BurgerIngredients = (props) => {
   const [currentTab, setCurrentTab] = useState('one');
-  const [tabs] = useState([
-    {
-      name: 'Булки',
-      value: 'one',
-      clickFunction: () => changeActiveTab('one')
-    },
-    {
-      name: 'Соусы',
-      value: 'two',
-      clickFunction: () => changeActiveTab('two')
-    },
-    {
-      name: 'Начинки',
-      value: 'three',
-      clickFunction: () => changeActiveTab('three')
-    }
-  ]);
-
+  const [tabs] = useState(ingredientTabs);
   const changeActiveTab = (string) => setCurrentTab(string);
 
   return (
@@ -35,25 +19,11 @@ const BurgerIngredients = (props) => {
       >
         Соберите бургер
       </h1>
-      <ul
-        className={clsx(styles.tabs_list)}
-      >
-        {
-          tabs.map(tab => (
-            <li
-              key={tab.value}
-            >
-              <Tab
-                value={tab.value}
-                active={currentTab === tab.value}
-                onClick={tab.clickFunction}
-              >
-                {tab.name}
-              </Tab>
-            </li>
-          ))
-        }
-      </ul>
+      <BurgerIngredientsTabs
+        tabs={tabs}
+        currentTab={currentTab}
+        changeTab={changeActiveTab}
+      />
       <ul
         className={clsx(styles.ingredients)}
       >

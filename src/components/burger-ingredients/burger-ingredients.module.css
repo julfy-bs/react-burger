@@ -1,11 +1,3 @@
-.tabs_list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  list-style: none;
-  margin: 20px 0 0;
-  padding: 0;
-}
-
 .ingredients {
   display: flex;
   flex-direction: column;
