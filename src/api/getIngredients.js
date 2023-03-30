@@ -1,11 +1,26 @@
-import { url as baseUrl } from '../utils/enum.js';
-const checkResponse = (res) => (res.ok) ? res.json() : Promise.reject(`${res.statusText}${res.status}`);
+import { serverConfig } from '../utils/config.js';
 
-const getIngredients = (url = '', options = {}) => {
-  const computedUrl = `${baseUrl}/${url}`;
-  return fetch(computedUrl, options).then(r => checkResponse(r));
-}
+const Api = (baseUrl, headers) => {
+  const checkResponse = (res) => (res.ok) ? res.json() : Promise.reject(JSON.parse(JSON.stringify(res.json())))
 
-export {
-  getIngredients
-}
+  const request = async (url, options = {}) => {
+    const computedUrl = `${baseUrl}/${url}`;
+    const res = await fetch(computedUrl, {
+      headers: headers,
+      ...options,
+    });
+    return checkResponse(res);
+  };
+
+  const getIngredients = () => {
+    return request('ingredients');
+  };
+
+  const createOrder = () => {
+    return 345436;
+  };
+
+  return { getIngredients, createOrder };
+};
+
+export const api = Api(serverConfig.baseUrl, serverConfig.headers);

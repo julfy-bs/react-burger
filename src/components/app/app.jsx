@@ -7,8 +7,9 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 
 import { cartData } from '../../utils/cart.js';
-import { getIngredients } from '../../api/getIngredients.js';
-import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
+
+import Modal from '../modal/modal.jsx';
+import { api } from '../../api/getIngredients.js';
 
 const App = () => {
   const [components, setComponents] = useState([
@@ -34,7 +35,8 @@ const App = () => {
     const loadData = async () => {
       try {
         // loading: true;
-        const { data } = await getIngredients();
+        const { data } = await api.getIngredients();
+        console.log(data);
         configureIngredientsArray(data);
       } catch (e) {
         // user error;
@@ -44,7 +46,8 @@ const App = () => {
       }
     };
     void loadData();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const configureIngredientsArray = (data) => {
     const updatedComponents = [...components];
@@ -64,9 +67,11 @@ const App = () => {
         <div className={clsx(styles.main_container)}>
           <BurgerIngredients data={components}/>
           <BurgerConstructor cart={cart}/>
-          <ModalOverlay opened={true} />
         </div>
       </main>
+      <Modal open={true} title={'Детали ингредиента'}>
+        <h1>123</h1>
+      </Modal>
     </>
   );
 };
