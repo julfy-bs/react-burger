@@ -6,7 +6,7 @@ import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktiku
 
 const BurgerConstructor = (props) => {
   return (
-    <section className={clsx('mt-25', styles.cart)}>
+    <section className={clsx(styles.section, 'mt-25')}>
       <ul className={clsx(styles.cart__list)}>
         <li
           className={clsx(styles.cart__item)}

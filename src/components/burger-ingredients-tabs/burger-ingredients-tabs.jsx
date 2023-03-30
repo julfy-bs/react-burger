@@ -30,8 +30,8 @@ const BurgerIngredientsTabs = ({ tabs, currentTab, changeTab }) => {
 
 BurgerIngredientsTabs.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired
+    name: PropTypes.oneOf(['Булки', 'Соусы', 'Начинки']).isRequired,
+    value: PropTypes.oneOf(['one', 'two', 'three']).isRequired
   })),
   currentTab: PropTypes.string.isRequired,
   changeTab: PropTypes.func.isRequired

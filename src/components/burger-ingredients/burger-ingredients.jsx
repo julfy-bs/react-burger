@@ -2,20 +2,20 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
-import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item.jsx';
 import { componentType } from '../../utils/types.js';
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs.jsx';
 import { ingredientTabs } from '../../utils/config.js';
+import BurgerIngredientsList from '../burger-ingredients-list/burger-ingredients-list.jsx';
 
-const BurgerIngredients = (props) => {
+const BurgerIngredients = ({ ingredients }) => {
   const [currentTab, setCurrentTab] = useState('one');
   const [tabs] = useState(ingredientTabs);
   const changeActiveTab = (string) => setCurrentTab(string);
 
   return (
-    <section>
+    <section className={clsx(styles.section, 'mt-10')}>
       <h1
-        className={clsx('text', 'text_type_main-large', 'mt-10')}
+        className={clsx('text', 'text_type_main-large')}
       >
         Соберите бургер
       </h1>
@@ -24,43 +24,14 @@ const BurgerIngredients = (props) => {
         currentTab={currentTab}
         changeTab={changeActiveTab}
       />
-      <ul
-        className={clsx(styles.ingredients)}
-      >
-        {
-          props.data.map((component, index) => (
-            <li
-              className={clsx(styles.ingredients__column)}
-              key={index}
-            >
-              <h2
-                className={clsx('text', 'text_type_main-medium')}
-              >
-                {component.name}
-              </h2>
-              <ul className={clsx(styles.ingredients__list)}
-              >
-                {
-                  component.items.map(item => (
-                    <BurgerIngredientsItem ingredient={item} key={item._id}/>
-                  ))
-                }
-              </ul>
-            </li>
-          ))
-        }
-      </ul>
+      <BurgerIngredientsList ingredients={ingredients} />
     </section>
   );
 };
 
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(componentType),
-};
-
-BurgerIngredients.defaultProps = {
-  data: [],
+  data: PropTypes.arrayOf(componentType.isRequired),
 };
 
 export default BurgerIngredients;
