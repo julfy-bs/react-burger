@@ -36,7 +36,6 @@ const App = () => {
       try {
         // loading: true;
         const { data } = await api.getIngredients();
-        console.log(data);
         configureIngredientsArray(data);
       } catch (e) {
         // user error;
