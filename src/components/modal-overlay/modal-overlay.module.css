@@ -1,0 +1,16 @@
+.modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s ease, visibility .5s ease;
+}
+
+.modal__overlay_opened {
+  visibility: visible;
+  opacity: 1;
+}

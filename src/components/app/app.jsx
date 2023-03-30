@@ -8,6 +8,7 @@ import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 
 import { cartData } from '../../utils/cart.js';
 import { getIngredients } from '../../api/getIngredients.js';
+import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
 
 const App = () => {
   const [components, setComponents] = useState([
@@ -63,6 +64,7 @@ const App = () => {
         <div className={clsx(styles.main_container)}>
           <BurgerIngredients data={components}/>
           <BurgerConstructor cart={cart}/>
+          <ModalOverlay opened={true} />
         </div>
       </main>
     </>
