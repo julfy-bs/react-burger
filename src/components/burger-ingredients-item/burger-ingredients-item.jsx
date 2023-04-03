@@ -2,49 +2,62 @@ import clsx from 'clsx';
 import styles from './burger-ingredients-item.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../utils/types.js';
+import Modal from '../modal/modal.jsx';
+import { useState } from 'react';
 
-const BurgerIngredientsItem = (props) => {
+const BurgerIngredientsItem = ({ ingredient }) => {
+  const [isOpened, setOpen] = useState(false);
+  const [selectedIngredient, setSelectedIngredient] = useState({});
   return (
-    <li
-      className={clsx(styles.ingredients__item)}
-    >
-      <Counter
-        count={1}
-        size="default"
-        extraClass="m-1"
-      />
-      <picture>
-        <source
-          srcSet={props.ingredient.image_mobile}
-          media="(max-width: 480px)"
-        />
-        <source
-          srcSet={props.ingredient.image_large}
-          media="(min-width: 1400px)"
-        />
-        <img
-          className={clsx(styles.ingredients__image)}
-          alt={props.ingredient.name}
-          src={props.ingredient.image}
-        />
-      </picture>
-      <div
-        className={clsx(styles.ingredients__price)}
+    <>
+      <li
+        className={clsx(styles.ingredients__item)}
+        onClick={() => {
+          setSelectedIngredient(ingredient);
+          setOpen(true);
+        }}
       >
+        <Counter
+          count={1}
+          size="default"
+          extraClass="m-1"
+        />
+        <picture>
+          <source
+            srcSet={ingredient.image_mobile}
+            media="(max-width: 480px)"
+          />
+          <source
+            srcSet={ingredient.image_large}
+            media="(min-width: 1400px)"
+          />
+          <img
+            className={clsx(styles.ingredients__image)}
+            alt={ingredient.name}
+            src={ingredient.image}
+          />
+        </picture>
+        <div
+          className={clsx(styles.ingredients__price)}
+        >
           <span
             className={clsx('text', 'text_type_digits-default')}
           >
-            {props.ingredient.price}
+            {ingredient.price}
           </span>
-        <CurrencyIcon type={'primary'}/>
-      </div>
+          <CurrencyIcon type={'primary'}/>
+        </div>
 
-      <h3
-        className={clsx(styles.ingredients__name, 'text', 'text_type_main-default')}
-      >
-        {props.ingredient.name}
-      </h3>
-    </li>
+        <h3
+          className={clsx(styles.ingredients__name, 'text', 'text_type_main-default')}
+        >
+          {ingredient.name}
+        </h3>
+      </li>
+      <Modal isOpen={isOpened} title={'Детали ингредиента'} setOpen={setOpen}>
+        <h1>{selectedIngredient.name}</h1>
+      </Modal>
+    </>
   );
 }
 

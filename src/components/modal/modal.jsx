@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './modal.module.css';
 import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { createPortal } from 'react-dom';
+import { MODAL_ID } from '../../utils/enum.js';
 
-const Modal = ({ title, children, open = false }) => {
-  const [isOpened, setOpen] = useState(open);
+const Modal = ({ title, children, isOpen, setOpen }) => {
 
   const closeModal = () => {
     setOpen(false);
@@ -18,21 +19,24 @@ const Modal = ({ title, children, open = false }) => {
     })
   })
 
-  return (
+  return createPortal(
     <>
       {
-        <ModalOverlay opened={isOpened}>
+        <ModalOverlay opened={isOpen} setOpen={setOpen}>
           <div
-            className={clsx(styles.modal, { [styles.modal_opened]: isOpened })}
+            className={clsx(styles.modal, { [styles.modal_opened]: isOpen })}
+            onClick={(e) => e.stopPropagation()}
             role="dialog"
-            aria-labelledby="edit-profile-form-title"
-            aria-modal="true"
+            aria-labelledby='modal-title'
+            aria-modal={isOpen ? 'true' : 'false'}
           >
             <div className={clsx(styles.modal__header)}>
-              <h3 className={clsx(styles.modal__title, 'text text_type_main-large')}>{title}</h3>
+              <h3 className={clsx(styles.modal__title, 'text text_type_main-large')} id="modal-title">
+                {title}
+              </h3>
               <button
                 className={clsx(styles.modal__close, 'ml-9')}
-                aria-label="Закрыть попап"
+                aria-label="Закрыть модальное окно"
                 type="button"
                 onClick={closeModal}
               >
@@ -43,7 +47,8 @@ const Modal = ({ title, children, open = false }) => {
           </div>
         </ModalOverlay>
       }
-    </>
+    </>,
+    document.querySelector(MODAL_ID)
   );
 };
 
@@ -51,7 +56,7 @@ const Modal = ({ title, children, open = false }) => {
 Modal.propTypes = {
   title: PropTypes.string,
   children: PropTypes.any,
-  open: PropTypes.bool,
+  isOpen: PropTypes.bool,
 };
 
 export default Modal;

@@ -6,6 +6,7 @@
   justify-content: space-between;
   min-height: 208px;
   position: relative;
+  cursor: pointer;
 }
 
 .ingredients__image {

@@ -7,7 +7,6 @@ import { useCart } from '../../hooks/useCart.js';
 import Header from '../header/header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
-import Modal from '../modal/modal.jsx';
 import Loader from '../loader/loader.jsx';
 
 const App = () => {
@@ -20,15 +19,10 @@ const App = () => {
         {
           !loading && serverData.length > 0
             ?
-            <>
-              <div className={clsx(styles.main_container)}>
-                <BurgerIngredients ingredients={ingredients}/>
-                <BurgerConstructor cart={cart}/>
-              </div>
-              <Modal open={true} title={'Детали ингредиента'}>
-                <h1>123</h1>
-              </Modal>
-            </>
+            <div className={clsx(styles.main_container)}>
+              <BurgerIngredients ingredients={ingredients}/>
+              <BurgerConstructor cart={cart}/>
+            </div>
             : <Loader loading={loading}/>
         }
       </main>

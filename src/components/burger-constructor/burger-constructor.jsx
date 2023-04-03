@@ -3,8 +3,12 @@ import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import Modal from '../modal/modal.jsx';
+import { useState } from 'react';
 
 const BurgerConstructor = (props) => {
+  const [isOpened, setOpen] = useState(false);
+
   return (
     <section className={clsx(styles.section, 'mt-25')}>
       <ul className={clsx(styles.cart__list)}>
@@ -61,9 +65,18 @@ const BurgerConstructor = (props) => {
             <CurrencyIcon type={'primary'}/>
           </span>
         </div>
-        <Button extraClass={styles.button} htmlType="button" type="primary" size="large">
+        <Button
+          extraClass={styles.button}
+          htmlType="button"
+          type="primary"
+          size="large"
+          onClick={() => setOpen(true)}
+        >
           Оформить заказ
         </Button>
+        <Modal title="Идентификатор заказа" isOpen={isOpened} setOpen={setOpen}>
+          <h1>123</h1>
+        </Modal>
       </div>
     </section>
   );
