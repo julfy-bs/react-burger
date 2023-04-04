@@ -14,9 +14,12 @@
   transition: transform 0.3s ease, visibility 0.25s ease, opacity 0.25s ease;
   visibility: hidden;
   z-index: 2000;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .modal_opened {

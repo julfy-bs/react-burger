@@ -4,16 +4,15 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import { ingredientType } from '../../utils/types.js';
 import Modal from '../modal/modal.jsx';
 import { useState } from 'react';
+import BurgerIngredientsItemDetail from '../burger-ingredients-item-detail/burger-ingredients-item-detail.jsx';
 
 const BurgerIngredientsItem = ({ ingredient }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState({});
   return (
     <>
       <li
         className={clsx(styles.ingredients__item)}
         onClick={() => {
-          setSelectedIngredient(ingredient);
           setIsOpen(true);
         }}
       >
@@ -55,7 +54,7 @@ const BurgerIngredientsItem = ({ ingredient }) => {
         </h3>
       </li>
       <Modal isOpen={isOpen} title={'Детали ингредиента'} setIsOpen={setIsOpen}>
-        <h1>{selectedIngredient.name}</h1>
+        <BurgerIngredientsItemDetail ingredient={ingredient} />
       </Modal>
     </>
   );
