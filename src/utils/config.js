@@ -9,14 +9,18 @@ export const serverConfig = {
 export const ingredientTabs = [
   {
     name: 'Булки',
-    value: 'one'
+    value: 'one',
+    type: 'bun'
+
   },
   {
     name: 'Соусы',
-    value: 'two'
+    value: 'two',
+    type: 'sauce'
   },
   {
     name: 'Начинки',
-    value: 'three'
+    value: 'three',
+    type: 'main'
   }
-]
+];

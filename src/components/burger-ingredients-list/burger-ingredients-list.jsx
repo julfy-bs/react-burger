@@ -17,6 +17,7 @@ const BurgerIngredientsList = ({ ingredients }) => {
           >
             <h2
               className={clsx('text', 'text_type_main-medium')}
+              id={component.type}
             >
               {component.name}
             </h2>

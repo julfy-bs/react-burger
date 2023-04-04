@@ -13,13 +13,15 @@ const BurgerIngredientsTabs = ({ tabs, currentTab, changeTab }) => {
           <li
             key={tab.value}
           >
-            <Tab
-              value={tab.value}
-              active={currentTab === tab.value}
-              onClick={changeTab}
-            >
-              {tab.name}
-            </Tab>
+            <a href={`#${tab.type}`} className={clsx(styles.tabs__link)}>
+              <Tab
+                value={tab.value}
+                active={currentTab === tab.value}
+                onClick={changeTab}
+              >
+                {tab.name}
+              </Tab>
+            </a>
           </li>
         ))
       }
@@ -31,7 +33,8 @@ const BurgerIngredientsTabs = ({ tabs, currentTab, changeTab }) => {
 BurgerIngredientsTabs.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.oneOf(['Булки', 'Соусы', 'Начинки']).isRequired,
-    value: PropTypes.oneOf(['one', 'two', 'three']).isRequired
+    value: PropTypes.oneOf(['one', 'two', 'three']).isRequired,
+    type: PropTypes.oneOf(['main', 'bun', 'sauce']).isRequired,
   })),
   currentTab: PropTypes.string.isRequired,
   changeTab: PropTypes.func.isRequired

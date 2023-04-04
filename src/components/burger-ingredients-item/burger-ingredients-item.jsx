@@ -6,7 +6,7 @@ import Modal from '../modal/modal.jsx';
 import { useState } from 'react';
 
 const BurgerIngredientsItem = ({ ingredient }) => {
-  const [isOpened, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState({});
   return (
     <>
@@ -14,7 +14,7 @@ const BurgerIngredientsItem = ({ ingredient }) => {
         className={clsx(styles.ingredients__item)}
         onClick={() => {
           setSelectedIngredient(ingredient);
-          setOpen(true);
+          setIsOpen(true);
         }}
       >
         <Counter
@@ -54,7 +54,7 @@ const BurgerIngredientsItem = ({ ingredient }) => {
           {ingredient.name}
         </h3>
       </li>
-      <Modal isOpen={isOpened} title={'Детали ингредиента'} setOpen={setOpen}>
+      <Modal isOpen={isOpen} title={'Детали ингредиента'} setIsOpen={setIsOpen}>
         <h1>{selectedIngredient.name}</h1>
       </Modal>
     </>

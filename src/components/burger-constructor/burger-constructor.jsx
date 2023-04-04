@@ -7,7 +7,7 @@ import Modal from '../modal/modal.jsx';
 import { useState } from 'react';
 
 const BurgerConstructor = (props) => {
-  const [isOpened, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <section className={clsx(styles.section, 'mt-25')}>
@@ -70,11 +70,11 @@ const BurgerConstructor = (props) => {
           htmlType="button"
           type="primary"
           size="large"
-          onClick={() => setOpen(true)}
+          onClick={() => setIsOpen(true)}
         >
           Оформить заказ
         </Button>
-        <Modal title="Идентификатор заказа" isOpen={isOpened} setOpen={setOpen}>
+        <Modal title="Идентификатор заказа" isOpen={isOpen} setIsOpen={setIsOpen}>
           <h1>123</h1>
         </Modal>
       </div>

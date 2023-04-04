@@ -25,6 +25,9 @@ const App = () => {
             </div>
             : <Loader loading={loading}/>
         }
+        {
+          error && <h1>Ошибка</h1>
+        }
       </main>
     </>
   );
