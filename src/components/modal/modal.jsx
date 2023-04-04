@@ -7,7 +7,7 @@ import { createPortal } from 'react-dom';
 import { MODAL_ID } from '../../utils/enum.js';
 import { useModal } from '../../hooks/useModal.js';
 
-const Modal = ({ title, children, isOpen, setIsOpen }) => {
+const Modal = ({ title, ariaTitle, children, isOpen, setIsOpen }) => {
   const { closeModal } = useModal(setIsOpen);
 
   return createPortal(
@@ -22,13 +22,22 @@ const Modal = ({ title, children, isOpen, setIsOpen }) => {
             className={clsx(styles.modal, { [styles.modal_opened]: isOpen })}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
-            aria-labelledby="modal-title"
+            aria-labelledby={title ? 'modal-title' : 'aria-title'}
             aria-modal={isOpen ? 'true' : 'false'}
           >
             <div className={clsx(styles.modal__header)}>
-              <h3 className={clsx(styles.modal__title, 'text text_type_main-large')} id="modal-title">
-                {title}
-              </h3>
+              {
+                title &&
+                <h3 className={clsx(styles.modal__title, 'text text_type_main-large')} id="modal-title">
+                  {title}
+                </h3>
+              }
+              {
+                !title &&
+                <h3 className={clsx(styles.screenReader)} id='aria-title'>
+                  {ariaTitle}
+                </h3>
+              }
               <button
                 className={clsx(styles.modal__close)}
                 aria-label="Закрыть модальное окно"
@@ -49,7 +58,8 @@ const Modal = ({ title, children, isOpen, setIsOpen }) => {
 
 
 Modal.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  ariaTitle: PropTypes.string,
   children: PropTypes.any,
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired

@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal.jsx';
 import { useState } from 'react';
+import CartOrderDetails from '../cart-order-details/cart-order-details.jsx';
 
-const BurgerConstructor = (props) => {
+const BurgerConstructor = ({ cart }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -19,15 +20,15 @@ const BurgerConstructor = (props) => {
             extraClass={clsx(styles.cart__bun)}
             type={'top'}
             isLocked={true}
-            text={`${props.cart.bun.name} (верх)`}
-            price={props.cart.bun.price}
-            thumbnail={props.cart.bun.image}
+            text={`${cart.bun.name} (верх)`}
+            price={cart.bun.price}
+            thumbnail={cart.bun.image}
           />
         </li>
         <li>
           <ul className={clsx(styles.cart__ingredients_list)}>
             {
-              props.cart.ingredients.map((ingredient, index) => (
+              cart.ingredients.map((ingredient, index) => (
                 <li
                   className={clsx(styles.cart__item, styles.cart__item_draggable)}
                   key={ingredient._id + index}
@@ -50,16 +51,16 @@ const BurgerConstructor = (props) => {
             extraClass={clsx(styles.cart__bun)}
             type={'bottom'}
             isLocked={true}
-            text={`${props.cart.bun.name} (низ)`}
-            price={props.cart.bun.price}
-            thumbnail={props.cart.bun.image}
+            text={`${cart.bun.name} (низ)`}
+            price={cart.bun.price}
+            thumbnail={cart.bun.image}
           />
         </li>
       </ul>
       <div className={clsx(styles.cart__footer)}>
         <div className={clsx(styles.cart__price)}>
             <span className={clsx('text', 'text_type_digits-medium')}>
-            {props.cart.price}
+            {cart.price}
             </span>
           <span className={styles.cart__currency}>
             <CurrencyIcon type={'primary'}/>
@@ -74,8 +75,8 @@ const BurgerConstructor = (props) => {
         >
           Оформить заказ
         </Button>
-        <Modal title="Идентификатор заказа" isOpen={isOpen} setIsOpen={setIsOpen}>
-          <h1>123</h1>
+        <Modal ariaTitle={'Идентификатор заказа'} isOpen={isOpen} setIsOpen={setIsOpen}>
+          <CartOrderDetails orderNumber={cart.orderNumber}/>
         </Modal>
       </div>
     </section>
