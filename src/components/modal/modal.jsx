@@ -5,25 +5,22 @@ import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
 import { MODAL_ID } from '../../utils/enum.js';
-import { useModal } from '../../hooks/useModal.js';
 
-const Modal = ({ title, ariaTitle, children, isOpen, setIsOpen }) => {
-  const { closeModal } = useModal(setIsOpen);
-
+const Modal = ({ title, ariaTitle, children, isModalOpen, closeModal }) => {
   return createPortal(
     <>
       {
         <>
           <ModalOverlay
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
+            isModalOpen={isModalOpen}
+            closeModal={closeModal}
           />
           <div
-            className={clsx(styles.modal, { [styles.modal_opened]: isOpen })}
+            className={clsx(styles.modal, { [styles.modal_opened]: isModalOpen })}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-labelledby={title ? 'modal-title' : 'aria-title'}
-            aria-modal={isOpen ? 'true' : 'false'}
+            aria-modal={isModalOpen ? 'true' : 'false'}
           >
             <div className={clsx(styles.modal__header)}>
               {
@@ -42,7 +39,7 @@ const Modal = ({ title, ariaTitle, children, isOpen, setIsOpen }) => {
                 className={clsx(styles.modal__close)}
                 aria-label="Закрыть модальное окно"
                 type="button"
-                onClick={closeModal}
+                onClick={() => closeModal()}
               >
                 <CloseIcon type="primary"/>
               </button>
@@ -61,8 +58,8 @@ Modal.propTypes = {
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
   children: PropTypes.any,
-  isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired
+  isModalOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired
 };
 
 export default Modal;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { cartData } from '../utils/cart.js';
 
 export const useCart = () => {
-  const [cart] = useState(cartData);
+  const [cart, setCart] = useState(cartData);
 
-  return { cart };
+  return { cart, setCart };
 };

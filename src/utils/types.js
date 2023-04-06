@@ -21,7 +21,15 @@ const componentType = PropTypes.exact({
   items: PropTypes.arrayOf(ingredientType).isRequired || []
 },)
 
+const cartType = PropTypes.exact({
+  price: PropTypes.number.isRequired,
+  orderNumber: PropTypes.string.isRequired,
+  bun: ingredientType.isRequired,
+  ingredients: PropTypes.arrayOf(ingredientType).isRequired || []
+})
+
 export {
   ingredientType,
-  componentType
+  componentType,
+  cartType
 }

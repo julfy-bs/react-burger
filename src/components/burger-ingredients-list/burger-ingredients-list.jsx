@@ -4,7 +4,7 @@ import styles from './burger-ingredients-list.module.css';
 import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item.jsx';
 import { componentType } from '../../utils/types.js';
 
-const BurgerIngredientsList = ({ ingredients }) => {
+const BurgerIngredientsList = ({ ingredients, openModal }) => {
   return (
     <ul
       className={clsx(styles.ingredients)}
@@ -25,7 +25,11 @@ const BurgerIngredientsList = ({ ingredients }) => {
             >
               {
                 component.items.map(item => (
-                  <BurgerIngredientsItem ingredient={item} key={item._id}/>
+                  <BurgerIngredientsItem
+                    openModal={openModal}
+                    ingredient={item}
+                    key={item._id}
+                  />
                 ))
               }
             </ul>
@@ -39,6 +43,7 @@ const BurgerIngredientsList = ({ ingredients }) => {
 
 BurgerIngredientsList.propTypes = {
   ingredients: PropTypes.arrayOf(componentType.isRequired),
+  openModal: PropTypes.func.isRequired
 };
 
 export default BurgerIngredientsList;

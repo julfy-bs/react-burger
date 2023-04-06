@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import styles from './cart-order-details.module.css';
+import styles from './order-details.module.css';
 import IconDone from '../ui/icon-done/icon-done.jsx';
 
-const CartOrderDetails = ({ orderNumber }) => {
+const OrderDetails = ({ orderNumber }) => {
   return (
     <div
       className={clsx(
@@ -43,8 +43,8 @@ const CartOrderDetails = ({ orderNumber }) => {
 };
 
 
-CartOrderDetails.propTypes = {
+OrderDetails.propTypes = {
   orderNumber: PropTypes.string.isRequired
 };
 
-export default CartOrderDetails;
+export default OrderDetails;

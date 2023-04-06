@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import styles from './burger-ingredients-item-detail.module.css';
+import styles from './ingredient-details.module.css';
 import { ingredientType } from '../../utils/types.js';
 
-const BurgerIngredientsItemDetail = ({ ingredient }) => {
+const IngredientDetails = ({ ingredient }) => {
   return (
     <div className={clsx(styles.ingredientDetail)}>
       <picture className={clsx(styles.ingredientDetail__picture)}>
@@ -75,8 +75,8 @@ const BurgerIngredientsItemDetail = ({ ingredient }) => {
 };
 
 
-BurgerIngredientsItemDetail.propTypes = {
+IngredientDetails.propTypes = {
   ingredient: ingredientType.isRequired
 };
 
-export default BurgerIngredientsItemDetail;
+export default IngredientDetails;

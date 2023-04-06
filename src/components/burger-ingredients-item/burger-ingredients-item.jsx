@@ -2,19 +2,14 @@ import clsx from 'clsx';
 import styles from './burger-ingredients-item.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../utils/types.js';
-import Modal from '../modal/modal.jsx';
-import { useState } from 'react';
-import BurgerIngredientsItemDetail from '../burger-ingredients-item-detail/burger-ingredients-item-detail.jsx';
+import PropTypes from 'prop-types';
 
-const BurgerIngredientsItem = ({ ingredient }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const BurgerIngredientsItem = ({ ingredient, openModal }) => {
   return (
     <>
       <li
         className={clsx(styles.ingredients__item)}
-        onClick={() => {
-          setIsOpen(true);
-        }}
+        onClick={() => openModal('ingredient', ingredient)}
       >
         <Counter
           count={1}
@@ -53,15 +48,13 @@ const BurgerIngredientsItem = ({ ingredient }) => {
           {ingredient.name}
         </h3>
       </li>
-      <Modal isOpen={isOpen} title={'Детали ингредиента'} setIsOpen={setIsOpen}>
-        <BurgerIngredientsItemDetail ingredient={ingredient} />
-      </Modal>
     </>
   );
-}
+};
 
 BurgerIngredientsItem.propTypes = {
-  ingredient: ingredientType.isRequired
+  ingredient: ingredientType.isRequired,
+  openModal: PropTypes.func.isRequired
 };
 
 export default BurgerIngredientsItem;

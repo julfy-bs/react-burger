@@ -1,26 +1,27 @@
 import styles from './modal-overlay.module.css';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import React from 'react';
 
-const ModalOverlay = ({ isOpen, setIsOpen }) => {
-
+const ModalOverlay = ({ isModalOpen, closeModal }) => {
   return (
     <div
+      tabIndex="1"
       className={
         clsx(
           styles.modal__overlay,
-          { [styles.modal__overlay_opened]: isOpen }
+          { [styles.modal__overlay_opened]: isModalOpen }
         )
       }
-      onClick={() => setIsOpen(false)}
+      onClick={() => closeModal()}
     >
     </div>
   );
 };
 
 ModalOverlay.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired
+  isModalOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired
 };
 
 export default ModalOverlay;

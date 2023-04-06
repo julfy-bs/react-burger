@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import styles from './header-link.module.css';
 import PropTypes from 'prop-types';
 
-const HeaderLink = (props) => {
+const HeaderLink = ({ text, active, children }) => {
   return (
     <a href="/#"
        className={
-         clsx(styles.link, props.active && styles.link_active, 'pt-4', 'pr-5', 'pb-4', 'pl-5')
+         clsx(styles.link, active && styles.link_active, 'pt-4', 'pr-5', 'pb-4', 'pl-5')
        }
     >
-      {props.children}
-      <span className={clsx('ml-2')}>{props.text}</span>
+      {children}
+      <span className={clsx('ml-2')}>{text}</span>
     </a>
   );
 }
@@ -18,7 +18,8 @@ const HeaderLink = (props) => {
 
 HeaderLink.propTypes = {
   text: PropTypes.string.isRequired,
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  children: PropTypes.any
 };
 
 HeaderLink.defaultProps = {

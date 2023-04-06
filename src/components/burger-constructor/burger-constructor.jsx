@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal.jsx';
-import { useState } from 'react';
-import CartOrderDetails from '../cart-order-details/cart-order-details.jsx';
+import OrderDetails from '../order-details/order-details.jsx';
+import { cartType } from '../../utils/types.js';
 
-const BurgerConstructor = ({ cart }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const BurgerConstructor = ({ cart, isModalOpen, isDetailedOrderOpened, openModal, closeModal }) => {
   return (
     <section className={clsx(styles.section, 'mt-25')}>
       <ul className={clsx(styles.cart__list)}>
@@ -71,20 +69,31 @@ const BurgerConstructor = ({ cart }) => {
           htmlType="button"
           type="primary"
           size="large"
-          onClick={() => setIsOpen(true)}
+          onClick={() => openModal('cart', true)}
         >
           Оформить заказ
         </Button>
-        <Modal ariaTitle={'Идентификатор заказа'} isOpen={isOpen} setIsOpen={setIsOpen}>
-          <CartOrderDetails orderNumber={cart.orderNumber}/>
-        </Modal>
       </div>
+      {
+        isDetailedOrderOpened &&
+        <Modal
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          ariaTitle={'Идентификатор заказа'}
+        >
+          <OrderDetails orderNumber={cart.orderNumber}/>
+        </Modal>
+      }
     </section>
   );
 };
 
 BurgerConstructor.propTypes = {
-  cart: PropTypes.object,
+  cart: cartType.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  isDetailedOrderOpened: PropTypes.bool.isRequired,
+  openModal: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;

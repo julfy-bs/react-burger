@@ -7,9 +7,10 @@ import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients
 import { ingredientTabs } from '../../utils/config.js';
 import BurgerIngredientsList from '../burger-ingredients-list/burger-ingredients-list.jsx';
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = ({ ingredients, openModal }) => {
   const [currentTab, setCurrentTab] = useState('one');
   const [tabs] = useState(ingredientTabs);
+
   const changeActiveTab = (string) => setCurrentTab(string);
 
   return (
@@ -24,14 +25,18 @@ const BurgerIngredients = ({ ingredients }) => {
         currentTab={currentTab}
         changeTab={changeActiveTab}
       />
-      <BurgerIngredientsList ingredients={ingredients} />
+      <BurgerIngredientsList
+        openModal={openModal}
+        ingredients={ingredients}
+      />
     </section>
   );
 };
 
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(componentType.isRequired),
+  ingredients: PropTypes.arrayOf(componentType.isRequired),
+  openModal: PropTypes.func.isRequired
 };
 
 export default BurgerIngredients;

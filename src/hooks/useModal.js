@@ -1,15 +1,41 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-export const useModal = (handleClose) => {
-  const closeModal = () => handleClose(false);
+export const useModal = () => {
+  const [isModalOpen, setModalState] = useState(false);
+  const [detailedIngredient, setDetailedIngredient] = useState(null);
+  const [isDetailedOrderOpened, setIsDetailedOrderOpened] = useState(false);
+
+  const closeModal = () => {
+    if (isDetailedOrderOpened) setIsDetailedOrderOpened(false);
+    if (detailedIngredient !== null) setDetailedIngredient(null);
+    setModalState(false);
+  };
+
+  const openModal = (type, value) => {
+    if (type === 'ingredient') {
+      setDetailedIngredient(value);
+      setModalState(true);
+    }
+    if (type === 'cart') {
+      setIsDetailedOrderOpened(value);
+      setModalState(true);
+    }
+  };
+
   const handleEscape = (e) => (e.key === 'Escape') && closeModal();
 
   useEffect(() => {
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, []);
+    if (!isModalOpen) return;
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isModalOpen]);
 
   return {
-    closeModal
-  }
+    handleEscape,
+    closeModal,
+    openModal,
+    isModalOpen,
+    detailedIngredient,
+    isDetailedOrderOpened,
+  };
 };
