@@ -51,23 +51,23 @@ const IngredientDetails = ({ ingredient }) => {
           <span
             className={clsx('text_type_digits-default')}
           >
-            {ingredient.calories}
-          </span>
+              {ingredient.calories}
+            </span>
           <span
             className={clsx('text_type_digits-default')}
           >
-            {ingredient.proteins}
-          </span>
+              {ingredient.proteins}
+            </span>
           <span
             className={clsx('text_type_digits-default')}
           >
-            {ingredient.fat}
-          </span>
+              {ingredient.fat}
+            </span>
           <span
             className={clsx('text_type_digits-default')}
           >
-            {ingredient.carbohydrates}
-          </span>
+              {ingredient.carbohydrates}
+            </span>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ const IngredientDetails = ({ ingredient }) => {
 
 
 IngredientDetails.propTypes = {
-  ingredient: ingredientType.isRequired
+  ingredient: ingredientType || null
 };
 
 export default IngredientDetails;

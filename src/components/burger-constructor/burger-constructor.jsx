@@ -3,11 +3,9 @@ import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../modal/modal.jsx';
-import OrderDetails from '../order-details/order-details.jsx';
 import { cartType } from '../../utils/types.js';
 
-const BurgerConstructor = ({ cart, isModalOpen, isDetailedOrderOpened, openModal, closeModal }) => {
+const BurgerConstructor = ({ cart, openModal }) => {
   return (
     <section className={clsx(styles.section, 'mt-25')}>
       <ul className={clsx(styles.cart__list)}>
@@ -74,26 +72,13 @@ const BurgerConstructor = ({ cart, isModalOpen, isDetailedOrderOpened, openModal
           Оформить заказ
         </Button>
       </div>
-      {
-        isDetailedOrderOpened &&
-        <Modal
-          isModalOpen={isModalOpen}
-          closeModal={closeModal}
-          ariaTitle={'Идентификатор заказа'}
-        >
-          <OrderDetails orderNumber={cart.orderNumber}/>
-        </Modal>
-      }
     </section>
   );
 };
 
 BurgerConstructor.propTypes = {
   cart: cartType.isRequired,
-  isModalOpen: PropTypes.bool.isRequired,
-  isDetailedOrderOpened: PropTypes.bool.isRequired,
   openModal: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;

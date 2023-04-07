@@ -11,6 +11,7 @@ import Loader from '../loader/loader.jsx';
 import Modal from '../modal/modal.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
 import { useModal } from '../../hooks/useModal.js';
+import OrderDetails from '../order-details/order-details.jsx';
 
 const App = () => {
   const { ingredients, serverData, error, loading } = useIngredients();
@@ -31,10 +32,7 @@ const App = () => {
               />
               <BurgerConstructor
                 cart={cart}
-                isModalOpen={isModalOpen}
                 openModal={openModal}
-                closeModal={closeModal}
-                isDetailedOrderOpened={isDetailedOrderOpened}
               />
             </div>
             : <Loader loading={loading}/>
@@ -43,16 +41,22 @@ const App = () => {
           error && <h1>Ошибка</h1>
         }
       </main>
-      {
-        detailedIngredient &&
-        <Modal
-          isModalOpen={isModalOpen}
-          closeModal={closeModal}
-          title={'Детали ингредиента'}
-        >
+
+      <Modal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        title={detailedIngredient ? 'Детали ингредиента' : ''}
+        ariaTitle={isDetailedOrderOpened ? 'Идентификатор заказа' : ''}
+      >
+        {
+          detailedIngredient &&
           <IngredientDetails ingredient={detailedIngredient}/>
-        </Modal>
-      }
+        }
+        {
+          isDetailedOrderOpened &&
+          <OrderDetails orderNumber={cart.orderNumber}/>
+        }
+      </Modal>
     </>
   );
 };
