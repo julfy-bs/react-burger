@@ -1,59 +1,62 @@
-import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import styles from './app.module.css';
+
+import { useIngredients } from '../../hooks/useIngredients.js';
+import { useCart } from '../../hooks/useCart.js';
 
 import Header from '../header/header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
-
-import { ingredientsData } from '../../utils/data.js';
-import { cartData } from '../../utils/cart.js';
+import Loader from '../loader/loader.jsx';
+import Modal from '../modal/modal.jsx';
+import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
+import { useModal } from '../../hooks/useModal.js';
+import OrderDetails from '../order-details/order-details.jsx';
 
 const App = () => {
-  const [components, setComponents] = useState([
-    {
-      name: 'Булки',
-      type: 'bun',
-      items: []
-    },
-    {
-      name: 'Соусы',
-      type: 'sauce',
-      items: []
-    },
-    {
-      name: 'Начинки',
-      type: 'main',
-      items: []
-    }
-  ]);
-  const [cart] = useState(cartData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => createBurgerComponentsArray(ingredientsData), [ingredientsData]);
-
-
-  const createBurgerComponentsArray = (data) => {
-    const updatedComponents = [...components];
-    data.forEach(ingredient => {
-      updatedComponents.forEach((component, index) =>
-        (!updatedComponents[index].items.includes(ingredient)
-          && component.type === ingredient.type)
-          ? updatedComponents[index].items.push(ingredient)
-          : null
-      );
-    });
-    setComponents(updatedComponents);
-  };
+  const { ingredients, serverData, error, loading } = useIngredients();
+  const { cart } = useCart();
+  const { detailedIngredient, isDetailedOrderOpened, isModalOpen, closeModal, openModal } = useModal();
 
   return (
     <>
       <Header/>
       <main className={clsx(styles.main, 'pb-10')}>
-        <div className={clsx(styles.main_container)}>
-          <BurgerIngredients data={components}/>
-          <BurgerConstructor cart={cart}/>
-        </div>
+        {
+          !loading && serverData.length > 0
+            ?
+            <div className={clsx(styles.main_container)}>
+              <BurgerIngredients
+                ingredients={ingredients}
+                openModal={openModal}
+              />
+              <BurgerConstructor
+                cart={cart}
+                openModal={openModal}
+              />
+            </div>
+            : <Loader loading={loading}/>
+        }
+        {
+          error && <h1>Ошибка</h1>
+        }
       </main>
+
+      <Modal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        title={detailedIngredient ? 'Детали ингредиента' : ''}
+        ariaTitle={isDetailedOrderOpened ? 'Идентификатор заказа' : ''}
+      >
+        {
+          detailedIngredient &&
+          <IngredientDetails ingredient={detailedIngredient}/>
+        }
+        {
+          isDetailedOrderOpened &&
+          <OrderDetails orderNumber={cart.orderNumber}/>
+        }
+      </Modal>
     </>
   );
 };

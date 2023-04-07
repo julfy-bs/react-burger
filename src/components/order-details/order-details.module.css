@@ -1,0 +1,10 @@
+.cartOrderDetails {
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.cartOrderDetails__text_case_lower {
+  text-transform: lowercase;
+}
