@@ -1,25 +1,26 @@
 import clsx from 'clsx';
 import styles from './app.module.css';
 
-import { useIngredients } from '../../hooks/useIngredients.js';
-import { useCart } from '../../hooks/useCart.js';
-
 import Header from '../header/header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 import Loader from '../loader/loader.jsx';
 import Modal from '../modal/modal.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
-import { useModal } from '../../hooks/useModal.js';
 import OrderDetails from '../order-details/order-details.jsx';
+
+import { useIngredients } from '../../hooks/useIngredients.js';
+import { useModal } from '../../hooks/useModal.js';
+import { CartContext } from '../../context/cartContext.js';
+import { useCart } from '../../hooks/useCart.js';
 
 const App = () => {
   const { ingredients, serverData, error, loading } = useIngredients();
-  const { cart } = useCart();
+  const { cart } = useCart(ingredients);
   const { detailedIngredient, isDetailedOrderOpened, isModalOpen, closeModal, openModal } = useModal();
 
   return (
-    <>
+    <CartContext.Provider value={cart}>
       <Header/>
       <main className={clsx(styles.main, 'pb-10')}>
         {
@@ -31,7 +32,6 @@ const App = () => {
                 openModal={openModal}
               />
               <BurgerConstructor
-                cart={cart}
                 openModal={openModal}
               />
             </div>
@@ -57,7 +57,7 @@ const App = () => {
           <OrderDetails orderNumber={cart.orderNumber}/>
         }
       </Modal>
-    </>
+    </CartContext.Provider>
   );
 };
 
