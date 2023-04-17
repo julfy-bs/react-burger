@@ -9,22 +9,25 @@ import { CartContext } from '../../context/cartContext.js';
 const BurgerConstructor = ({ openModal }) => {
   const cart = useContext(CartContext);
 
-
   return (
     <section className={clsx(styles.section, 'mt-25')}>
       <ul className={clsx(styles.cart__list)}>
-        <li
-          className={clsx(styles.cart__item)}
-        >
-          <ConstructorElement
-            extraClass={clsx(styles.cart__bun)}
-            type={'top'}
-            isLocked={true}
-            text={`${cart.bun.name} (верх)`}
-            price={cart.bun.price}
-            thumbnail={cart.bun.image}
-          />
-        </li>
+        {
+          cart.bun !== null && (
+            <li
+              className={clsx(styles.cart__item)}
+            >
+              <ConstructorElement
+                extraClass={clsx(styles.cart__bun)}
+                type={'top'}
+                isLocked={true}
+                text={`${cart.bun.name} (верх)`}
+                price={cart.bun.price}
+                thumbnail={cart.bun.image}
+              />
+            </li>
+          )
+        }
         <li>
           <ul className={clsx(styles.cart__ingredients_list)}>
             {
@@ -44,18 +47,22 @@ const BurgerConstructor = ({ openModal }) => {
             }
           </ul>
         </li>
-        <li
-          className={clsx(styles.cart__item)}
-        >
-          <ConstructorElement
-            extraClass={clsx(styles.cart__bun)}
-            type={'bottom'}
-            isLocked={true}
-            text={`${cart.bun.name} (низ)`}
-            price={cart.bun.price}
-            thumbnail={cart.bun.image}
-          />
-        </li>
+        {
+          cart.bun !== null && (
+            <li
+              className={clsx(styles.cart__item)}
+            >
+              <ConstructorElement
+                extraClass={clsx(styles.cart__bun)}
+                type={'bottom'}
+                isLocked={true}
+                text={`${cart.bun.name} (низ)`}
+                price={cart.bun.price}
+                thumbnail={cart.bun.image}
+              />
+            </li>
+          )
+        }
       </ul>
       <div className={clsx(styles.cart__footer)}>
         <div className={clsx(styles.cart__price)}>

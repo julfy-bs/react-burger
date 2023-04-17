@@ -3,19 +3,38 @@ import styles from './burger-ingredients-item.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../utils/types.js';
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { CartContext } from '../../context/cartContext.js';
 
 const BurgerIngredientsItem = ({ ingredient, openModal }) => {
+  const cart = useContext(CartContext);
+  const ingredientsCondition = cart.ingredients.some(
+    cartIngredient => cartIngredient._id === ingredient._id
+  );
+
+  const bunCondition = cart.bun._id === ingredient._id;
+
+  const countIngredient = (type) => {
+    if (type === 'bun') return 1;
+    else if (type === 'main' || type === 'sauce') return cart.ingredients.filter(item => item._id === ingredient._id).length;
+    else throw new Error('Передайте тип ингредиента!')
+  };
+
   return (
     <>
       <li
         className={clsx(styles.ingredients__item)}
         onClick={() => openModal('ingredient', ingredient)}
       >
-        <Counter
-          count={1}
-          size="default"
-          extraClass="m-1"
-        />
+        {
+          (ingredientsCondition || bunCondition) && (
+            <Counter
+              count={countIngredient(ingredient.type)}
+              size="default"
+              extraClass="m-1"
+            />
+          )
+        }
         <picture>
           <source
             srcSet={ingredient.image_mobile}

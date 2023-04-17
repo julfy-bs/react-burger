@@ -16,7 +16,7 @@ import { useCart } from '../../hooks/useCart.js';
 
 const App = () => {
   const { ingredients, serverData, error, loading } = useIngredients();
-  const { cart } = useCart();
+  const { cart } = useCart(ingredients);
   const { detailedIngredient, isDetailedOrderOpened, isModalOpen, closeModal, openModal } = useModal();
 
   return (
