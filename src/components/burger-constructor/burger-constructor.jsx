@@ -3,9 +3,13 @@ import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { cartType } from '../../utils/types.js';
+import { useContext } from 'react';
+import { CartContext } from '../../context/cartContext.js';
 
-const BurgerConstructor = ({ cart, openModal }) => {
+const BurgerConstructor = ({ openModal }) => {
+  const cart = useContext(CartContext);
+
+
   return (
     <section className={clsx(styles.section, 'mt-25')}>
       <ul className={clsx(styles.cart__list)}>
@@ -77,7 +81,6 @@ const BurgerConstructor = ({ cart, openModal }) => {
 };
 
 BurgerConstructor.propTypes = {
-  cart: cartType.isRequired,
   openModal: PropTypes.func.isRequired,
 };
 

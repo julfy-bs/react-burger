@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { cartData } from '../utils/cart.js';
 
 export const useCart = () => {
-  const [cart, setCart] = useState(cartData);
+  const cart = cartData;
 
-  return { cart, setCart };
+  return { cart };
 };
