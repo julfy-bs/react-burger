@@ -3,11 +3,34 @@ import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CartContext } from '../../context/cartContext.js';
 
 const BurgerConstructor = ({ openModal }) => {
-  const cart = useContext(CartContext);
+  const { cart, dispatch, state } = useContext(CartContext);
+
+  const createPriceArray = () => {
+    const prices = [];
+
+    if (cart.bun !== null && cart.bun) {
+      prices.push(cart.bun.price);
+      prices.push(cart.bun.price);
+    }
+
+    if (cart.ingredients.length > 0) {
+      cart.ingredients.forEach(item => prices.push(item.price));
+    }
+
+    return prices
+  }
+
+
+  useEffect(() => {
+    const prices = createPriceArray();
+    const amount = prices.reduce((acc, curr) => acc + curr);
+    dispatch({ type: 'summation', value: amount})
+    return () => dispatch({ type: 'reset' });
+  }, [cart, dispatch])
 
   return (
     <section className={clsx(styles.section, 'mt-25')}>
@@ -67,7 +90,7 @@ const BurgerConstructor = ({ openModal }) => {
       <div className={clsx(styles.cart__footer)}>
         <div className={clsx(styles.cart__price)}>
             <span className={clsx('text', 'text_type_digits-medium')}>
-            {cart.price}
+            {state.cartPrice}
             </span>
           <span className={styles.cart__currency}>
             <CurrencyIcon type={'primary'}/>

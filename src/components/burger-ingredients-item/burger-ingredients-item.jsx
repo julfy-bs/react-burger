@@ -7,12 +7,25 @@ import { useContext } from 'react';
 import { CartContext } from '../../context/cartContext.js';
 
 const BurgerIngredientsItem = ({ ingredient, openModal }) => {
-  const cart = useContext(CartContext);
-  const ingredientsCondition = cart.ingredients.some(
-    cartIngredient => cartIngredient._id === ingredient._id
-  );
+  const { cart } = useContext(CartContext);
+  const setIngredientsCondition = () => {
+    if(cart.ingredients !== undefined && cart.ingredients.length > 0) {
+      return cart.ingredients.some(
+        cartIngredient => cartIngredient._id === ingredient._id
+      );
+    }
+    return false
+  }
 
-  const bunCondition = cart.bun._id === ingredient._id;
+  const setBunCondition = () => {
+    if (cart.bun !== undefined && cart.bun !== null) {
+      return cart.bun._id === ingredient._id;
+    }
+    return false;
+  }
+
+  const ingredientsCondition = setIngredientsCondition() || false;
+  const bunCondition = setBunCondition() || false;
 
   const countIngredient = (type) => {
     if (type === 'bun') return 1;

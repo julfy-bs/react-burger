@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useReducer } from 'react';
 
 export const useCart = (ingredients) => {
   const randomizeBun = () => {
@@ -17,13 +17,31 @@ export const useCart = (ingredients) => {
     return cartIngredients[Math.floor(Math.random() * cartIngredients.length)];
   };
 
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'summation':
+        return { cartPrice: state.cartPrice + action.value };
+      case 'subtraction':
+        return { cartPrice: state.cartPrice - action.value };
+      case 'reset':
+        return { cartPrice: 0 };
+      default:
+        throw new Error(`Wrong type of action: ${action.type}`);
+    }
+  }
+
+  const initialState = { cartPrice: 0 };
+
+  const stateInitializer = initialState => initialState;
+
+  const [state, dispatch] = useReducer(reducer, initialState, stateInitializer);
+
   const cart = useMemo(() => {
     return {
-      price: 0,
-      orderNumber: Date.now().toString(),
+      orderNumber: Date.now().toString().split('').slice(7, 13).join(''),
       bun: randomizeBun(),
       ingredients: [randomizeIngredients(), randomizeIngredients()]
     };
   }, [ingredients])
-  return { cart };
+  return { cart, dispatch, state };
 };
