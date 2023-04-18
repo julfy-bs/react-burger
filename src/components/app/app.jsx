@@ -16,11 +16,11 @@ import { useCart } from '../../hooks/useCart.js';
 
 const App = () => {
   const { ingredients, serverData, error, loading } = useIngredients();
-  const { cart } = useCart(ingredients);
+  const { cart, dispatch, state } = useCart(ingredients);
   const { detailedIngredient, isDetailedOrderOpened, isModalOpen, closeModal, openModal } = useModal();
 
   return (
-    <CartContext.Provider value={cart}>
+    <CartContext.Provider value={{ cart, dispatch, state }}>
       <Header/>
       <main className={clsx(styles.main, 'pb-10')}>
         {
