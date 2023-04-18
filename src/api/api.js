@@ -16,11 +16,7 @@ const Api = (baseUrl, headers) => {
     return request('ingredients');
   };
 
-  const createOrder = () => {
-    return 345436;
-  };
-
-  return { getIngredients, createOrder };
+  return { getIngredients };
 };
 
 export const api = Api(serverConfig.baseUrl, serverConfig.headers);
