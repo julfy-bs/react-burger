@@ -16,7 +16,14 @@ const Api = (baseUrl, headers) => {
     return request('ingredients');
   };
 
-  return { getIngredients };
+  const createOrder = (order) => {
+    return request('orders', {
+      method: 'POST',
+      body: JSON.stringify(order)
+    })
+  }
+
+  return { getIngredients, createOrder };
 };
 
 export const api = Api(serverConfig.baseUrl, serverConfig.headers);

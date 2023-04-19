@@ -44,7 +44,7 @@ const OrderDetails = ({ orderNumber }) => {
 
 
 OrderDetails.propTypes = {
-  orderNumber: PropTypes.string.isRequired
+  orderNumber: PropTypes.string.isRequired || null
 };
 
 export default OrderDetails;
