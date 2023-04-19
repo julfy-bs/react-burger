@@ -38,7 +38,7 @@ export const useCart = (ingredients) => {
 
   const cart = useMemo(() => {
     return {
-      orderNumber: Date.now().toString().split('').slice(7, 13).join(''),
+      orderNumber: null,
       bun: randomizeBun(),
       ingredients: [randomizeIngredients(), randomizeIngredients()]
     };
