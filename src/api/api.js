@@ -17,6 +17,8 @@ const Api = (baseUrl, headers) => {
   };
 
   const createOrder = (order) => {
+    //   В post запрос на сервер необходимо добавить в хедер свойство Content-type - иначе сервер может неправильно обработать.
+    //   Content-type добавляется в функции request
     return request('orders', {
       method: 'POST',
       body: JSON.stringify(order)

@@ -44,7 +44,7 @@ const OrderDetails = ({ orderNumber }) => {
 
 
 OrderDetails.propTypes = {
-  orderNumber: PropTypes.string.isRequired || null
+  orderNumber: PropTypes.oneOf([PropTypes.string, null]).isRequired
 };
 
 export default OrderDetails;

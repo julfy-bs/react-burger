@@ -2,9 +2,12 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './burger-ingredients-list.module.css';
 import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item.jsx';
-import { componentType } from '../../utils/types.js';
+import { useContext } from 'react';
+import { IngredientsContext } from '../../context/ingredientsContext.js';
 
-const BurgerIngredientsList = ({ ingredients, openModal }) => {
+const BurgerIngredientsList = ({ openModal }) => {
+  const { ingredients } = useContext(IngredientsContext);
+
   return (
     <ul
       className={clsx(styles.ingredients)}
@@ -42,7 +45,6 @@ const BurgerIngredientsList = ({ ingredients, openModal }) => {
 
 
 BurgerIngredientsList.propTypes = {
-  ingredients: PropTypes.arrayOf(componentType.isRequired),
   openModal: PropTypes.func.isRequired
 };
 
