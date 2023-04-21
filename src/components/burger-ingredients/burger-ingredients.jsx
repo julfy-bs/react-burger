@@ -2,12 +2,11 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
-import { componentType } from '../../utils/types.js';
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs.jsx';
 import { ingredientTabs } from '../../utils/config.js';
 import BurgerIngredientsList from '../burger-ingredients-list/burger-ingredients-list.jsx';
 
-const BurgerIngredients = ({ ingredients, openModal }) => {
+const BurgerIngredients = ({ openModal }) => {
   const [currentTab, setCurrentTab] = useState('one');
   const [tabs] = useState(ingredientTabs);
 
@@ -27,7 +26,6 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
       />
       <BurgerIngredientsList
         openModal={openModal}
-        ingredients={ingredients}
       />
     </section>
   );
@@ -35,7 +33,6 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
 
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(componentType.isRequired),
   openModal: PropTypes.func.isRequired
 };
 

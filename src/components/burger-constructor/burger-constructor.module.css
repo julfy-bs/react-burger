@@ -4,6 +4,10 @@
   gap: 40px;
 }
 
+.title {
+  align-self: flex-end;
+}
+
 .cart__list {
   box-sizing: border-box;
   display: flex;
