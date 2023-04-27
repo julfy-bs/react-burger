@@ -1,26 +1,23 @@
 import clsx from 'clsx';
-import styles from './burger-ingredients-item.module.css';
+import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../utils/types.js';
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import { CartContext } from '../../context/cartContext.js';
 
-const BurgerIngredientsItem = ({ ingredient, openModal }) => {
-  const { cart } = useContext(CartContext);
+const Ingredient = ({ ingredient, openModal }) => {
   const setIngredientsCondition = () => {
-    if(cart.ingredients !== undefined && cart.ingredients.length > 0) {
-      return cart.ingredients.some(
-        cartIngredient => cartIngredient._id === ingredient._id
-      );
-    }
+    // if(cart.ingredients !== undefined && cart.ingredients.length > 0) {
+    //   return cart.ingredients.some(
+    //     cartIngredient => cartIngredient._id === ingredient._id
+    //   );
+    // }
     return false
   }
 
   const setBunCondition = () => {
-    if (cart.bun !== undefined && cart.bun !== null) {
-      return cart.bun._id === ingredient._id;
-    }
+    // if (cart.bun !== undefined && cart.bun !== null) {
+    //   return cart.bun._id === ingredient._id;
+    // }
     return false;
   }
 
@@ -28,9 +25,10 @@ const BurgerIngredientsItem = ({ ingredient, openModal }) => {
   const bunCondition = setBunCondition() || false;
 
   const countIngredient = (type) => {
-    if (type === 'bun') return 1;
-    else if (type === 'main' || type === 'sauce') return cart.ingredients.filter(item => item._id === ingredient._id).length;
-    else throw new Error('Передайте тип ингредиента!')
+    return 0
+    // if (type === 'bun') return 1;
+    // else if (type === 'main' || type === 'sauce') return cart.ingredients.filter(item => item._id === ingredient._id).length;
+    // else throw new Error('Передайте тип ингредиента!')
   };
 
   return (
@@ -84,9 +82,9 @@ const BurgerIngredientsItem = ({ ingredient, openModal }) => {
   );
 };
 
-BurgerIngredientsItem.propTypes = {
+Ingredient.propTypes = {
   ingredient: ingredientType.isRequired,
   openModal: PropTypes.func.isRequired
 };
 
-export default BurgerIngredientsItem;
+export default Ingredient;
