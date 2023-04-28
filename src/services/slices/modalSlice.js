@@ -5,6 +5,7 @@ const modalSlice = createSlice({
   initialState: {
     isModalOpen: false,
     modalIngredient: null,
+    isDetailedOrderOpened: false
   },
   reducers: {
     openModal(state, action) {

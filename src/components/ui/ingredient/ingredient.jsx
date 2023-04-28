@@ -2,47 +2,34 @@ import clsx from 'clsx';
 import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../../utils/types.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../../services/slices/modalSlice.js';
+import { addIngredient } from '../../../services/slices/cartSlice.js';
 
 const Ingredient = ({ ingredient }) => {
+  const { cart } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
-  const handleIngredientClick = () => {
-    dispatch(openModal(ingredient));
-  }
+  const handleIngredientClick = (e) => e.shiftKey
+    ? dispatch(addIngredient(ingredient))
+    : dispatch(openModal(ingredient));
 
-  const setIngredientsCondition = () => {
-    // if(cart.ingredients !== undefined && cart.ingredients.length > 0) {
-    //   return cart.ingredients.some(
-    //     cartIngredient => cartIngredient._id === ingredient._id
-    //   );
-    // }
-    return false
-  }
+  const setIngredientsCondition = () => cart.ingredients.length > 0
+    ? cart.ingredients.some(cartIngredient => cartIngredient._id === ingredient._id)
+    : false;
 
-  const setBunCondition = () => {
-    // if (cart.bun !== undefined && cart.bun !== null) {
-    //   return cart.bun._id === ingredient._id;
-    // }
-    return false;
-  }
+  const setBunCondition = () => (cart.bun) ? cart.bun._id === ingredient._id : false;
 
   const ingredientsCondition = setIngredientsCondition() || false;
   const bunCondition = setBunCondition() || false;
 
-  const countIngredient = (type) => {
-    return 0
-    // if (type === 'bun') return 1;
-    // else if (type === 'main' || type === 'sauce') return cart.ingredients.filter(item => item._id === ingredient._id).length;
-    // else throw new Error('Передайте тип ингредиента!')
-  };
+  const countIngredient = (type) => (type === 'bun') ? 1 : cart.ingredients.filter(item => item._id === ingredient._id).length;
 
   return (
     <>
       <li
         className={clsx(styles.ingredients__item)}
-        onClick={() => handleIngredientClick()}
+        onClick={(e) => handleIngredientClick(e)}
       >
         {
           (ingredientsCondition || bunCondition) && (

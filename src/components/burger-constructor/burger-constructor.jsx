@@ -2,15 +2,17 @@ import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { removeIngredient, summarizeIngredientsCost } from '../../services/slices/cartSlice.js';
 
 const BurgerConstructor = () => {
   const { cart, cartPrice } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
-  const bun = useMemo(() => cart.filter((item) => item.type === 'bun'), [cart]);
-  const ingredients = useMemo(() => cart.filter((item) => item.type !== 'bun'), [cart]);
+  const removeIngredientFromCart = (id) => {
+    dispatch(removeIngredient(id));
+  };
 
   // const createIngredientsIdsArray = () => {
   //   const idsArray = { 'ingredients': [] };
@@ -61,12 +63,32 @@ const BurgerConstructor = () => {
   //   return () => dispatch({ type: 'reset' });
   // }, [cart, dispatch, createPriceArray]);
 
+  useEffect(() => {
+    dispatch(summarizeIngredientsCost());
+  }, [cart, dispatch]);
+
+  const ingredientElements = cart.ingredients.map(
+    (ingredient, index) =>
+      <li
+        className={clsx(styles.cart__item, styles.cart__item_draggable)}
+        key={ingredient._id + index}
+      >
+        <DragIcon type="primary"/>
+        <ConstructorElement
+          text={ingredient.name}
+          price={ingredient.price}
+          thumbnail={ingredient.image}
+          handleClose={() => removeIngredientFromCart(index)}
+        />
+      </li>
+  );
+
   return (
     <>
       <section className={clsx(styles.section, 'mt-25')}>
-          {
-            bun
-              ?
+        {
+          !cart.bun
+            ? (
               <h1
                 className={
                   clsx('text', 'text_type_main-large', styles.title)
@@ -74,7 +96,9 @@ const BurgerConstructor = () => {
               >
                 Выберите булку
               </h1>
-              : <ul className={clsx(styles.cart__list)}>
+            )
+            : (
+              <ul className={clsx(styles.cart__list)}>
                 <li
                   className={clsx(styles.cart__item)}
                 >
@@ -82,28 +106,14 @@ const BurgerConstructor = () => {
                     extraClass={clsx(styles.cart__bun)}
                     type={'top'}
                     isLocked={true}
-                    text={`${bun[0].name} (верх)`}
-                    price={bun[0].price}
-                    thumbnail={bun[0].image}
+                    text={`${cart.bun.name} (верх)`}
+                    price={cart.bun.price}
+                    thumbnail={cart.bun.image}
                   />
                 </li>
                 <li>
                   <ul className={clsx(styles.cart__ingredients_list)}>
-                    {
-                      ingredients.map((ingredient, index) => (
-                        <li
-                          className={clsx(styles.cart__item, styles.cart__item_draggable)}
-                          key={ingredient._id + index}
-                        >
-                          <DragIcon type="primary"/>
-                          <ConstructorElement
-                            text={ingredient.name}
-                            price={ingredient.price}
-                            thumbnail={ingredient.image}
-                          />
-                        </li>
-                      ))
-                    }
+                    {ingredientElements}
                   </ul>
                 </li>
                 <li
@@ -113,35 +123,34 @@ const BurgerConstructor = () => {
                     extraClass={clsx(styles.cart__bun)}
                     type={'bottom'}
                     isLocked={true}
-                    text={`${bun[0].name} (низ)`}
-                    price={bun[0].price}
-                    thumbnail={bun[0].image}
+                    text={`${cart.bun.name} (низ)`}
+                    price={cart.bun.price}
+                    thumbnail={cart.bun.image}
                   />
                 </li>
               </ul>
-          }
-          <div className={clsx(styles.cart__footer)}>
-            <div className={clsx(styles.cart__price)}>
+            )
+        }
+        <div className={clsx(styles.cart__footer)}>
+          <div className={clsx(styles.cart__price)}>
             <span className={clsx('text', 'text_type_digits-medium')}>
             {cartPrice}
             </span>
-              <span className={styles.cart__currency}>
+            <span className={styles.cart__currency}>
             <CurrencyIcon type={'primary'}/>
           </span>
-            </div>
-            <Button
-              extraClass={styles.button}
-              htmlType="button"
-              type="primary"
-              size="large"
-              onClick={
-                handleBurgerConstructorButton
-              }
-            >
-              Оформить заказ
-            </Button>
           </div>
-        </section>
+          <Button
+            extraClass={styles.button}
+            htmlType="button"
+            type="primary"
+            size="large"
+            onClick={handleBurgerConstructorButton}
+          >
+            Оформить заказ
+          </Button>
+        </div>
+      </section>
     </>
   );
 };
