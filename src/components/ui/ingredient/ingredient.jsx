@@ -1,10 +1,17 @@
 import clsx from 'clsx';
 import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../utils/types.js';
-import PropTypes from 'prop-types';
+import { ingredientType } from '../../../utils/types.js';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../../../services/slices/modalSlice.js';
 
-const Ingredient = ({ ingredient, openModal }) => {
+const Ingredient = ({ ingredient }) => {
+  const dispatch = useDispatch();
+
+  const handleIngredientClick = () => {
+    dispatch(openModal(ingredient));
+  }
+
   const setIngredientsCondition = () => {
     // if(cart.ingredients !== undefined && cart.ingredients.length > 0) {
     //   return cart.ingredients.some(
@@ -35,7 +42,7 @@ const Ingredient = ({ ingredient, openModal }) => {
     <>
       <li
         className={clsx(styles.ingredients__item)}
-        onClick={() => openModal('ingredient', ingredient)}
+        onClick={() => handleIngredientClick()}
       >
         {
           (ingredientsCondition || bunCondition) && (
@@ -83,8 +90,7 @@ const Ingredient = ({ ingredient, openModal }) => {
 };
 
 Ingredient.propTypes = {
-  ingredient: ingredientType.isRequired,
-  openModal: PropTypes.func.isRequired
+  ingredient: ingredientType.isRequired
 };
 
 export default Ingredient;

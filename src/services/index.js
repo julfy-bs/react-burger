@@ -4,13 +4,15 @@ import ingredientsSlice from './slices/ingredientsSlice';
 import loadingSlice from './slices/loadingSlice.js';
 import errorSlice from './slices/errorSlice.js';
 import cartSlice from './slices/cartSlice.js';
+import modalSlice from './slices/modalSlice.js';
 
 
 const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
   loading: loadingSlice,
   error: errorSlice,
-  cart: cartSlice
+  cart: cartSlice,
+  modal: modalSlice
 });
 
 export const store = configureStore({

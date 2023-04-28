@@ -5,16 +5,18 @@ import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
 import { MODAL_ID } from '../../utils/enum.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal } from '../../services/slices/modalSlice.js';
 
-const Modal = ({ title, ariaTitle, children, isModalOpen, closeModal }) => {
+const Modal = ({ title, ariaTitle, children }) => {
+  const { isModalOpen } = useSelector(state => state.modal);
+  const dispatch = useDispatch();
+
   return createPortal(
     <>
       {
         <>
-          <ModalOverlay
-            isModalOpen={isModalOpen}
-            closeModal={closeModal}
-          />
+          <ModalOverlay />
           <div
             className={clsx(styles.modal, { [styles.modal_opened]: isModalOpen })}
             onClick={(e) => e.stopPropagation()}
@@ -39,7 +41,7 @@ const Modal = ({ title, ariaTitle, children, isModalOpen, closeModal }) => {
                 className={clsx(styles.modal__close)}
                 aria-label="Закрыть модальное окно"
                 type="button"
-                onClick={() => closeModal()}
+                onClick={() => dispatch(closeModal())}
               >
                 <CloseIcon type="primary"/>
               </button>
@@ -57,9 +59,7 @@ const Modal = ({ title, ariaTitle, children, isModalOpen, closeModal }) => {
 Modal.propTypes = {
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
-  children: PropTypes.any,
-  isModalOpen: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired
+  children: PropTypes.any
 };
 
 export default Modal;

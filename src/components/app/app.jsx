@@ -10,22 +10,18 @@ import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
 import OrderDetails from '../order-details/order-details.jsx';
 
 import { useModal } from '../../hooks/useModal.js';
-import { CartContext } from '../../context/cartContext.js';
-import { IngredientsContext } from '../../context/ingredientsContext.js';
-import { useCart } from '../../hooks/useCart.js';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchIngredients, filterIngredients } from '../../services/slices/ingredientsSlice.js';
-import { addIngredient } from '../../services/slices/cartSlice.js';
-import ingredient from '../../ui/ingredient/ingredient.jsx';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice.js';
 
 const App = () => {
-  // const { cart, dispatch, state } = useCart(ingredients);
-  const { detailedIngredient, isDetailedOrderOpened, isModalOpen, closeModal, openModal } = useModal();
+  const { isDetailedOrderOpened } = useModal();
   const { ingredients } = useSelector(state => state.ingredients);
   const { loading } = useSelector(state => state.loading);
   const { error } = useSelector(state => state.error);
   const { cart, orderNumber } = useSelector(state => state.cart);
+  const { modalIngredient } = useSelector(state => state.modal);
+
   const dispatch = useDispatch();
 
 
@@ -34,7 +30,7 @@ const App = () => {
     return () => {
       dispatch(fetchIngredients());
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -44,12 +40,8 @@ const App = () => {
           !loading && ingredients.length > 0
             ?
             <div className={clsx(styles.main_container)}>
-              <BurgerIngredients
-                openModal={openModal}
-              />
-              <BurgerConstructor
-                openModal={openModal}
-              />
+              <BurgerIngredients />
+              <BurgerConstructor />
             </div>
             : <Loader loading={loading}/>
         }
@@ -60,14 +52,12 @@ const App = () => {
       ;
 
       <Modal
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        title={detailedIngredient ? 'Детали ингредиента' : ''}
+        title={modalIngredient ? 'Детали ингредиента' : ''}
         ariaTitle={isDetailedOrderOpened ? 'Идентификатор заказа' : ''}
       >
         {
-          detailedIngredient &&
-          <IngredientDetails ingredient={detailedIngredient}/>
+          modalIngredient &&
+          <IngredientDetails ingredient={modalIngredient}/>
         }
         {
           (isDetailedOrderOpened && orderNumber) &&

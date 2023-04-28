@@ -1,4 +1,4 @@
-import { createSlice, createAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const cartSlice = createSlice({
   name: 'cartSlice',
@@ -25,6 +25,6 @@ const cartSlice = createSlice({
   }
 });
 
-const { actions } = cartSlice
-export const { addIngredient, removeIngredient } = actions
+const { actions } = cartSlice;
+export const { addIngredient, removeIngredient } = actions;
 export default cartSlice.reducer;
