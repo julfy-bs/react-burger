@@ -1,13 +1,11 @@
 import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useCallback, useEffect, useMemo } from 'react';
-import { api } from '../../api/api.js';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const BurgerConstructor = ({ openModal }) => {
+const BurgerConstructor = () => {
   const { cart, cartPrice } = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
@@ -146,10 +144,6 @@ const BurgerConstructor = ({ openModal }) => {
         </section>
     </>
   );
-};
-
-BurgerConstructor.propTypes = {
-  openModal: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

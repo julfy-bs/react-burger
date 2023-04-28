@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import styles from './burger-ingredients.module.css';
-import PropTypes from 'prop-types';
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs.jsx';
 import { ingredientTabs } from '../../utils/config.js';
-import IngredientsContainer from '../../ui/ingredients-container/ingredients-container.jsx';
+import IngredientsContainer from '../ui/ingredients-container/ingredients-container.jsx';
 import { useSelector } from 'react-redux';
-import Ingredient from '../../ui/ingredient/ingredient.jsx';
+import Ingredient from '../ui/ingredient/ingredient.jsx';
 
-const BurgerIngredients = ({ openModal }) => {
+const BurgerIngredients = () => {
   const [currentTab, setCurrentTab] = useState('one');
   const [tabs] = useState(ingredientTabs);
   const changeActiveTab = (string) => setCurrentTab(string);
@@ -19,9 +18,9 @@ const BurgerIngredients = ({ openModal }) => {
   const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);
   const main = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
 
-  const bunElements = useMemo(() => buns.map((item) => <Ingredient key={item._id} openModal={openModal} ingredient={item} />), [buns, openModal]);
-  const sauceElements = useMemo(() => sauces.map((item) => <Ingredient key={item._id} openModal={openModal} ingredient={item} />), [openModal, sauces]);
-  const mainElements = useMemo(() => main.map((item) => <Ingredient key={item._id} openModal={openModal} ingredient={item} />), [main, openModal]);
+  const bunElements = useMemo(() => buns.map((item) => <Ingredient key={item._id} ingredient={item} />), [buns]);
+  const sauceElements = useMemo(() => sauces.map((item) => <Ingredient key={item._id} ingredient={item} />), [sauces]);
+  const mainElements = useMemo(() => main.map((item) => <Ingredient key={item._id} ingredient={item} />), [main]);
 
 
   return (
@@ -51,11 +50,6 @@ const BurgerIngredients = ({ openModal }) => {
       </ul>
     </section>
   );
-};
-
-
-BurgerIngredients.propTypes = {
-  openModal: PropTypes.func.isRequired
 };
 
 export default BurgerIngredients;
