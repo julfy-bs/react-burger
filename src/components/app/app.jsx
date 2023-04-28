@@ -9,18 +9,16 @@ import Modal from '../modal/modal.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
 import OrderDetails from '../order-details/order-details.jsx';
 
-import { useModal } from '../../hooks/useModal.js';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice.js';
 
 const App = () => {
-  const { isDetailedOrderOpened } = useModal();
   const { ingredients } = useSelector(state => state.ingredients);
   const { loading } = useSelector(state => state.loading);
   const { error } = useSelector(state => state.error);
   const { cart, orderNumber } = useSelector(state => state.cart);
-  const { modalIngredient } = useSelector(state => state.modal);
+  const { modalIngredient, isDetailedOrderOpened } = useSelector(state => state.modal);
 
   const dispatch = useDispatch();
 
@@ -29,8 +27,8 @@ const App = () => {
     dispatch(fetchIngredients());
     return () => {
       dispatch(fetchIngredients());
-    }
-  }, [dispatch])
+    };
+  }, [dispatch]);
 
   return (
     <>
@@ -40,8 +38,8 @@ const App = () => {
           !loading && ingredients.length > 0
             ?
             <div className={clsx(styles.main_container)}>
-              <BurgerIngredients />
-              <BurgerConstructor />
+              <BurgerIngredients/>
+              <BurgerConstructor/>
             </div>
             : <Loader loading={loading}/>
         }
