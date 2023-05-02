@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './order-details.module.css';
 import IconDone from '../ui/icon-done/icon-done.jsx';
+import { useSelector } from 'react-redux';
 
-const OrderDetails = ({ orderNumber }) => {
+const OrderDetails = () => {
+  const { orderNumber } = useSelector(state => state.order);
+
   return (
     <div
       className={clsx(
@@ -40,11 +42,6 @@ const OrderDetails = ({ orderNumber }) => {
       </span>
     </div>
   );
-};
-
-
-OrderDetails.propTypes = {
-  orderNumber: PropTypes.string.isRequired
 };
 
 export default OrderDetails;

@@ -2,69 +2,39 @@ import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
 
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeIngredient, summarizeIngredientsCost } from '../../services/slices/cartSlice.js';
+import {
+  cleanCart,
+  removeIngredient,
+  resetIngredientsCost,
+  summarizeIngredientsCost
+} from '../../services/slices/cartSlice.js';
+import { openModal } from '../../services/slices/modalSlice.js';
+import { createOrder, setOrderIdsArray } from '../../services/slices/orderSlice.js';
 
 const BurgerConstructor = () => {
   const { cart, cartPrice } = useSelector(state => state.cart);
+  const { orderIdsArray } = useSelector(state => state.order);
   const dispatch = useDispatch();
 
   const removeIngredientFromCart = (id) => {
     dispatch(removeIngredient(id));
   };
 
-  // const createIngredientsIdsArray = () => {
-  //   const idsArray = { 'ingredients': [] };
-  //   cart.ingredients.forEach(item => idsArray.ingredients.push(item._id));
-  //   idsArray.ingredients.push(cart.bun._id);
-  //   idsArray.ingredients.push(cart.bun._id);
-  //   return idsArray;
-  // };
-  //
-  // const handleBurgerConstructorButton = async () => {
-  //   try {
-  //     const order = createIngredientsIdsArray();
-  //     const res = await api.createOrder(order);
-  //     cart.orderNumber = res.order.number.toString();
-  //     if (cart.orderNumber !== null) openModal('cart', true);
-  //     else console.error('Ошибка в формировании номера заказа.');
-  //     cart.ingredients = [];
-  //     cart.bun = null;
-  //     dispatch({ type: 'reset' });
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // };
-  const handleBurgerConstructorButton = async () => {
-    console.log(123);
+  const handleBurgerConstructorButton = () => {
+
+    if (orderIdsArray.length > 0) {
+      dispatch(createOrder(orderIdsArray));
+      dispatch(openModal({ type: 'order' }));
+      dispatch(cleanCart());
+      dispatch(resetIngredientsCost());
+    }
   };
-  //
-  // const createPriceArray = useCallback(() => {
-  //   const prices = [];
-  //
-  //   if (cart.bun !== null && cart.bun) {
-  //     prices.push(cart.bun.price);
-  //     prices.push(cart.bun.price);
-  //   }
-  //
-  //   if (cart.length > 0) {
-  //     cart.forEach(item => prices.push(item.price));
-  //   }
-  //
-  //   return prices;
-  // }, [cart]);
-  //
-  //
-  // useEffect(() => {
-  //   const prices = createPriceArray();
-  //   const amount = prices.reduce((acc, curr) => acc + curr);
-  //   dispatch({ type: 'summation', value: amount });
-  //   return () => dispatch({ type: 'reset' });
-  // }, [cart, dispatch, createPriceArray]);
 
   useEffect(() => {
     dispatch(summarizeIngredientsCost());
+    cart.bun !== null && dispatch(setOrderIdsArray(cart));
   }, [cart, dispatch]);
 
   const ingredientElements = cart.ingredients.map(
