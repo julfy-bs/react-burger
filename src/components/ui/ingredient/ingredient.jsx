@@ -3,7 +3,7 @@ import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../../utils/types.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { openModal } from '../../../services/slices/modalSlice.js';
+import { openModal, setModalIngredient } from '../../../services/slices/modalSlice.js';
 import { addIngredient } from '../../../services/slices/cartSlice.js';
 
 const Ingredient = ({ ingredient }) => {
@@ -12,7 +12,7 @@ const Ingredient = ({ ingredient }) => {
 
   const handleIngredientClick = (e) => e.shiftKey
     ? dispatch(addIngredient(ingredient))
-    : dispatch(openModal(ingredient));
+    : dispatch(setModalIngredient(ingredient)) && dispatch(openModal({type: 'ingredient'}));
 
   const setIngredientsCondition = () => cart.ingredients.length > 0
     ? cart.ingredients.some(cartIngredient => cartIngredient._id === ingredient._id)

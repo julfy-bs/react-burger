@@ -17,8 +17,8 @@ const App = () => {
   const { ingredients } = useSelector(state => state.ingredients);
   const { loading } = useSelector(state => state.loading);
   const { error } = useSelector(state => state.error);
-  const { cart, orderNumber } = useSelector(state => state.cart);
-  const { modalIngredient, isDetailedOrderOpened } = useSelector(state => state.modal);
+  const { orderNumber } = useSelector(state => state.order);
+  const { modalIngredient, isDetailedOrderOpened, isDetailedIngredientOpened } = useSelector(state => state.modal);
 
   const dispatch = useDispatch();
 
@@ -54,12 +54,12 @@ const App = () => {
         ariaTitle={isDetailedOrderOpened ? 'Идентификатор заказа' : ''}
       >
         {
-          modalIngredient &&
+          (modalIngredient && isDetailedIngredientOpened) &&
           <IngredientDetails ingredient={modalIngredient}/>
         }
         {
-          (isDetailedOrderOpened && orderNumber) &&
-          <OrderDetails orderNumber={cart.orderNumber}/>
+          (orderNumber && isDetailedOrderOpened) &&
+          <OrderDetails />
         }
       </Modal>;
     </>

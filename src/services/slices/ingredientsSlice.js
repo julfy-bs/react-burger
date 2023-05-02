@@ -1,10 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../api/api';
 
+const initialState = {
+  ingredients: [],
+  ingredientsFetchRequest: false,
+  ingredientsFetchFailed: false,
+};
+
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
   async (_, thunkApi) => {
-    try{
+    try {
       const res = await api.getIngredients();
       return res.data;
     } catch (e) {
@@ -16,13 +22,8 @@ export const fetchIngredients = createAsyncThunk(
 
 const ingredientsSlice = createSlice({
   name: 'ingredientsSlice',
-  initialState: {
-    ingredients: [],
-    ingredientsFetchRequest: false,
-    ingredientsFetchFailed: false,
-  },
-  reducers: {
-  },
+  initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -36,7 +37,7 @@ const ingredientsSlice = createSlice({
         state.ingredientsFetchRequest = false;
         state.ingredientsFetchFailed = true;
         console.error(action.payload);
-      })
+      });
   },
 });
 

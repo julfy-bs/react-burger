@@ -1,15 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  cart: {
+    bun: null,
+    ingredients: []
+  },
+  cartPrice: 0
+};
+
 const cartSlice = createSlice({
   name: 'cartSlice',
-  initialState: {
-    orderNumber: null,
-    cart: {
-      bun: null,
-      ingredients: []
-    },
-    cartPrice: 0
-  },
+  initialState,
   reducers: {
     addIngredient(state, action) {
       action.payload.type === 'bun'
@@ -18,6 +19,12 @@ const cartSlice = createSlice({
     },
     removeIngredient(state, action) {
       state.cart.ingredients.splice(action.payload, 1);
+    },
+    cleanCart(state) {
+      state.cart = {
+        bun: null,
+        ingredients: []
+      };
     },
     summarizeIngredientsCost(state) {
       if (state.cart.bun !== null) {
@@ -37,6 +44,7 @@ export const {
   addIngredient,
   removeIngredient,
   summarizeIngredientsCost,
+  cleanCart,
   resetIngredientsCost
 } = actions;
 export default cartSlice.reducer;
