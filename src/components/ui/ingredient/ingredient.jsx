@@ -1,43 +1,35 @@
 import clsx from 'clsx';
-import styles from './burger-ingredients-item.module.css';
+import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../utils/types.js';
-import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import { CartContext } from '../../context/cartContext.js';
+import { ingredientType } from '../../../utils/types.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { openModal, setModalIngredient } from '../../../services/slices/modalSlice.js';
+import { addIngredient } from '../../../services/slices/cartSlice.js';
 
-const BurgerIngredientsItem = ({ ingredient, openModal }) => {
-  const { cart } = useContext(CartContext);
-  const setIngredientsCondition = () => {
-    if(cart.ingredients !== undefined && cart.ingredients.length > 0) {
-      return cart.ingredients.some(
-        cartIngredient => cartIngredient._id === ingredient._id
-      );
-    }
-    return false
-  }
+const Ingredient = ({ ingredient }) => {
+  const { cart } = useSelector(state => state.cart);
+  const dispatch = useDispatch();
 
-  const setBunCondition = () => {
-    if (cart.bun !== undefined && cart.bun !== null) {
-      return cart.bun._id === ingredient._id;
-    }
-    return false;
-  }
+  const handleIngredientClick = (e) => e.shiftKey
+    ? dispatch(addIngredient(ingredient))
+    : dispatch(setModalIngredient(ingredient)) && dispatch(openModal({type: 'ingredient'}));
+
+  const setIngredientsCondition = () => cart.ingredients.length > 0
+    ? cart.ingredients.some(cartIngredient => cartIngredient._id === ingredient._id)
+    : false;
+
+  const setBunCondition = () => (cart.bun) ? cart.bun._id === ingredient._id : false;
 
   const ingredientsCondition = setIngredientsCondition() || false;
   const bunCondition = setBunCondition() || false;
 
-  const countIngredient = (type) => {
-    if (type === 'bun') return 1;
-    else if (type === 'main' || type === 'sauce') return cart.ingredients.filter(item => item._id === ingredient._id).length;
-    else throw new Error('Передайте тип ингредиента!')
-  };
+  const countIngredient = (type) => (type === 'bun') ? 1 : cart.ingredients.filter(item => item._id === ingredient._id).length;
 
   return (
     <>
       <li
         className={clsx(styles.ingredients__item)}
-        onClick={() => openModal('ingredient', ingredient)}
+        onClick={(e) => handleIngredientClick(e)}
       >
         {
           (ingredientsCondition || bunCondition) && (
@@ -84,9 +76,8 @@ const BurgerIngredientsItem = ({ ingredient, openModal }) => {
   );
 };
 
-BurgerIngredientsItem.propTypes = {
-  ingredient: ingredientType.isRequired,
-  openModal: PropTypes.func.isRequired
+Ingredient.propTypes = {
+  ingredient: ingredientType.isRequired
 };
 
-export default BurgerIngredientsItem;
+export default Ingredient;

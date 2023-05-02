@@ -9,71 +9,60 @@ import Modal from '../modal/modal.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
 import OrderDetails from '../order-details/order-details.jsx';
 
-import { useIngredients } from '../../hooks/useIngredients.js';
-import { useModal } from '../../hooks/useModal.js';
-import { CartContext } from '../../context/cartContext.js';
-import { IngredientsContext } from '../../context/ingredientsContext.js';
-import { useCart } from '../../hooks/useCart.js';
-import { useMemo } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 
 const App = () => {
-  const { ingredients, serverData, error, loading } = useIngredients();
-  const { cart, dispatch, state } = useCart(ingredients);
-  const { detailedIngredient, isDetailedOrderOpened, isModalOpen, closeModal, openModal } = useModal();
+  const { ingredients } = useSelector(state => state.ingredients);
+  const { loading } = useSelector(state => state.loading);
+  const { error } = useSelector(state => state.error);
+  const { orderNumber } = useSelector(state => state.order);
+  const { modalIngredient, isDetailedOrderOpened, isDetailedIngredientOpened } = useSelector(state => state.modal);
 
-  const ingredientsContextValue = useMemo(() => {
-    return { ingredients };
-  }, [ingredients]);
+  const dispatch = useDispatch();
 
-  const cartContextValue = useMemo(() => {
-    return { cart, dispatch, state };
-  }, [cart, dispatch, state]);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+    return () => {
+      dispatch(fetchIngredients());
+    };
+  }, [dispatch]);
 
   return (
     <>
       <Header/>
       <main className={clsx(styles.main, 'pb-10')}>
         {
-          !loading && serverData.length > 0
+          !loading && ingredients.length > 0
             ?
-            <IngredientsContext.Provider value={ingredientsContextValue}>
-              <CartContext.Provider value={cartContextValue}>
-                <div className={clsx(styles.main_container)}>
-                  <BurgerIngredients
-                    openModal={openModal}
-                  />
-                  <BurgerConstructor
-                    openModal={openModal}
-                  />
-                </div>
-              </CartContext.Provider>
-            </IngredientsContext.Provider>
+            <div className={clsx(styles.main_container)}>
+              <BurgerIngredients/>
+              <BurgerConstructor/>
+            </div>
             : <Loader loading={loading}/>
         }
         {
-          error && <h1>Ошибка</h1>
+          error.exists && <h1>Ошибка</h1>
         }
       </main>
-      ;
 
       <Modal
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        title={detailedIngredient ? 'Детали ингредиента' : ''}
+        title={modalIngredient ? 'Детали ингредиента' : ''}
         ariaTitle={isDetailedOrderOpened ? 'Идентификатор заказа' : ''}
       >
         {
-          detailedIngredient &&
-          <IngredientDetails ingredient={detailedIngredient}/>
+          (modalIngredient && isDetailedIngredientOpened) &&
+          <IngredientDetails ingredient={modalIngredient}/>
         }
         {
-          isDetailedOrderOpened &&
-          <OrderDetails orderNumber={cart.orderNumber}/>
+          (orderNumber && isDetailedOrderOpened) &&
+          <OrderDetails/>
         }
-      </Modal>;
+      </Modal>
     </>
-  )
-    ;
+  );
 };
 
 export default App;

@@ -21,3 +21,7 @@
   src: url("./fonts/Iceland-Regular.woff") format("woff");
   font-display: swap;
 }
+
+html {
+  scroll-behavior: smooth;
+}
