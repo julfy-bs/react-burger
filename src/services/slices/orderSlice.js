@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { api } from '../../api/api.js';
+import { createSlice } from '@reduxjs/toolkit';
+import { createOrder } from '../asyncThunk/orderThunk.js';
 
 const initialState = {
   orderNumber: null,
@@ -7,16 +7,6 @@ const initialState = {
   orderFetchFailed: false,
   orderIdsArray: []
 };
-export const createOrder = createAsyncThunk(
-  'order/createOrder',
-  async (idsArray, thunkApi) => {
-    try {
-      return await api.createOrder({ ingredients: idsArray });
-    } catch (e) {
-      return thunkApi.rejectWithValue(e);
-    }
-  },
-);
 
 const orderSlice = createSlice({
   name: 'orderSlice',
@@ -49,6 +39,5 @@ const orderSlice = createSlice({
       });
   },
 });
-const { actions } = orderSlice;
-export const { setOrderIdsArray, resetOrderIdsArray } = actions;
+export const { setOrderIdsArray, resetOrderIdsArray } = orderSlice.actions;
 export default orderSlice.reducer;

@@ -11,7 +11,7 @@ import OrderDetails from '../order-details/order-details.jsx';
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice.js';
+import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 
 const App = () => {
   const { ingredients } = useSelector(state => state.ingredients);
@@ -47,7 +47,6 @@ const App = () => {
           error.exists && <h1>Ошибка</h1>
         }
       </main>
-      ;
 
       <Modal
         title={modalIngredient ? 'Детали ингредиента' : ''}
@@ -59,12 +58,11 @@ const App = () => {
         }
         {
           (orderNumber && isDetailedOrderOpened) &&
-          <OrderDetails />
+          <OrderDetails/>
         }
-      </Modal>;
+      </Modal>
     </>
-  )
-    ;
+  );
 };
 
 export default App;
