@@ -1,24 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { api } from '../../api/api';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchIngredients } from '../asyncThunk/ingredientsThunk.js';
 
 const initialState = {
   ingredients: [],
   ingredientsFetchRequest: false,
   ingredientsFetchFailed: false,
 };
-
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchIngredients',
-  async (_, thunkApi) => {
-    try {
-      const res = await api.getIngredients();
-      return res.data;
-    } catch (e) {
-      return thunkApi.rejectWithValue(e);
-    }
-  },
-);
-
 
 const ingredientsSlice = createSlice({
   name: 'ingredientsSlice',

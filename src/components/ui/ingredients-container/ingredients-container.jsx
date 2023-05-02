@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 const IngredientsContainer = ({title, type, children}) => {
   return (
-    <li>
+    <>
       <h2
         className={clsx('text', 'text_type_main-medium')}
         id={type}
@@ -14,7 +14,7 @@ const IngredientsContainer = ({title, type, children}) => {
       <ul className={clsx(styles.ingredients__list)}>
         {children}
       </ul>
-    </li>
+    </>
   );
 };
 

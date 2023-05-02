@@ -11,7 +11,8 @@ import {
   summarizeIngredientsCost
 } from '../../services/slices/cartSlice.js';
 import { openModal } from '../../services/slices/modalSlice.js';
-import { createOrder, setOrderIdsArray } from '../../services/slices/orderSlice.js';
+import { resetOrderIdsArray, setOrderIdsArray } from '../../services/slices/orderSlice.js';
+import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 
 const BurgerConstructor = () => {
   const { cart, cartPrice } = useSelector(state => state.cart);
@@ -29,6 +30,7 @@ const BurgerConstructor = () => {
       dispatch(openModal({ type: 'order' }));
       dispatch(cleanCart());
       dispatch(resetIngredientsCost());
+      dispatch(resetOrderIdsArray());
     }
   };
 

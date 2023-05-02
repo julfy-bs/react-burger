@@ -7,7 +7,6 @@ import cartSlice from './slices/cartSlice.js';
 import modalSlice from './slices/modalSlice.js';
 import orderSlice from './slices/orderSlice.js';
 
-
 const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
   loading: loadingSlice,
