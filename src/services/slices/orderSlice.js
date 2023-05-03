@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const orderSlice = createSlice({
-  name: 'orderSlice',
+  name: 'order',
   initialState,
   reducers: {
     setOrderIdsArray(state, action) {
@@ -39,5 +39,8 @@ const orderSlice = createSlice({
       });
   },
 });
-export const { setOrderIdsArray, resetOrderIdsArray } = orderSlice.actions;
+export const {
+  setOrderIdsArray,
+  resetOrderIdsArray
+} = orderSlice.actions;
 export default orderSlice.reducer;

@@ -5,20 +5,14 @@ const initialState = {
   modalIngredient: null,
   isDetailedIngredientOpened: false,
   isDetailedOrderOpened: false
-}
+};
 
 const modalSlice = createSlice({
-  name: 'modalSlice',
+  name: 'modal',
   initialState,
   reducers: {
     setModalIngredient(state, action) {
       state.modalIngredient = action.payload;
-    },
-    openOrderModal(state) {
-      state.isDetailedOrderOpened = true;
-    },
-    closeOrderModal(state) {
-      state.isDetailedOrderOpened = false;
     },
     openModal(state, action) {
       action.payload.type === 'ingredient'
@@ -33,6 +27,10 @@ const modalSlice = createSlice({
     }
   }
 });
-const { actions } = modalSlice;
-export const { setModalIngredient, openModal, closeModal, openOrderModal, closeOrderModal } = actions;
+
+export const {
+  setModalIngredient,
+  openModal,
+  closeModal,
+} = modalSlice.actions;
 export default modalSlice.reducer;

@@ -11,7 +11,7 @@ const initialState = {
 const create = createAction('error/create');
 
 const errorSlice = createSlice({
-  name: 'errorSlice',
+  name: 'error',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

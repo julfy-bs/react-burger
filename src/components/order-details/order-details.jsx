@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import styles from './order-details.module.css';
-import IconDone from '../ui/icon-done/icon-done.jsx';
+import IconDone from '../icon-done/icon-done.jsx';
 import { useSelector } from 'react-redux';
 
 const OrderDetails = () => {
