@@ -12,6 +12,9 @@ import OrderDetails from '../order-details/order-details.jsx';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { addIngredient } from '../../services/slices/cartSlice.js';
 
 const App = () => {
   const { ingredients } = useSelector(state => state.ingredients);
@@ -19,15 +22,13 @@ const App = () => {
   const { error } = useSelector(state => state.error);
   const { orderNumber } = useSelector(state => state.order);
   const { modalIngredient, isDetailedOrderOpened, isDetailedIngredientOpened } = useSelector(state => state.modal);
-
   const dispatch = useDispatch();
 
+  const handleDrop = (item) => dispatch(addIngredient(item));
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    return () => {
-      dispatch(fetchIngredients());
-    };
+    return () => dispatch(fetchIngredients());
   }, [dispatch]);
 
   return (
@@ -38,8 +39,10 @@ const App = () => {
           !loading && ingredients.length > 0
             ?
             <div className={clsx(styles.main_container)}>
-              <BurgerIngredients/>
-              <BurgerConstructor/>
+              <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients/>
+                <BurgerConstructor onDropHandler={handleDrop}/>
+              </DndProvider>
             </div>
             : <Loader loading={loading}/>
         }

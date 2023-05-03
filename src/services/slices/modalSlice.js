@@ -8,7 +8,7 @@ const initialState = {
 }
 
 const modalSlice = createSlice({
-  name: 'modalSlice',
+  name: 'modal',
   initialState,
   reducers: {
     setModalIngredient(state, action) {

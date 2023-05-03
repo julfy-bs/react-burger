@@ -4,42 +4,38 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import { ingredientType } from '../../../utils/types.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal, setModalIngredient } from '../../../services/slices/modalSlice.js';
-import { addIngredient } from '../../../services/slices/cartSlice.js';
+import { useDrag } from 'react-dnd';
+import { memo, useMemo } from 'react';
 
 const Ingredient = ({ ingredient }) => {
-  const { cart } = useSelector(state => state.cart);
+  const { orderIdsArray } = useSelector(state => state.order);
   const dispatch = useDispatch();
+  const [, dragRef] = useDrag({
+    type: 'ingredient',
+    item: ingredient,
+  });
 
-  const handleIngredientClick = (e) => e.shiftKey
-    ? dispatch(addIngredient(ingredient))
-    : dispatch(setModalIngredient(ingredient)) && dispatch(openModal({type: 'ingredient'}));
+  const handleIngredientClick = () => dispatch(setModalIngredient(ingredient)) && dispatch(openModal({ type: 'ingredient' }));
 
-  const setIngredientsCondition = () => cart.ingredients.length > 0
-    ? cart.ingredients.some(cartIngredient => cartIngredient._id === ingredient._id)
-    : false;
-
-  const setBunCondition = () => (cart.bun) ? cart.bun._id === ingredient._id : false;
-
-  const ingredientsCondition = setIngredientsCondition() || false;
-  const bunCondition = setBunCondition() || false;
-
-  const countIngredient = (type) => (type === 'bun') ? 1 : cart.ingredients.filter(item => item._id === ingredient._id).length;
+  const ingredientCounter = useMemo(() => (
+    orderIdsArray.reduce((acc, current) => {
+      ingredient._id === current && (acc += 1);
+      return acc;
+    }, 0)
+  ), [ingredient._id, orderIdsArray]);
 
   return (
     <>
       <li
+        ref={dragRef}
         className={clsx(styles.ingredients__item)}
-        onClick={(e) => handleIngredientClick(e)}
+        onClick={handleIngredientClick}
       >
-        {
-          (ingredientsCondition || bunCondition) && (
-            <Counter
-              count={countIngredient(ingredient.type)}
-              size="default"
-              extraClass="m-1"
-            />
-          )
-        }
+        {!!ingredientCounter && <Counter
+          count={+ingredientCounter}
+          size="default"
+          extraClass="m-1"
+        />}
         <picture>
           <source
             srcSet={ingredient.image_mobile}
@@ -58,11 +54,11 @@ const Ingredient = ({ ingredient }) => {
         <div
           className={clsx(styles.ingredients__price)}
         >
-          <span
-            className={clsx('text', 'text_type_digits-default')}
-          >
-            {ingredient.price}
-          </span>
+            <span
+              className={clsx('text', 'text_type_digits-default')}
+            >
+              {ingredient.price}
+            </span>
           <CurrencyIcon type={'primary'}/>
         </div>
 
@@ -80,4 +76,4 @@ Ingredient.propTypes = {
   ingredient: ingredientType.isRequired
 };
 
-export default Ingredient;
+export default memo(Ingredient);

@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const cartSlice = createSlice({
-  name: 'cartSlice',
+  name: 'cart',
   initialState,
   reducers: {
     addIngredient(state, action) {
@@ -18,7 +18,13 @@ const cartSlice = createSlice({
         : state.cart.ingredients.push(action.payload);
     },
     removeIngredient(state, action) {
-      state.cart.ingredients.splice(action.payload, 1);
+      state.cart.ingredients.splice(action.payload.index, 1);
+    },
+    sortIngredients(state, action) {
+      state.cart.ingredients.splice(action.payload.atIndex, 0, action.payload.ingredient);
+    },
+    createIngredient(state, action) {
+      state.cart.ingredients.splice(action.payload.atIndex, 0, action.payload.ingredient);
     },
     cleanCart(state) {
       state.cart = {
@@ -45,6 +51,7 @@ export const {
   removeIngredient,
   summarizeIngredientsCost,
   cleanCart,
-  resetIngredientsCost
+  resetIngredientsCost,
+  sortIngredients
 } = actions;
 export default cartSlice.reducer;
