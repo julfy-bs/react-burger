@@ -39,5 +39,8 @@ const orderSlice = createSlice({
       });
   },
 });
-export const { setOrderIdsArray, resetOrderIdsArray } = orderSlice.actions;
+export const {
+  setOrderIdsArray,
+  resetOrderIdsArray
+} = orderSlice.actions;
 export default orderSlice.reducer;

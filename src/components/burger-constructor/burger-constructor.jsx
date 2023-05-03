@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
 
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   cleanCart, removeIngredient,
@@ -13,14 +13,14 @@ import { openModal } from '../../services/slices/modalSlice.js';
 import { resetOrderIdsArray, setOrderIdsArray } from '../../services/slices/orderSlice.js';
 import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 import { useDrop } from 'react-dnd';
-import ConstructorIngredient from '../ui/constructor-ingredient/constructor-ingredient.jsx';
+import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
 
 const BurgerConstructor = ({ onDropHandler }) => {
-  const { ingredients } = useSelector(state => state.cart.cart);
   const { cart, cartPrice } = useSelector(state => state.cart);
   const { orderIdsArray } = useSelector(state => state.order);
   const dispatch = useDispatch();
-
+  const isButtonDisabled = useMemo(() => cart.bun === null
+    || cart.ingredients.length === 0, [cart]);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
@@ -49,13 +49,13 @@ const BurgerConstructor = ({ onDropHandler }) => {
 
   const findIngredient = useCallback(
     (id) => {
-      const ingredient = ingredients.filter(item => item._id === id)[0];
+      const ingredient = cart.ingredients.filter(item => item._id === id)[0];
       return {
         ingredient,
-        index: ingredients.indexOf(ingredient),
+        index: cart.ingredients.indexOf(ingredient),
       };
     },
-    [ingredients],
+    [cart],
   );
 
   const moveIngredient = useCallback(
@@ -149,11 +149,12 @@ const BurgerConstructor = ({ onDropHandler }) => {
             </span>
           </div>
           <Button
-            extraClass={styles.button}
+            extraClass={clsx(styles.button)}
             htmlType="button"
             type="primary"
             size="large"
             onClick={handleBurgerConstructorButton}
+            disabled={isButtonDisabled}
           >
             Оформить заказ
           </Button>

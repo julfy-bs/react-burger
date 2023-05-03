@@ -23,9 +23,6 @@ const cartSlice = createSlice({
     sortIngredients(state, action) {
       state.cart.ingredients.splice(action.payload.atIndex, 0, action.payload.ingredient);
     },
-    createIngredient(state, action) {
-      state.cart.ingredients.splice(action.payload.atIndex, 0, action.payload.ingredient);
-    },
     cleanCart(state) {
       state.cart = {
         bun: null,
@@ -45,7 +42,6 @@ const cartSlice = createSlice({
   }
 });
 
-const { actions } = cartSlice;
 export const {
   addIngredient,
   removeIngredient,
@@ -53,5 +49,5 @@ export const {
   cleanCart,
   resetIngredientsCost,
   sortIngredients
-} = actions;
+} = cartSlice.actions;
 export default cartSlice.reducer;

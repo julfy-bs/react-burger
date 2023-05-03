@@ -1,19 +1,22 @@
 import clsx from 'clsx';
 import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../../utils/types.js';
+import { ingredientType } from '../../utils/types.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { openModal, setModalIngredient } from '../../../services/slices/modalSlice.js';
+import { openModal, setModalIngredient } from '../../services/slices/modalSlice.js';
 import { useDrag } from 'react-dnd';
 import { memo, useMemo } from 'react';
 
 const Ingredient = ({ ingredient }) => {
   const { orderIdsArray } = useSelector(state => state.order);
+  const { cart } = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [, dragRef] = useDrag({
     type: 'ingredient',
     item: ingredient,
   });
+
+  const isDisabled = useMemo(() => cart.bun === null, [cart])
 
   const handleIngredientClick = () => dispatch(setModalIngredient(ingredient)) && dispatch(openModal({ type: 'ingredient' }));
 
@@ -28,8 +31,9 @@ const Ingredient = ({ ingredient }) => {
     <>
       <li
         ref={dragRef}
-        className={clsx(styles.ingredients__item)}
+        className={clsx(styles.ingredients__item, (ingredient.type !== 'bun' && isDisabled) && styles.ingredients__item_disabled)}
         onClick={handleIngredientClick}
+
       >
         {!!ingredientCounter && <Counter
           count={+ingredientCounter}

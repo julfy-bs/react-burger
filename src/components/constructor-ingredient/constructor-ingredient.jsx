@@ -4,7 +4,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import styles from './constructor-ingredient.module.css';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
-import { removeIngredient } from '../../../services/slices/cartSlice.js';
+import { removeIngredient } from '../../services/slices/cartSlice.js';
 import { memo } from 'react';
 
 const IngredientElement = ({ ingredient, index, findIngredient, moveIngredient }) => {
