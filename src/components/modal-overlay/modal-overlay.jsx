@@ -1,5 +1,6 @@
 import styles from './modal-overlay.module.css';
 import clsx from 'clsx';
+
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../../services/slices/modalSlice.js';

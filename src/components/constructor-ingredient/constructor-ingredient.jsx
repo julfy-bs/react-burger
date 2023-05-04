@@ -1,13 +1,17 @@
-import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDrag, useDrop } from 'react-dnd';
-
-import styles from './constructor-ingredient.module.css';
-import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
+import styles from './constructor-ingredient.module.css';
+import PropTypes from 'prop-types';
+
+import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import { useDrag, useDrop } from 'react-dnd';
+import { useDispatch } from 'react-redux';
 import { removeIngredient } from '../../services/slices/cartSlice.js';
 import { memo } from 'react';
 
-const IngredientElement = ({ ingredient, index, findIngredient, moveIngredient }) => {
+import { ingredientType } from '../../utils/types.js';
+
+const IngredientElement = ({ ingredient, index, moveIngredient }) => {
   const dispatch = useDispatch();
   const [{ isDragging }, drag] = useDrag(
     () => ({
@@ -24,13 +28,10 @@ const IngredientElement = ({ ingredient, index, findIngredient, moveIngredient }
     () => ({
       accept: 'ingredientSort',
       hover({ id }) {
-        if (id !== ingredient._id) {
-          const { index } = findIngredient(ingredient._id);
-          moveIngredient(id, index);
-        }
+        (id !== ingredient._id) && moveIngredient(id, index);
       },
     }),
-    [moveIngredient, findIngredient],
+    [moveIngredient],
   );
 
   const handleDeleteIngredient = () => dispatch(removeIngredient({ index: index }));
@@ -49,6 +50,12 @@ const IngredientElement = ({ ingredient, index, findIngredient, moveIngredient }
       />
     </li>
   );
+};
+
+IngredientElement.propTypes = {
+  ingredient: ingredientType.isRequired,
+  index: PropTypes.number.isRequired,
+  moveIngredient: PropTypes.func.isRequired
 };
 
 export default memo(IngredientElement);

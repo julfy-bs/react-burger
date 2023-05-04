@@ -1,12 +1,15 @@
 import clsx from 'clsx';
 import styles from './burger-ingredients.module.css';
+
 import Tabs from '../tabs/tabs.jsx';
 import IngredientsContainer from '../ingredients-container/ingredients-container.jsx';
 import Ingredient from '../ingredient/ingredient.jsx';
-import { ingredientTabs } from '../../utils/config.js';
+
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { InView } from 'react-intersection-observer';
+
+import { ingredientTabs } from '../../utils/config.js';
 
 const BurgerIngredients = () => {
   const tabsRef = useRef(null);

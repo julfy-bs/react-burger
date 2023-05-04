@@ -1,4 +1,4 @@
-import { createSlice, createAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   error: {
@@ -8,22 +8,26 @@ const initialState = {
   },
 };
 
-const create = createAction('error/create');
-
 const errorSlice = createSlice({
   name: 'error',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(create, (state, action) => {
-        state.error = {
-          exists: true,
-          code: action.payload.code,
-          message: action.payload.message
-        };
-      });
-  },
+  reducers: {
+    setError(state, action) {
+      state.error = {
+        exists: true,
+        code: action.payload.code,
+        message: action.payload.message
+      };
+    },
+    resetError(state) {
+      state.error = {
+        exists: false,
+        code: null,
+        message: null
+      };
+    }
+  }
 });
 
+export const { setError, resetError } = errorSlice.actions;
 export default errorSlice.reducer;

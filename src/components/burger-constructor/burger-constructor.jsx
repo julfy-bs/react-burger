@@ -32,9 +32,9 @@ const BurgerConstructor = ({ onDropHandler }) => {
     })
   });
 
-  const handleBurgerConstructorButton = () => {
+  const handleBurgerConstructorButton = async () => {
     if (orderIdsArray.length > 0) {
-      dispatch(createOrder(orderIdsArray));
+      await dispatch(createOrder(orderIdsArray));
       dispatch(openModal({ type: 'order' }));
       dispatch(cleanCart());
       dispatch(resetIngredientsCost());

@@ -1,11 +1,14 @@
 import clsx from 'clsx';
 import styles from './ingredient.module.css';
+
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../utils/types.js';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal, setModalIngredient } from '../../services/slices/modalSlice.js';
 import { useDrag } from 'react-dnd';
 import { memo, useMemo } from 'react';
+
+import { ingredientType } from '../../utils/types.js';
 
 const Ingredient = ({ ingredient }) => {
   const { orderIdsArray } = useSelector(state => state.order);
@@ -16,7 +19,7 @@ const Ingredient = ({ ingredient }) => {
     item: ingredient,
   });
 
-  const isDisabled = useMemo(() => cart.bun === null, [cart])
+  const isDisabled = useMemo(() => cart.bun === null, [cart]);
 
   const handleIngredientClick = () => dispatch(setModalIngredient(ingredient)) && dispatch(openModal({ type: 'ingredient' }));
 

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import styles from './tabs.module.css';
 import PropTypes from 'prop-types';
+
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const Tabs = ({ tabs, currentTab, changeTab }) => {

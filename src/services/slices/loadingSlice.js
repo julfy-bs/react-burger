@@ -1,7 +1,4 @@
-import { createSlice, createAction } from '@reduxjs/toolkit';
-
-const start = createAction('loading/start');
-const end = createAction('loading/end');
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   loading: false
@@ -10,16 +7,12 @@ const initialState = {
 const loadingSlice = createSlice({
   name: 'loading',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(start, (state) => {
-        state.loading = true;
-      })
-      .addCase(end, (state) => {
-        state.loading = false;
-      });
+  reducers: {
+    setLoading(state, action) {
+      state.loading = action.payload.loading;
+    }
   },
 });
 
+export const { setLoading } = loadingSlice.actions;
 export default loadingSlice.reducer;

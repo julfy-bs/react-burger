@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const ingredientType = PropTypes.exact({
+const ingredientType = PropTypes.shape({
   '_id': PropTypes.string.isRequired,
   'name': PropTypes.string.isRequired,
   'type': PropTypes.oneOf(['main', 'bun', 'sauce']).isRequired,
@@ -15,21 +15,6 @@ const ingredientType = PropTypes.exact({
   '__v': PropTypes.number.isRequired
 });
 
-const componentType = PropTypes.exact({
-  name: PropTypes.oneOf(['Булки', 'Соусы', 'Начинки']).isRequired,
-  type: PropTypes.oneOf(['main', 'bun', 'sauce']).isRequired,
-  items: PropTypes.arrayOf(ingredientType).isRequired || []
-},)
-
-const cartType = PropTypes.exact({
-  price: PropTypes.number.isRequired,
-  orderNumber: PropTypes.string.isRequired,
-  bun: ingredientType.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientType).isRequired || []
-})
-
 export {
   ingredientType,
-  componentType,
-  cartType
 }

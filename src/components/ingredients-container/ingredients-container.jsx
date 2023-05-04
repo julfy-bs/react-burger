@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from './ingredients-container.module.css';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 
-const IngredientsContainer = ({title, type, children}) => {
+const IngredientsContainer = ({ title, type, children }) => {
   return (
     <>
       <h2
@@ -19,7 +20,8 @@ const IngredientsContainer = ({title, type, children}) => {
 };
 
 IngredientsContainer.propTypes = {
-
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 export default IngredientsContainer;

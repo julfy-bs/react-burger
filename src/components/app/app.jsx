@@ -11,18 +11,33 @@ import OrderDetails from '../order-details/order-details.jsx';
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
-import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { addIngredient } from '../../services/slices/cartSlice.js';
+import { setLoading } from '../../services/slices/loadingSlice.js';
+import { resetError, setError } from '../../services/slices/errorSlice.js';
+import { DndProvider } from 'react-dnd';
+import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 
 const App = () => {
-  const { ingredients } = useSelector(state => state.ingredients);
+  const { ingredients, ingredientsFetchRequest, ingredientsFetchFailed } = useSelector(state => state.ingredients);
   const { loading } = useSelector(state => state.loading);
   const { error } = useSelector(state => state.error);
   const { orderNumber } = useSelector(state => state.order);
   const { modalIngredient, isDetailedOrderOpened, isDetailedIngredientOpened } = useSelector(state => state.modal);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading({ loading: ingredientsFetchRequest }));
+  }, [dispatch, ingredientsFetchRequest]);
+
+  useEffect(() => {
+    ingredientsFetchFailed
+      ? dispatch(setError({
+        code: null,
+        message: 'Ошибка загрузки ингредиентов'
+      }))
+      : dispatch(resetError());
+  }, [dispatch, ingredientsFetchFailed]);
 
   const handleDrop = (item) => dispatch(addIngredient(item));
 
@@ -47,7 +62,7 @@ const App = () => {
             : <Loader loading={loading}/>
         }
         {
-          error.exists && <h1>Ошибка</h1>
+          error.exists && <h1>{error.code !== null && error.code} {error.message}</h1>
         }
       </main>
 
