@@ -19,7 +19,7 @@ const cartSlice = createSlice({
 
       (state.cart.bun !== null
         && action.payload.type === 'bun'
-        && state.cart.bun !== action.payload) && delete state.ingredientsCounter[state.cart.bun._id];
+        && state.cart.bun !== action.payload) && (state.ingredientsCounter[state.cart.bun._id] = 0);
 
       isIngredientInCart
         ? state.ingredientsCounter[action.payload._id] = counter + 1
