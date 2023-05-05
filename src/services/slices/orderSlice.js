@@ -5,24 +5,12 @@ const initialState = {
   orderNumber: null,
   orderFetchRequest: false,
   orderFetchFailed: false,
-  orderIdsArray: []
 };
 
 const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {
-    setOrderIdsArray(state, action) {
-      const idsArray = [];
-      action.payload.ingredients.forEach(item => idsArray.push(item._id));
-      idsArray.push(action.payload.bun._id);
-      idsArray.push(action.payload.bun._id);
-      state.orderIdsArray = idsArray;
-    },
-    resetOrderIdsArray(state) {
-      state.orderIdsArray = [];
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {
@@ -39,8 +27,4 @@ const orderSlice = createSlice({
       });
   },
 });
-export const {
-  setOrderIdsArray,
-  resetOrderIdsArray
-} = orderSlice.actions;
 export default orderSlice.reducer;

@@ -11,8 +11,7 @@ import { memo, useMemo } from 'react';
 import { ingredientType } from '../../utils/types.js';
 
 const Ingredient = ({ ingredient }) => {
-  const { orderIdsArray } = useSelector(state => state.order);
-  const { cart } = useSelector(state => state.cart);
+  const { cart, ingredientsCounter } = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [, dragRef] = useDrag({
     type: 'ingredient',
@@ -23,18 +22,21 @@ const Ingredient = ({ ingredient }) => {
 
   const handleIngredientClick = () => dispatch(setModalIngredient(ingredient)) && dispatch(openModal({ type: 'ingredient' }));
 
-  const ingredientCounter = useMemo(() => (
-    orderIdsArray.reduce((acc, current) => {
-      ingredient._id === current && (acc += 1);
-      return acc;
-    }, 0)
-  ), [ingredient._id, orderIdsArray]);
+  const ingredientCounter = useMemo(() => {
+    const isIngredientInCart = Object.keys(ingredientsCounter).includes(ingredient._id);
+    return (isIngredientInCart) && ingredientsCounter[ingredient._id];
+  }, [ingredient._id, ingredientsCounter]);
 
   return (
     <>
       <li
         ref={dragRef}
-        className={clsx(styles.ingredients__item, (ingredient.type !== 'bun' && isDisabled) && styles.ingredients__item_disabled)}
+        className={
+          clsx(
+            styles.ingredients__item,
+            { [styles.ingredients__item_disabled]: ingredient.type !== 'bun' && isDisabled }
+          )
+        }
         onClick={handleIngredientClick}
 
       >
