@@ -20,7 +20,12 @@ const BurgerConstructor = () => {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
-      dispatch(addIngredient(ingredient));
+      ingredient.type !== 'bun'
+        ? dispatch(addIngredient({
+          ...ingredient,
+          _uid: uuid()
+        }))
+        : dispatch(addIngredient(ingredient));
     },
     collect: monitor => ({
       isHover: monitor.isOver(),
@@ -45,7 +50,7 @@ const BurgerConstructor = () => {
 
   const findIngredient = useCallback(
     (id) => {
-      const ingredient = cart.ingredients.find(item => item._id === id)[0];
+      const ingredient = cart.ingredients.find(item => item._id === id);
       return {
         ingredient,
         index: cart.ingredients.indexOf(ingredient),
@@ -70,7 +75,7 @@ const BurgerConstructor = () => {
   const ingredientElements = cart.ingredients.map(
     (ingredient, index) => (
       <ConstructorIngredient
-        key={uuid()}
+        key={ingredient._uid}
         index={index}
         ingredient={ingredient}
         moveIngredient={moveIngredient}

@@ -22,10 +22,7 @@ const Ingredient = ({ ingredient }) => {
 
   const handleIngredientClick = () => dispatch(setModalIngredient(ingredient)) && dispatch(openModal({ type: 'ingredient' }));
 
-  const ingredientCounter = useMemo(() => {
-    const isIngredientInCart = Object.keys(ingredientsCounter).includes(ingredient._id);
-    return (isIngredientInCart) && ingredientsCounter[ingredient._id];
-  }, [ingredient._id, ingredientsCounter]);
+  const ingredientCounter = useMemo(() => ingredientsCounter[ingredient._id] || 0, [ingredient._id, ingredientsCounter]);
 
   return (
     <>
