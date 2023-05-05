@@ -7,12 +7,13 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import { removeIngredient } from '../../services/slices/cartSlice.js';
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 
 import { ingredientType } from '../../utils/types.js';
 
 const IngredientElement = ({ ingredient, index, moveIngredient }) => {
   const dispatch = useDispatch();
+  const ref = useRef();
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'ingredientSort',
@@ -34,12 +35,14 @@ const IngredientElement = ({ ingredient, index, moveIngredient }) => {
     [moveIngredient],
   );
 
-  const handleDeleteIngredient = () => dispatch(removeIngredient({ index: index }));
+  const handleDeleteIngredient = () => dispatch(removeIngredient({ index: index, _id: ingredient._id }));
+
+  drag(drop(ref));
 
   return (
     <li
       className={clsx(styles.item, styles.item_draggable, isDragging && styles.item_dragging)}
-      ref={(node) => drag(drop(node))}
+      ref={ref}
     >
       <DragIcon type="primary"/>
       <ConstructorElement

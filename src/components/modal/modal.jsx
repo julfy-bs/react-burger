@@ -62,7 +62,7 @@ const Modal = ({ title, ariaTitle, children }) => {
 Modal.propTypes = {
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.node
 };
 
 export default Modal;

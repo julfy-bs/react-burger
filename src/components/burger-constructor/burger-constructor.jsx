@@ -2,30 +2,25 @@ import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
 
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  cleanCart, removeIngredient,
-  resetIngredientsCost, sortIngredients,
-  summarizeIngredientsCost
-} from '../../services/slices/cartSlice.js';
+import { addIngredient, cleanCart, removeIngredient, sortIngredients } from '../../services/slices/cartSlice.js';
 import { openModal } from '../../services/slices/modalSlice.js';
-import { resetOrderIdsArray, setOrderIdsArray } from '../../services/slices/orderSlice.js';
 import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 import { useDrop } from 'react-dnd';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
+import uuid from 'react-uuid';
 
-const BurgerConstructor = ({ onDropHandler }) => {
-  const { cart, cartPrice } = useSelector(state => state.cart);
-  const { orderIdsArray } = useSelector(state => state.order);
+const BurgerConstructor = () => {
+  const { cart } = useSelector(state => state.cart);
   const dispatch = useDispatch();
-  const isButtonDisabled = useMemo(() => cart.bun === null
-    || cart.ingredients.length === 0, [cart]);
+  const isButtonDisabled = useMemo(() => !!(cart.bun === null
+    || cart.ingredients.length === 0), [cart]);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
-      onDropHandler(ingredient);
+      dispatch(addIngredient(ingredient));
     },
     collect: monitor => ({
       isHover: monitor.isOver(),
@@ -33,23 +28,24 @@ const BurgerConstructor = ({ onDropHandler }) => {
   });
 
   const handleBurgerConstructorButton = async () => {
-    if (orderIdsArray.length > 0) {
-      await dispatch(createOrder(orderIdsArray));
-      dispatch(openModal({ type: 'order' }));
-      dispatch(cleanCart());
-      dispatch(resetIngredientsCost());
-      dispatch(resetOrderIdsArray());
-    }
+    await dispatch(createOrder(cart));
+    dispatch(openModal({ type: 'order' }));
+    dispatch(cleanCart());
   };
 
-  useEffect(() => {
-    dispatch(summarizeIngredientsCost());
-    cart.bun !== null && dispatch(setOrderIdsArray(cart));
-  }, [cart, dispatch]);
+  const cartPrice = useMemo(() => {
+    if (cart.bun !== null) {
+      const bunPrice = cart.bun.price;
+      const ingredientsPrice = cart.ingredients.reduce((acc, current) => acc + current.price, 0);
+      return bunPrice + ingredientsPrice + bunPrice;
+    } else {
+      return 0;
+    }
+  }, [cart.bun, cart.ingredients]);
 
   const findIngredient = useCallback(
     (id) => {
-      const ingredient = cart.ingredients.filter(item => item._id === id)[0];
+      const ingredient = cart.ingredients.find(item => item._id === id)[0];
       return {
         ingredient,
         index: cart.ingredients.indexOf(ingredient),
@@ -61,7 +57,7 @@ const BurgerConstructor = ({ onDropHandler }) => {
   const moveIngredient = useCallback(
     (id, atIndex) => {
       const { ingredient, index } = findIngredient(id);
-      dispatch(removeIngredient({ index }));
+      dispatch(removeIngredient({ index, _id: id }));
       dispatch(sortIngredients({ index, atIndex, ingredient }));
     },
     [dispatch, findIngredient],
@@ -74,7 +70,7 @@ const BurgerConstructor = ({ onDropHandler }) => {
   const ingredientElements = cart.ingredients.map(
     (ingredient, index) => (
       <ConstructorIngredient
-        key={ingredient._id + index}
+        key={uuid()}
         index={index}
         ingredient={ingredient}
         moveIngredient={moveIngredient}

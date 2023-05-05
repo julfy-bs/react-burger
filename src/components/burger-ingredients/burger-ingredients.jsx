@@ -10,11 +10,12 @@ import { useSelector } from 'react-redux';
 import { InView } from 'react-intersection-observer';
 
 import { ingredientTabs } from '../../utils/config.js';
+import { TABS } from '../../utils/enum.js';
 
 const BurgerIngredients = () => {
   const tabsRef = useRef(null);
   const [tabs] = useState(ingredientTabs);
-  const [currentTab, setCurrentTab] = useState('bun');
+  const [currentTab, setCurrentTab] = useState(TABS.BUN);
 
   const getRefs = () => (!tabsRef.current) ? tabsRef.current = new Map() : tabsRef.current;
 
@@ -70,7 +71,6 @@ const BurgerIngredients = () => {
                 }
               }}
               threshold={0.5}
-              rootMargin='96px 0px 0px 0px'
             >
               <IngredientsContainer type={tab.type} title={tab.name}>
                 {

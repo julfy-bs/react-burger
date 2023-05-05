@@ -12,7 +12,6 @@ import OrderDetails from '../order-details/order-details.jsx';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { addIngredient } from '../../services/slices/cartSlice.js';
 import { setLoading } from '../../services/slices/loadingSlice.js';
 import { resetError, setError } from '../../services/slices/errorSlice.js';
 import { DndProvider } from 'react-dnd';
@@ -39,11 +38,8 @@ const App = () => {
       : dispatch(resetError());
   }, [dispatch, ingredientsFetchFailed]);
 
-  const handleDrop = (item) => dispatch(addIngredient(item));
-
   useEffect(() => {
     dispatch(fetchIngredients());
-    return () => dispatch(fetchIngredients());
   }, [dispatch]);
 
   return (
@@ -56,7 +52,7 @@ const App = () => {
             <div className={clsx(styles.main_container)}>
               <DndProvider backend={HTML5Backend}>
                 <BurgerIngredients/>
-                <BurgerConstructor onDropHandler={handleDrop}/>
+                <BurgerConstructor />
               </DndProvider>
             </div>
             : <Loader loading={loading}/>

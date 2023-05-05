@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   cart: {
     bun: null,
-    ingredients: []
+    ingredients: [],
   },
-  cartPrice: 0
+  ingredientsCounter: {},
 };
 
 const cartSlice = createSlice({
@@ -13,11 +13,27 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addIngredient(state, action) {
+      const ingredientId = action.payload._id;
+      const counter = state.ingredientsCounter[ingredientId];
+      const isIngredientInCart = Object.keys(state.ingredientsCounter).includes(ingredientId);
+
+      (state.cart.bun !== null
+        && action.payload.type === 'bun'
+        && state.cart.bun !== action.payload) && delete state.ingredientsCounter[state.cart.bun._id];
+
+      isIngredientInCart
+        ? state.ingredientsCounter[action.payload._id] = counter + 1
+        : state.ingredientsCounter[action.payload._id] = 1;
+
       action.payload.type === 'bun'
         ? state.cart.bun = action.payload
         : state.cart.ingredients.push(action.payload);
     },
     removeIngredient(state, action) {
+      const ingredientId = action.payload._id;
+      const counter = state.ingredientsCounter[ingredientId];
+      state.ingredientsCounter[action.payload._id] = counter - 1;
+
       state.cart.ingredients.splice(action.payload.index, 1);
     },
     sortIngredients(state, action) {
@@ -28,16 +44,8 @@ const cartSlice = createSlice({
         bun: null,
         ingredients: []
       };
-    },
-    summarizeIngredientsCost(state) {
-      if (state.cart.bun !== null) {
-        const bunPrice = state.cart.bun.price;
-        const ingredientsPrice = state.cart.ingredients.reduce((acc, current) => acc + current.price, 0);
-        state.cartPrice = bunPrice + ingredientsPrice + bunPrice;
-      }
-    },
-    resetIngredientsCost(state) {
-      state.cartPrice = 0;
+      state.ingredientsCounter = {};
+      state.orderIdsArray = [];
     }
   }
 });
@@ -45,9 +53,7 @@ const cartSlice = createSlice({
 export const {
   addIngredient,
   removeIngredient,
-  summarizeIngredientsCost,
   cleanCart,
-  resetIngredientsCost,
   sortIngredients
 } = cartSlice.actions;
 export default cartSlice.reducer;
