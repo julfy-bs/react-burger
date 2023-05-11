@@ -1,12 +1,17 @@
 .ingredients__item {
   align-items: center;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 4px;
   justify-content: space-between;
   min-height: 208px;
   position: relative;
-  cursor: pointer;
+}
+
+.ingredients__item_disabled {
+  filter: grayscale(1);
+  pointer-events: none;
 }
 
 .ingredients__image {
@@ -21,8 +26,8 @@
 .ingredients__price {
   align-items: center;
   display: flex;
-  gap: 9px;
   font-size: 28px;
+  gap: 9px;
   line-height: 24px;
 }
 

@@ -16,16 +16,14 @@ const Api = (baseUrl, headers) => {
     return request('ingredients');
   };
 
-  const createOrder = (order) => {
-    //   В post запрос на сервер необходимо добавить в хедер свойство Content-type - иначе сервер может неправильно обработать.
-    //   Content-type добавляется в функции request
+  const postOrder = (order) => {
     return request('orders', {
       method: 'POST',
       body: JSON.stringify(order)
     })
   }
 
-  return { getIngredients, createOrder };
+  return { getIngredients, postOrder };
 };
 
-export const api = Api(serverConfig.baseUrl, serverConfig.headers);
+export const { getIngredients, postOrder } = Api(serverConfig.baseUrl, serverConfig.headers);
