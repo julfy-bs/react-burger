@@ -25,3 +25,13 @@
 html {
   scroll-behavior: smooth;
 }
+
+.page__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.page__link {
+  text-decoration: none;
+}

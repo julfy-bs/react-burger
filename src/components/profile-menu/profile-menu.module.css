@@ -1,0 +1,26 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  align-items: center;
+  display: flex;
+  min-height: 64px;
+  width: 100%;
+}
+
+.link {
+  color: #8585ad;
+  transition: color .25s ease, opacity .25s ease;
+}
+
+.link:hover {
+  opacity: .8;
+}
+
+.link_active {
+  transition: color .25s ease;
+  color: #f2f2f3;
+}
+
