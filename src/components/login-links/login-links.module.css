@@ -1,0 +1,21 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+}
+
+.plain_text {
+  color: #8585AD;
+}
+
+.app_link {
+  text-decoration: none;
+  color: #4C4CFF;
+}

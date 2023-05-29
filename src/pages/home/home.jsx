@@ -1,13 +1,12 @@
 import clsx from 'clsx';
-import styles from './app.module.css';
+import styles from './home.module.css';
 
-import Header from '../header/header.jsx';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
-import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
-import Loader from '../loader/loader.jsx';
-import Modal from '../modal/modal.jsx';
-import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
-import OrderDetails from '../order-details/order-details.jsx';
+import BurgerIngredients from '../../components/burger-ingredients/burger-ingredients.jsx';
+import BurgerConstructor from '../../components/burger-constructor/burger-constructor.jsx';
+import Loader from '../../components/loader/loader.jsx';
+import Modal from '../../components/modal/modal.jsx';
+import IngredientDetails from '../../components/ingredient-details/ingredient-details.jsx';
+import OrderDetails from '../../components/order-details/order-details.jsx';
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +16,7 @@ import { resetError, setError } from '../../services/slices/errorSlice.js';
 import { DndProvider } from 'react-dnd';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 
-const App = () => {
+const HomePage = () => {
   const { ingredients, ingredientsFetchRequest, ingredientsFetchFailed } = useSelector(state => state.ingredients);
   const { loading } = useSelector(state => state.loading);
   const { error } = useSelector(state => state.error);
@@ -44,23 +43,20 @@ const App = () => {
 
   return (
     <>
-      <Header/>
-      <main className={clsx(styles.main, 'pb-10')}>
-        {
-          !loading && ingredients.length > 0
-            ?
-            <div className={clsx(styles.main_container)}>
-              <DndProvider backend={HTML5Backend}>
-                <BurgerIngredients/>
-                <BurgerConstructor />
-              </DndProvider>
-            </div>
-            : <Loader loading={loading}/>
-        }
-        {
-          error.exists && <h1>{error.code !== null && error.code} {error.message}</h1>
-        }
-      </main>
+      {
+        !loading && ingredients.length > 0
+          ?
+          <div className={clsx(styles.container)}>
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients/>
+              <BurgerConstructor />
+            </DndProvider>
+          </div>
+          : <Loader loading={loading}/>
+      }
+      {
+        error.exists && <h1>{error.code !== null && error.code} {error.message}</h1>
+      }
 
       <Modal
         title={modalIngredient ? 'Детали ингредиента' : ''}
@@ -79,4 +75,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default HomePage;
