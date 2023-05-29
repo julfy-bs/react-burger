@@ -31,3 +31,7 @@ html {
   margin: 0;
   list-style: none;
 }
+
+.page__link {
+  text-decoration: none;
+}

@@ -4,6 +4,7 @@
   flex-direction: column;
   margin: 180px auto 0;
   gap: 80px;
+  max-width: 1240px;
 }
 
 .article {

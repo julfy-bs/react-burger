@@ -1,7 +1,15 @@
 import styles from './app.module.css';
 import Header from '../components/header/header.jsx';
 import { Route, Routes } from 'react-router-dom';
-import { HomePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, NotFoundPage } from '../pages';
+import {
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  NotFoundPage,
+  ProfilePage
+} from '../pages';
 import { PATH } from '../utils/config';
 import clsx from 'clsx';
 
@@ -18,7 +26,7 @@ const App = () => {
           />
           <Route
             path={PATH.REGISTER}
-            element={<RegisterPage />}
+            element={<RegisterPage/>}
           />
           <Route
             path={PATH.FORGOT_PASSWORD}
@@ -28,7 +36,15 @@ const App = () => {
             path={PATH.RESET_PASSWORD}
             element={<ResetPasswordPage/>}
           />
-          <Route path='*' element={<NotFoundPage />} />
+          <Route
+            path={PATH.PROFILE}
+            element={<ProfilePage/>}
+          />
+          <Route
+            path={PATH.ORDERS}
+            element={<ProfilePage/>}
+          />
+          <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
       </main>
     </>

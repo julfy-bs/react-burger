@@ -3,7 +3,8 @@ import LoginPage from './login/login.jsx';
 import RegisterPage from './register/register.jsx';
 import ForgotPasswordPage from './forgot-password/forgot-password.jsx';
 import ResetPasswordPage from './reset-password/reset-password.jsx';
-import NotFoundPage from './not-found/not-found.jsx'
+import NotFoundPage from './not-found/not-found.jsx';
+import ProfilePage from './profile/profile.jsx';
 
 export {
   HomePage,
@@ -11,5 +12,6 @@ export {
   RegisterPage,
   ForgotPasswordPage,
   ResetPasswordPage,
-  NotFoundPage
+  NotFoundPage,
+  ProfilePage
 };

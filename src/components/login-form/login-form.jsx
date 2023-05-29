@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './login-form.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
 
 const LoginForm = ({ type }) => {
@@ -15,13 +15,12 @@ const LoginForm = ({ type }) => {
           <>
             <h1 className={clsx('text', 'text_type_main-medium')}>Вход</h1>
             <Input
-              type={'text'}
+              type={'email'}
               placeholder={'E-mail'}
               name={'email'}
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
             <Input
               type={'password'}
@@ -31,13 +30,12 @@ const LoginForm = ({ type }) => {
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
-            <Link to={PATH.HOME}>
+            <NavLink to={PATH.HOME}>
               <Button htmlType="button" type="primary" size="medium">
                 Войти
               </Button>
-            </Link>
+            </NavLink>
           </>
         );
       case 'register':
@@ -51,16 +49,14 @@ const LoginForm = ({ type }) => {
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
             <Input
-              type={'text'}
+              type={'email'}
               placeholder={'E-mail'}
               name={'email'}
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
             <Input
               type={'password'}
@@ -70,13 +66,12 @@ const LoginForm = ({ type }) => {
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
-            <Link to={PATH.LOGIN}>
+            <NavLink to={PATH.LOGIN}>
               <Button htmlType="button" type="primary" size="medium">
                 Зарегистрироваться
               </Button>
-            </Link>
+            </NavLink>
           </>
         );
       case 'forgot':
@@ -90,13 +85,12 @@ const LoginForm = ({ type }) => {
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
-            <Link to={PATH.RESET_PASSWORD}>
+            <NavLink to={PATH.RESET_PASSWORD}>
               <Button htmlType="button" type="primary" size="medium">
                 Восстановить
               </Button>
-            </Link>
+            </NavLink>
           </>
         );
       case 'reset':
@@ -110,7 +104,6 @@ const LoginForm = ({ type }) => {
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
               icon={'ShowIcon'}
             />
             <Input
@@ -120,13 +113,44 @@ const LoginForm = ({ type }) => {
               error={false}
               errorText={'Ошибка'}
               size={'default'}
-              extraClass="ml-1"
             />
-            <Link to={PATH.LOGIN}>
+            <NavLink to={PATH.LOGIN}>
               <Button htmlType="button" type="primary" size="medium">
                 Сохранить
               </Button>
-            </Link>
+            </NavLink>
+          </>
+        );
+      case 'profile':
+        return (
+          <>
+            <Input
+              type={'text'}
+              placeholder={'Имя'}
+              icon={'EditIcon'}
+              name={'name'}
+              error={false}
+              errorText={'Ошибка'}
+              size={'default'}
+            />
+            <Input
+              type={'email'}
+              placeholder={'Логин'}
+              icon={'EditIcon'}
+              name={'email'}
+              error={false}
+              errorText={'Ошибка'}
+              size={'default'}
+            />
+            <Input
+              type={'password'}
+              placeholder={'Пароль'}
+              icon={'EditIcon'}
+              name={'password'}
+              error={false}
+              errorText={'Ошибка'}
+              size={'default'}
+            />
           </>
         );
       default:
@@ -143,7 +167,7 @@ const LoginForm = ({ type }) => {
 
 
 LoginForm.propTypes = {
-  type: PropTypes.oneOf(['login', 'register', 'forgot', 'reset'])
+  type: PropTypes.oneOf(['login', 'register', 'forgot', 'reset', 'profile'])
 };
 
 export default LoginForm;

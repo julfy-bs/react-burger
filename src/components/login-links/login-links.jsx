@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './login-links.module.css';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
 
 const LoginLinks = ({ type }) => {
@@ -13,11 +13,11 @@ const LoginLinks = ({ type }) => {
           <>
             <li className={clsx('text', 'text_type_main-small', styles.item)}>
               <span className={clsx(styles.plain_text)}>Вы — новый пользователь?</span>
-              <Link className={clsx(styles.app_link)} to={PATH.REGISTER}>Зарегистрироваться</Link>
+              <NavLink className={clsx(styles.app_link)} to={PATH.REGISTER}>Зарегистрироваться</NavLink>
             </li>
             <li className={clsx('text', 'text_type_main-small', styles.item)}>
               <span className={clsx(styles.plain_text)}>Забыли пароль?</span>
-              <Link className={clsx(styles.app_link)} to={PATH.FORGOT_PASSWORD}>Восстановить пароль</Link>
+              <NavLink className={clsx(styles.app_link)} to={PATH.FORGOT_PASSWORD}>Восстановить пароль</NavLink>
             </li>
           </>
         );
@@ -26,7 +26,7 @@ const LoginLinks = ({ type }) => {
           <>
             <li className={clsx('text', 'text_type_main-small', styles.item)}>
               <span className={clsx(styles.plain_text)}>Уже зарегистрированы?</span>
-              <Link className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</Link>
+              <NavLink className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</NavLink>
             </li>
           </>
         );
@@ -35,7 +35,7 @@ const LoginLinks = ({ type }) => {
           <>
             <li className={clsx('text', 'text_type_main-small', styles.item)}>
               <span className={clsx(styles.plain_text)}>Вспомнили пароль?</span>
-              <Link className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</Link>
+              <NavLink className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</NavLink>
             </li>
           </>
         );
@@ -44,7 +44,7 @@ const LoginLinks = ({ type }) => {
           <>
             <li className={clsx('text', 'text_type_main-small', styles.item)}>
               <span className={clsx(styles.plain_text)}>Вспомнили пароль?</span>
-              <Link className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</Link>
+              <NavLink className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</NavLink>
             </li>
           </>
         );
