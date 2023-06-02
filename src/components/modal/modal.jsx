@@ -6,22 +6,28 @@ import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { closeModal } from '../../services/slices/modalSlice.js';
 
-import { MODAL_ID } from '../../utils/enum.js';
+import { MODAL_ID } from '../../utils/constants.js';
+import { useModal } from '../../hooks/useModal.js';
 
-const Modal = ({ title, ariaTitle, children }) => {
-  const { isModalOpen } = useSelector(state => state.modal);
+const Modal = ({ info, title, ariaTitle, children }) => {
+  const { isModalOpen } = useModal();
   const dispatch = useDispatch();
 
   return createPortal(
     <>
       {
         <>
-          <ModalOverlay/>
+          { !info && <ModalOverlay/> }
           <div
-            className={clsx(styles.modal, { [styles.modal_opened]: isModalOpen })}
+            className={clsx(
+              styles.modal,
+              { [styles.modal_opened]: isModalOpen },
+              { [styles.modal_content]: !info },
+              { [styles.modal_info]: info }
+            )}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-labelledby={title ? 'modal-title' : 'aria-title'}
@@ -30,7 +36,15 @@ const Modal = ({ title, ariaTitle, children }) => {
             <div className={clsx(styles.modal__header)}>
               {
                 title &&
-                <h3 className={clsx(styles.modal__title, 'text text_type_main-large')} id="modal-title">
+                <h3
+                  className={clsx(
+                    styles.modal__title,
+                    'text',
+                    { 'text_type_main-large': !info },
+                    { 'text_type_main-default': info },
+
+                  )}
+                  id="modal-title">
                   {title}
                 </h3>
               }
@@ -60,9 +74,14 @@ const Modal = ({ title, ariaTitle, children }) => {
 
 
 Modal.propTypes = {
+  info: PropTypes.bool,
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
   children: PropTypes.node
+};
+
+Modal.defaultProps = {
+  cornered: false
 };
 
 export default Modal;

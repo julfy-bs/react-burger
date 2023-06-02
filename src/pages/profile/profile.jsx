@@ -5,10 +5,10 @@ import ProfileMenu from '../../components/profile-menu/profile-menu.jsx';
 
 const ProfilePage = () => {
   return (
-    <div className={clsx(styles.container)}>
+    <section className={clsx(styles.container)}>
       <ProfileMenu />
       <LoginForm type={'profile'} />
-    </div>
+    </section>
   );
 };
 

@@ -30,7 +30,7 @@ const ProfileMenu = () => {
           </li>
           <li className={clsx(styles.item)}>
             <NavLink
-              to={'/logout'}
+              to={PATH.LOGOUT}
               className={clsx(styles.link, 'page__link', 'text', 'text_type_main-medium')}
             >
               Выход
