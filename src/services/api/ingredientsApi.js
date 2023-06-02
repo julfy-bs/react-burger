@@ -1,7 +1,7 @@
-import { serverConfig } from '../utils/config.js';
+import { serverConfig } from '../../utils/config.js';
+import checkResponse from '../helpers/checkResponse.js';
 
-const Api = (baseUrl, headers) => {
-  const checkResponse = (res) => (res.ok) ? res.json() : Promise.reject(JSON.parse(JSON.stringify(res.json())))
+const IngredientsApi = ({ baseUrl, headers }) => {
 
   const request = async (url, options = {}) => {
     const computedUrl = `${baseUrl}/${url}`;
@@ -20,10 +20,10 @@ const Api = (baseUrl, headers) => {
     return request('orders', {
       method: 'POST',
       body: JSON.stringify(order)
-    })
-  }
+    });
+  };
 
   return { getIngredients, postOrder };
 };
 
-export const { getIngredients, postOrder } = Api(serverConfig.baseUrl, serverConfig.headers);
+export const { getIngredients, postOrder } = IngredientsApi(serverConfig);

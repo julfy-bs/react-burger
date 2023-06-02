@@ -7,7 +7,7 @@ import { PATH } from '../../utils/config';
 const NotFoundPage = () => {
 
   return (
-    <div className={clsx(styles.container)}>
+    <section className={clsx(styles.container)}>
       <article className={clsx(styles.article)}>
         <p className="text text_type_digits-large">
           404
@@ -21,7 +21,7 @@ const NotFoundPage = () => {
           Вернуться на главную страницу
         </Button>
       </Link>
-    </div>
+    </section>
   );
 };
 

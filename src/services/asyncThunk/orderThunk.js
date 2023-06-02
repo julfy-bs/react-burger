@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { postOrder } from '../../api/api.js';
+import { postOrder } from '../api/ingredientsApi.js';
 
 export const createOrder = createAsyncThunk(
   'order/createOrder',

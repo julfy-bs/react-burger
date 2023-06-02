@@ -3,8 +3,10 @@ import clsx from 'clsx';
 import styles from './login-links.module.css';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
+import { useSelector } from 'react-redux';
 
 const LoginLinks = ({ type }) => {
+  const { errorMessage } = useSelector(store => store.profile);
 
   const determineType = () => {
     switch (type) {
@@ -55,6 +57,9 @@ const LoginLinks = ({ type }) => {
 
   return (
     <ul className={clsx('page__list', styles.list)}>
+      <li className={clsx('text', 'text_type_main-small', styles.item)}>
+        <span className={clsx(styles.plain_text, styles.error_text)}>{errorMessage}</span>
+      </li>
       {determineType()}
     </ul>
   );

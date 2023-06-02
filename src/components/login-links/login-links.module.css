@@ -4,6 +4,7 @@
   gap: 16px;
   align-items: center;
   width: 100%;
+  position: relative;
 }
 
 .item {
@@ -18,4 +19,14 @@
 .app_link {
   text-decoration: none;
   color: #4C4CFF;
+}
+
+.error_text {
+  color: red;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, 0);
+  text-align: center;
 }

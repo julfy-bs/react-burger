@@ -2,166 +2,176 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './login-form.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
-import { PATH } from '../../utils/config.js';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const LoginForm = ({ type }) => {
-  // todo: input value + input onchange listener
+const LoginForm = ({ type, values, handleSubmit, handleChange }) => {
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+  const { email, name, password } = useSelector(store => store.profile);
+
+  const onIconClick = () => setIsVisiblePassword(!isVisiblePassword);
 
   const determineType = () => {
     switch (type) {
       case 'login':
-        return (
-          <>
-            <h1 className={clsx('text', 'text_type_main-medium')}>Вход</h1>
-            <Input
-              type={'email'}
-              placeholder={'E-mail'}
-              name={'email'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <Input
-              type={'password'}
-              placeholder={'Пароль'}
-              icon={'ShowIcon'}
-              name={'password'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <NavLink to={PATH.HOME}>
-              <Button htmlType="button" type="primary" size="medium">
-                Войти
-              </Button>
-            </NavLink>
-          </>
-        );
+        return (<>
+          <Input
+            type={'email'}
+            value={values.email || ''}
+            onChange={handleChange}
+            placeholder={'E-mail'}
+            name={'email'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Input
+            type={isVisiblePassword ? 'text' : 'password'}
+            value={values.password || ''}
+            onChange={handleChange}
+            placeholder={'Пароль'}
+            icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
+            name={'password'}
+            error={false}
+            errorText={'Ошибка'}
+            onIconClick={onIconClick}
+            size={'default'}
+          />
+          <Button htmlType="submit" type="primary" size="medium">
+            Войти
+          </Button>
+        </>);
       case 'register':
-        return (
-          <>
-            <h1 className={clsx('text', 'text_type_main-medium')}>Регистрация</h1>
-            <Input
-              type={'text'}
-              placeholder={'Имя'}
-              name={'name'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <Input
-              type={'email'}
-              placeholder={'E-mail'}
-              name={'email'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <Input
-              type={'password'}
-              placeholder={'Пароль'}
-              icon={'ShowIcon'}
-              name={'password'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <NavLink to={PATH.LOGIN}>
-              <Button htmlType="button" type="primary" size="medium">
-                Зарегистрироваться
-              </Button>
-            </NavLink>
-          </>
-        );
+        return (<>
+          <h1 className={clsx('text', 'text_type_main-medium')}>Регистрация</h1>
+          <Input
+            type={'text'}
+            placeholder={'Имя'}
+            name={'name'}
+            value={values.name || ''}
+            onChange={handleChange}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Input
+            type={'email'}
+            placeholder={'E-mail'}
+            value={values.email || ''}
+            name={'email'}
+            onChange={handleChange}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Input
+            type={isVisiblePassword ? 'text' : 'password'}
+            placeholder={'Пароль'}
+            value={values.password || ''}
+            onChange={handleChange}
+            icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
+            name={'password'}
+            error={false}
+            errorText={'Ошибка'}
+            onIconClick={onIconClick}
+            size={'default'}
+          />
+          <Button htmlType="submit" type="primary" size="medium">
+            Зарегистрироваться
+          </Button>
+        </>);
       case 'forgot':
-        return (
-          <>
-            <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
-            <Input
-              type={'text'}
-              placeholder={'Укажите e-mail'}
-              name={'name'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <NavLink to={PATH.RESET_PASSWORD}>
-              <Button htmlType="button" type="primary" size="medium">
-                Восстановить
-              </Button>
-            </NavLink>
-          </>
-        );
+        return (<>
+          <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
+          <Input
+            type={'email'}
+            value={values.email || ''}
+            onChange={handleChange}
+            placeholder={'Укажите e-mail'}
+            name={'email'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Button htmlType="submit" type="primary" size="medium">
+            Восстановить
+          </Button>
+        </>);
       case 'reset':
-        return (
-          <>
-            <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
-            <Input
-              type={'password'}
-              placeholder={'Введите новый пароль'}
-              name={'name'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-              icon={'ShowIcon'}
-            />
-            <Input
-              type={'text'}
-              placeholder={'Введите код из письма'}
-              name={'name'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <NavLink to={PATH.LOGIN}>
-              <Button htmlType="button" type="primary" size="medium">
-                Сохранить
-              </Button>
-            </NavLink>
-          </>
-        );
+        return (<>
+          <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
+          <Input
+            type={isVisiblePassword ? 'text' : 'password'}
+            value={values.password || ''}
+            onChange={handleChange}
+            placeholder={'Введите новый пароль'}
+            name={'password'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+            onIconClick={onIconClick}
+            icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
+          />
+          <Input
+            type={'text'}
+            value={values.token || ''}
+            onChange={handleChange}
+            placeholder={'Введите код из письма'}
+            name={'token'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Button htmlType="submit" type="primary" size="medium">
+            Сохранить
+          </Button>
+        </>);
       case 'profile':
-        return (
-          <>
-            <Input
-              type={'text'}
-              placeholder={'Имя'}
-              icon={'EditIcon'}
-              name={'name'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <Input
-              type={'email'}
-              placeholder={'Логин'}
-              icon={'EditIcon'}
-              name={'email'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-            <Input
-              type={'password'}
-              placeholder={'Пароль'}
-              icon={'EditIcon'}
-              name={'password'}
-              error={false}
-              errorText={'Ошибка'}
-              size={'default'}
-            />
-          </>
-        );
+        return (<>
+          <Input
+            type={'text'}
+            value={name}
+            onChange={handleChange}
+            placeholder={'Имя'}
+            icon={'EditIcon'}
+            name={'name'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Input
+            type={'email'}
+            value={email}
+            onChange={handleChange}
+            placeholder={'Логин'}
+            icon={'EditIcon'}
+            name={'email'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+          <Input
+            type={isVisiblePassword ? 'text' : 'password'}
+            onIconSubmit={onIconClick}
+            value={password}
+            onChange={handleChange}
+            placeholder={'Пароль'}
+            icon={'EditIcon'}
+            name={'password'}
+            error={false}
+            errorText={'Ошибка'}
+            size={'default'}
+          />
+        </>);
       default:
         return (<h1>unknown type</h1>);
     }
   };
 
   return (
-    <div className={clsx(styles.login_form)}>
+    <form className={clsx(styles.login_form)} onSubmit={handleSubmit}>
       {determineType()}
-    </div>
+    </form>
   );
 };
 
