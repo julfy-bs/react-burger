@@ -1,5 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { registerUser, loginUser, forgotPassword, resetPassword, logoutUser } from '../api/profileApi.js';
+import {
+  registerUser,
+  loginUser,
+  forgotPassword,
+  resetPassword,
+  logoutUser,
+  getUser,
+  patchUser
+} from '../api/profileApi.js';
+import { getCookie } from '../helpers/getCookie.js';
+import { REFRESH_TOKEN } from '../../utils/constants.js';
 
 
 export const fetchRegister = createAsyncThunk(
@@ -26,12 +36,34 @@ export const fetchLogin = createAsyncThunk(
 
 export const fetchLogout = createAsyncThunk(
   'profile/fetchLogout',
-  async(_, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.refreshToken;
+      const token = getCookie(REFRESH_TOKEN);
       return await logoutUser({ token });
-    } catch(e) {
+    } catch (e) {
       return rejectWithValue(e);
+    }
+  },
+);
+
+export const fetchGetUser = createAsyncThunk(
+  'profile/fetchGetUser',
+  async (_, thunkApi) => {
+    try {
+      return await getUser();
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
+  },
+);
+
+export const fetchUpdateUser = createAsyncThunk(
+  'profile/fetchUpdateUser',
+  async (data, thunkApi) => {
+    try {
+      return await patchUser(data);
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
     }
   },
 );

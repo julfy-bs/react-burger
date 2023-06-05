@@ -1,10 +1,16 @@
-import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useAuthorization } from '../../hooks/useAuthorization.js';
 
+const ProtectedRoute = ({ children, redirectTo }) => {
+  const { isUserLoggedIn, handleProtectedRoute } = useAuthorization();
 
-const ProtectedRoute = ({children, redirectTo }) => {
-  const { isLogin } = useSelector(store => store.profile);
-  return isLogin ? children : <Navigate to={redirectTo} />;;
+  useEffect(() => {
+    if (!isUserLoggedIn) {
+      handleProtectedRoute(redirectTo)
+    }
+  }, [handleProtectedRoute, isUserLoggedIn, redirectTo])
+
+  return children;
 };
 
 export default ProtectedRoute;

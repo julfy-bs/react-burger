@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  max-width: 480px;
+}
+
+.button_container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.button {
+  box-sizing: border-box;
+  padding: 16px 40px;
+  max-width: 167px;
+  max-height: 56px;
+}
+
+.button_secondary {
+  box-sizing: border-box;
+  padding: 16px 8px;
+  max-width: 74px;
+  max-height: 56px;
+}
+
+.errorMessage {
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: red
+}

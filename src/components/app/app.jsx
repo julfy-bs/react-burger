@@ -9,9 +9,10 @@ import {
   ForgotPasswordPage,
   ResetPasswordPage,
   NotFoundPage,
-  ProfilePage
+  ProfilePage,
+  ProfileFormPage,
+  ProfileOrdersPage
 } from '../../pages/index.js';
-import { PATH } from '../../utils/config.js';
 import clsx from 'clsx';
 import Modal from '../modal/modal.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
@@ -19,17 +20,24 @@ import OrderDetails from '../order-details/order-details.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import AppDetails from '../app-details/app-details.jsx';
 import Loader from '../loader/loader.jsx';
+import ProtectedRoute from '../protected-route/protected-route.jsx';
 import { useEffect } from 'react';
 import { setLoading } from '../../services/slices/loadingSlice.js';
-import { resetError, setError } from '../../services/slices/errorSlice.js';
-import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
-import ProtectedRoute from '../protected-route/protected-route.jsx';
+import { useFetch } from '../../hooks/useFetch.js';
 import { useModal } from '../../hooks/useModal.js';
+import { getCookie } from '../../services/helpers/getCookie.js';
+import { fetchGetUser } from '../../services/asyncThunk/profileThunk.js';
+import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
+import { PATH } from '../../utils/config.js';
+import { ACCESS_TOKEN } from '../../utils/constants.js';
 
 const App = () => {
-  const dispatch = useDispatch();
-  const { error } = useSelector(store => store.error);
-  const { orderNumber } = useSelector(store => store.order);
+  const {
+    ingredientsFetchRequest,
+    ingredientsFetchFailed,
+    ingredientsNotification,
+    ingredientsError
+  } = useSelector(store => store.ingredients);
   const {
     modalIngredient,
     isDetailedOrderOpened,
@@ -37,28 +45,36 @@ const App = () => {
     detailedInformation,
     isDetailedInformationOpened
   } = useModal();
-  const { errorMessage, isLogin } = useSelector(store => store.profile);
+  const { errorMessage } = useSelector(store => store.profile);
   const { loading } = useSelector(store => store.loading);
+  const { orderNumber } = useSelector(store => store.order);
+  const dispatch = useDispatch();
 
-  const { ingredientsFetchRequest, ingredientsFetchFailed } = useSelector(store => store.ingredients);
+  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
+
 
   useEffect(() => {
-    // console.log(localStorage);
     dispatch(setLoading({ loading: ingredientsFetchRequest }));
   }, [dispatch, ingredientsFetchRequest]);
 
   useEffect(() => {
-    ingredientsFetchFailed
-      ? dispatch(setError({
-        code: null,
-        message: 'Ошибка загрузки ингредиентов'
-      }))
-      : dispatch(resetError());
-  }, [dispatch, ingredientsFetchFailed]);
+    dispatch(fetchIngredients());
+    const token = getCookie(ACCESS_TOKEN);
+    if (token) dispatch(fetchGetUser());
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
+    handleFulfilledFetch({
+      fetchStatus: ingredientsFetchRequest,
+      fetchError: ingredientsFetchFailed,
+      message: ingredientsNotification,
+    });
+    handleRejectedFetch({
+      fetchStatus: ingredientsFetchRequest,
+      fetchError: ingredientsFetchFailed,
+      errorMessage: ingredientsError,
+    });
+  });
 
   return (
     <>
@@ -67,52 +83,55 @@ const App = () => {
         {
           loading
             ? (<Loader loading={loading}/>)
-            : (<Routes>
-              <Route
-                path={PATH.HOME}
-                element={<ConstructorPage/>}
-              />
-              <Route
-                path={PATH.LOGIN}
-                element={<LoginPage/>}
-              />
-              <Route
-                path={PATH.LOGOUT}
-                element={<LogoutPage/>}
-              />
-              <Route
-                path={PATH.REGISTER}
-                element={<RegisterPage/>}
-              />
-              <Route
-                path={PATH.FORGOT_PASSWORD}
-                element={<ForgotPasswordPage/>}
-              />
-              <Route
-                path={PATH.RESET_PASSWORD}
-                element={<ResetPasswordPage/>}
-              />
-              <Route
-                path={PATH.PROFILE}
-                element={
+            : (
+              <Routes>
+                <Route
+                  path={PATH.HOME}
+                  element={<ConstructorPage/>}
+                />
+                <Route
+                  path={PATH.LOGIN}
+                  element={
+                    <LoginPage/>
+                  }
+                />
+                <Route
+                  path={PATH.LOGOUT}
+                  element={
+                    <LogoutPage/>
+                  }
+                />
+                <Route
+                  path={PATH.REGISTER}
+                  element={
+                    <RegisterPage/>
+                  }
+                />
+                <Route
+                  path={PATH.FORGOT_PASSWORD}
+                  element={
+                    <ForgotPasswordPage/>
+                  }
+                />
+                <Route
+                  path={PATH.RESET_PASSWORD}
+                  element={
+                    <ResetPasswordPage/>
+                  }
+                />
+                <Route path={PATH.PROFILE} element={
                   <ProtectedRoute redirectTo={PATH.LOGIN}>
                     <ProfilePage/>
                   </ProtectedRoute>
-                }
-              />
-              <Route
-                path={PATH.ORDERS}
-                element={
-                  <ProtectedRoute redirectTo={PATH.LOGIN}>
-                    <ProfilePage/>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="*"
-                element={<NotFoundPage/>}
-              />
-            </Routes>)
+                }>
+                  <Route index element={<ProfileFormPage/>}/>
+                  <Route path={PATH.ORDERS} element={<ProfileOrdersPage/>}/>
+                </Route>
+                <Route
+                  path="*"
+                  element={<NotFoundPage/>}
+                />
+              </Routes>)
         }
       </main>
 

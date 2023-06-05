@@ -15,15 +15,16 @@ const orderSlice = createSlice({
     builder
       .addCase(createOrder.pending, (state) => {
         state.orderFetchRequest = true;
+        state.orderFetchFailed = false;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        state.orderNumber = action.payload.order.number.toString();
+        const { number } = action.payload.order
+        state.orderNumber = number.toString();
         state.orderFetchRequest = false;
       })
-      .addCase(createOrder.rejected, (state, action) => {
+      .addCase(createOrder.rejected, (state) => {
         state.orderFetchRequest = false;
         state.orderFetchFailed = true;
-        console.error(action.payload);
       });
   },
 });
