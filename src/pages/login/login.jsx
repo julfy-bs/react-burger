@@ -4,45 +4,48 @@ import LoginForm from '../../components/login-form/login-form.jsx';
 import LoginLinks from '../../components/login-links/login-links.jsx';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm.js';
-import { clearErrorMessage, setMessage } from '../../services/slices/profileSlice.js';
-import { closeModal, openModalWithMessage } from '../../services/slices/modalSlice.js';
+import { useFetch } from '../../hooks/useFetch.js';
+import { useAuthorization } from '../../hooks/useAuthorization.js';
 import { fetchLogin } from '../../services/asyncThunk/profileThunk.js';
 import { PATH } from '../../utils/config.js';
-import { NOTIFICATION_LOGIN_SUCCESS } from '../../utils/constants.js';
 
 const LoginPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
+  const { isUserLoggedIn, handleUnprotectedRoute, previousUrl } = useAuthorization();
   const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
+  const dispatch = useDispatch();
 
-  const redirectToHomePage = useCallback(() => {
-    navigate(PATH.HOME, { replace: true });
-  }, [navigate]);
-
-  const handleFulfilledFetch = useCallback(() => {
-    const logoutSuccessCondition = !profileFetchRequest
-      && !profileFetchFailed
-      && message === NOTIFICATION_LOGIN_SUCCESS;
-    if (logoutSuccessCondition) {
-      dispatch(openModalWithMessage(message));
-      setTimeout(() => {
-        dispatch(closeModal());
-        dispatch(setMessage(''));
-      }, 2000);
-      redirectToHomePage();
+  const handleRouterLocation = useCallback(() => {
+    if (previousUrl) {
+      handleUnprotectedRoute(previousUrl);
+    } else {
+      handleUnprotectedRoute(PATH.HOME);
     }
-  }, [dispatch, message, profileFetchFailed, profileFetchRequest, redirectToHomePage]);
+  }, [handleUnprotectedRoute, previousUrl]);
 
-  const handleRejectedFetch = useCallback(() => {
-    const logoutFailCondition = !profileFetchRequest
-      && profileFetchFailed
-      && errorMessage;
-    logoutFailCondition && setTimeout(() => dispatch(clearErrorMessage()), 4000);
-  }, [dispatch, errorMessage, profileFetchFailed, profileFetchRequest]);
+  useEffect(() => {
+    if (isUserLoggedIn) handleRouterLocation();
+  }, [handleRouterLocation, handleUnprotectedRoute, isUserLoggedIn]);
 
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
+
+  useEffect(() => {
+    handleFulfilledFetch({
+      fetchStatus: profileFetchRequest,
+      fetchError: profileFetchFailed,
+      messageContent: message,
+      handleFulfilledFetch: () => handleRouterLocation()
+    });
+    handleRejectedFetch({
+      fetchStatus: profileFetchRequest,
+      fetchError: profileFetchFailed,
+      errorMessage: errorMessage,
+    });
+  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, handleRouterLocation, message, profileFetchFailed, profileFetchRequest]);
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
@@ -52,18 +55,16 @@ const LoginPage = () => {
     }));
   }, [dispatch, values.email, values.password]);
 
-  useEffect(() => {
-    resetForm();
-  }, [resetForm]);
-
-  useEffect(() => {
-    handleFulfilledFetch();
-    handleRejectedFetch();
-  }, [handleFulfilledFetch, handleRejectedFetch]);
-
   return (
     <section className={clsx(styles.container)}>
-      <LoginForm type={'login'} values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
+      <LoginForm
+        type={'login'}
+        errors={errors}
+        values={values}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        isValid={isValid}
+      />
       <LoginLinks type={'login'}/>
     </section>
   );

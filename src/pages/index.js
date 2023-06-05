@@ -6,6 +6,8 @@ import ForgotPasswordPage from './forgot-password/forgot-password.jsx';
 import ResetPasswordPage from './reset-password/reset-password.jsx';
 import NotFoundPage from './not-found/not-found.jsx';
 import ProfilePage from './profile/profile.jsx';
+import ProfileFormPage from './profile/profile-form/profile-form.jsx';
+import ProfileOrdersPage from './profile/profile-orders/profile-orders.jsx';
 
 export {
   ConstructorPage,
@@ -15,5 +17,7 @@ export {
   ForgotPasswordPage,
   ResetPasswordPage,
   NotFoundPage,
-  ProfilePage
+  ProfilePage,
+  ProfileFormPage,
+  ProfileOrdersPage
 };

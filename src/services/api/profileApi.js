@@ -1,5 +1,8 @@
 import { serverConfig } from '../../utils/config.js';
 import checkResponse from '../helpers/checkResponse.js';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../utils/constants.js';
+import { getCookie } from '../helpers/getCookie.js';
+import { setCookie } from '../helpers/setCookie.js';
 
 const profileApi = ({ baseUrl, headers }) => {
 
@@ -9,6 +12,40 @@ const profileApi = ({ baseUrl, headers }) => {
       headers: headers,
       ...options,
     });
+    return checkResponse(res);
+  };
+
+  const authorizationRequest = async (url, options) => {
+    const computedUrl = `${baseUrl}/${url}`;
+    const res = await fetch(computedUrl, {
+      headers: {
+        authorization: getCookie(ACCESS_TOKEN),
+        ...headers
+      },
+      ...options
+    });
+    if (res.status === 403) {
+      const updateTokenRequest = await fetch(`${baseUrl}/auth/token`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ token: getCookie(REFRESH_TOKEN) }),
+      });
+
+      if (updateTokenRequest.ok) {
+        const data = await updateTokenRequest;
+        setCookie(ACCESS_TOKEN, data.accessToken, 1200);
+        setCookie(REFRESH_TOKEN, data.refreshToken, 1200);
+
+        const res = await fetch(computedUrl, {
+          headers: {
+            authorization: getCookie(ACCESS_TOKEN),
+            ...headers
+          },
+          ...options
+        });
+        return checkResponse(res);
+      }
+    }
     return checkResponse(res);
   };
 
@@ -33,6 +70,19 @@ const profileApi = ({ baseUrl, headers }) => {
     });
   };
 
+  const getUser = () => {
+    return authorizationRequest('auth/user', {
+      method: 'GET',
+    });
+  };
+
+  const patchUser = async (data) => {
+    return authorizationRequest('auth/user', {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  };
+
   const forgotPassword = ({ email }) => {
     return request('password-reset', {
       method: 'POST',
@@ -47,7 +97,15 @@ const profileApi = ({ baseUrl, headers }) => {
     });
   };
 
-  return { registerUser, loginUser, logoutUser, forgotPassword: forgotPassword, resetPassword };
+  return { registerUser, loginUser, logoutUser, getUser, patchUser, forgotPassword: forgotPassword, resetPassword };
 };
 
-export const { registerUser, loginUser, logoutUser, forgotPassword, resetPassword } = profileApi(serverConfig);
+export const {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUser,
+  patchUser,
+  forgotPassword,
+  resetPassword
+} = profileApi(serverConfig);

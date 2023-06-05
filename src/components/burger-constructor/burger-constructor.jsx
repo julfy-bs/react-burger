@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
-
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,9 +9,15 @@ import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 import { useDrop } from 'react-dnd';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
 import uuid from 'react-uuid';
+import { getCookie } from '../../services/helpers/getCookie.js';
+import { ACCESS_TOKEN } from '../../utils/constants.js';
+import { PATH } from '../../utils/config.js';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const BurgerConstructor = () => {
   const { cart } = useSelector(state => state.cart);
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const isButtonDisabled = useMemo(() => !!(cart.bun === null
     || cart.ingredients.length === 0), [cart]);
@@ -32,10 +37,19 @@ const BurgerConstructor = () => {
     })
   });
 
+  const redirectToLoginPage = useCallback(() => {
+    navigate(PATH.LOGIN, { replace: true, state: { background: location.pathname } });
+  }, [location.pathname, navigate]);
+
   const handleBurgerConstructorButton = async () => {
-    await dispatch(createOrder(cart));
-    dispatch(openModal({ type: 'order' }));
-    dispatch(cleanCart());
+    const token = getCookie(ACCESS_TOKEN);
+    if (token) {
+      await dispatch(createOrder(cart));
+      dispatch(openModal({ type: 'order' }));
+      dispatch(cleanCart());
+    } else {
+      redirectToLoginPage();
+    }
   };
 
   const cartPrice = useMemo(() => {

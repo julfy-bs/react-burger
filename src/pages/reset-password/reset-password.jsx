@@ -2,54 +2,47 @@ import clsx from 'clsx';
 import styles from './reset-password.module.css';
 import LoginForm from '../../components/login-form/login-form.jsx';
 import LoginLinks from '../../components/login-links/login-links.jsx';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm.js';
-import { clearErrorMessage, setMessage } from '../../services/slices/profileSlice.js';
-import { closeModal, openModalWithMessage } from '../../services/slices/modalSlice.js';
+import { useAuthorization } from '../../hooks/useAuthorization.js';
+import { useFetch } from '../../hooks/useFetch.js';
 import { fetchResetPassword } from '../../services/asyncThunk/profileThunk.js';
-import { NOTIFICATION_PASSWORD_RESET } from '../../utils/constants.js';
 import { PATH } from '../../utils/config.js';
 
 const ResetPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const {
-    message,
-    profileFetchRequest,
-    profileFetchFailed,
-    errorMessage,
-    isEmailSubmitted
-  } = useSelector(store => store.profile);
+  const { isEmailSubmitted } = useSelector(store => store.profile);
+  const { isUserLoggedIn, handleUnprotectedRoute } = useAuthorization();
+  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
+  const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
 
-  const redirectToForgotPasswordPage = useCallback(() => {
-    navigate(PATH.FORGOT_PASSWORD, { replace: true });
-  }, [navigate]);
+  useEffect(() => {
+    if (isUserLoggedIn) handleUnprotectedRoute(PATH.HOME);
+  }, [handleUnprotectedRoute, isUserLoggedIn]);
 
-  const redirectToLoginPage = useCallback(() => {
-    navigate(PATH.LOGIN, { replace: true });
-  }, [navigate]);
+  useEffect(() => {
+    if (!isEmailSubmitted) handleUnprotectedRoute(PATH.FORGOT_PASSWORD);
+  }, [handleUnprotectedRoute, isEmailSubmitted]);
 
-  const handleFulfilledFetch = useCallback(() => {
-    const logoutSuccessCondition = !profileFetchRequest
-      && !profileFetchFailed
-      && message === NOTIFICATION_PASSWORD_RESET;
-    if (logoutSuccessCondition) {
-      dispatch(openModalWithMessage(message));
-      setTimeout(() => {
-        dispatch(closeModal());
-        dispatch(setMessage(''));
-      }, 6000);
-      redirectToLoginPage();
-    }
-  }, [dispatch, message, profileFetchFailed, profileFetchRequest, redirectToLoginPage]);
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
-  const handleRejectedFetch = useCallback(() => {
-    const logoutFailCondition = !profileFetchRequest && profileFetchFailed && errorMessage;
-    logoutFailCondition && setTimeout(() => dispatch(clearErrorMessage()), 4000);
-  }, [dispatch, errorMessage, profileFetchFailed, profileFetchRequest]);
+  useEffect(() => {
+    handleFulfilledFetch({
+      fetchStatus: profileFetchRequest,
+      fetchError: profileFetchFailed,
+      messageContent: message,
+      handleFulfilledFetch: () => handleUnprotectedRoute(PATH.LOGIN)
+    });
+    handleRejectedFetch({
+      fetchStatus: profileFetchRequest,
+      fetchError: profileFetchFailed,
+      errorMessage: errorMessage,
+    });
+  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, handleUnprotectedRoute, message, profileFetchFailed, profileFetchRequest]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,23 +52,16 @@ const ResetPasswordPage = () => {
     }));
   };
 
-  useEffect(() => {
-    resetForm();
-  }, [resetForm]);
-
-  useEffect(() => {
-    !isEmailSubmitted && redirectToForgotPasswordPage();
-  }, [isEmailSubmitted, redirectToForgotPasswordPage]);
-
-  useEffect(() => {
-    handleFulfilledFetch();
-    handleRejectedFetch();
-  }, [handleFulfilledFetch, handleRejectedFetch]);
-
-
   return (
     <section className={clsx(styles.container)}>
-      <LoginForm type={'reset'} values={values} handleSubmit={handleSubmit} handleChange={handleChange}/>
+      <LoginForm
+        type={'reset'}
+        errors={errors}
+        isValid={isValid}
+        values={values}
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+      />
       <LoginLinks type={'reset'}/>
     </section>
   );

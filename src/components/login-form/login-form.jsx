@@ -1,29 +1,30 @@
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './login-form.module.css';
-import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const LoginForm = ({ type, values, handleSubmit, handleChange }) => {
+const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }) => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-  const { email, name, password } = useSelector(store => store.profile);
-
+  const { profileFetchRequest } = useSelector(store => store.profile);
   const onIconClick = () => setIsVisiblePassword(!isVisiblePassword);
 
   const determineType = () => {
     switch (type) {
       case 'login':
         return (<>
-          <Input
+          <EmailInput
             type={'email'}
             value={values.email || ''}
             onChange={handleChange}
             placeholder={'E-mail'}
             name={'email'}
-            error={false}
-            errorText={'Ошибка'}
+            error={!!errors.email}
+            errorText={errors.email}
             size={'default'}
+            isIcon={false}
+            required
           />
           <Input
             type={isVisiblePassword ? 'text' : 'password'}
@@ -32,12 +33,20 @@ const LoginForm = ({ type, values, handleSubmit, handleChange }) => {
             placeholder={'Пароль'}
             icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
             name={'password'}
-            error={false}
-            errorText={'Ошибка'}
+            error={!!errors.password}
+            errorText={errors.password}
             onIconClick={onIconClick}
             size={'default'}
+            minLength={1}
+            maxLength={20}
+            required
           />
-          <Button htmlType="submit" type="primary" size="medium">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            disabled={!isValid || profileFetchRequest}
+          >
             Войти
           </Button>
         </>);
@@ -53,47 +62,67 @@ const LoginForm = ({ type, values, handleSubmit, handleChange }) => {
             error={false}
             errorText={'Ошибка'}
             size={'default'}
+            minLength={2}
+            maxLength={20}
+            required
           />
-          <Input
-            type={'email'}
+          <EmailInput
             placeholder={'E-mail'}
             value={values.email || ''}
             name={'email'}
             onChange={handleChange}
-            error={false}
-            errorText={'Ошибка'}
+            type={'email'}
+            error={!!errors.email}
+            errorText={errors.email}
             size={'default'}
+            isIcon={false}
+            required
           />
           <Input
             type={isVisiblePassword ? 'text' : 'password'}
-            placeholder={'Пароль'}
             value={values.password || ''}
             onChange={handleChange}
+            placeholder={'Пароль'}
             icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
             name={'password'}
-            error={false}
-            errorText={'Ошибка'}
+            error={!!errors.password}
+            errorText={errors.password}
             onIconClick={onIconClick}
             size={'default'}
+            minLength={8}
+            maxLength={20}
+            required
           />
-          <Button htmlType="submit" type="primary" size="medium">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            disabled={!isValid || profileFetchRequest}
+          >
             Зарегистрироваться
           </Button>
         </>);
       case 'forgot':
         return (<>
           <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
-          <Input
-            type={'email'}
+          <EmailInput
+            placeholder={'E-mail'}
             value={values.email || ''}
-            onChange={handleChange}
-            placeholder={'Укажите e-mail'}
             name={'email'}
-            error={false}
-            errorText={'Ошибка'}
+            onChange={handleChange}
+            type={'email'}
+            error={!!errors.email}
+            errorText={errors.email}
             size={'default'}
+            isIcon={false}
+            required
           />
-          <Button htmlType="submit" type="primary" size="medium">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            disabled={!isValid || profileFetchRequest}
+          >
             Восстановить
           </Button>
         </>);
@@ -102,15 +131,19 @@ const LoginForm = ({ type, values, handleSubmit, handleChange }) => {
           <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
           <Input
             type={isVisiblePassword ? 'text' : 'password'}
-            value={values.password || ''}
-            onChange={handleChange}
             placeholder={'Введите новый пароль'}
-            name={'password'}
-            error={false}
-            errorText={'Ошибка'}
-            size={'default'}
-            onIconClick={onIconClick}
+            onChange={handleChange}
             icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
+            value={values.password || ''}
+            name={'password'}
+            error={!!errors.password}
+            onIconClick={onIconClick}
+            errorText={errors.password}
+            size={'default'}
+            extraClass="mt-6"
+            minLength={8}
+            maxLength={20}
+            required
           />
           <Input
             type={'text'}
@@ -118,50 +151,18 @@ const LoginForm = ({ type, values, handleSubmit, handleChange }) => {
             onChange={handleChange}
             placeholder={'Введите код из письма'}
             name={'token'}
-            error={false}
-            errorText={'Ошибка'}
             size={'default'}
+            error={!!errors.token}
+            errorText={errors.token}
           />
-          <Button htmlType="submit" type="primary" size="medium">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            disabled={!isValid || profileFetchRequest}
+          >
             Сохранить
           </Button>
-        </>);
-      case 'profile':
-        return (<>
-          <Input
-            type={'text'}
-            value={name}
-            onChange={handleChange}
-            placeholder={'Имя'}
-            icon={'EditIcon'}
-            name={'name'}
-            error={false}
-            errorText={'Ошибка'}
-            size={'default'}
-          />
-          <Input
-            type={'email'}
-            value={email}
-            onChange={handleChange}
-            placeholder={'Логин'}
-            icon={'EditIcon'}
-            name={'email'}
-            error={false}
-            errorText={'Ошибка'}
-            size={'default'}
-          />
-          <Input
-            type={isVisiblePassword ? 'text' : 'password'}
-            onIconSubmit={onIconClick}
-            value={password}
-            onChange={handleChange}
-            placeholder={'Пароль'}
-            icon={'EditIcon'}
-            name={'password'}
-            error={false}
-            errorText={'Ошибка'}
-            size={'default'}
-          />
         </>);
       default:
         return (<h1>unknown type</h1>);

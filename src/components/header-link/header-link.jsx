@@ -7,7 +7,6 @@ import { PATH } from '../../utils/config.js';
 const HeaderLink = ({ text, route, children }) => {
   return (
     <NavLink
-      end
       to={route}
       className={
         ({ isActive }) => clsx(styles.link, isActive ? styles.link_active : '', 'pt-4', 'pr-5', 'pb-4', 'pl-5')
