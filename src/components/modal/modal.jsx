@@ -6,27 +6,36 @@ import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
-import { useDispatch } from 'react-redux';
-import { closeModal } from '../../services/slices/modalSlice.js';
 
 import { MODAL_ID } from '../../utils/constants.js';
 import { useModal } from '../../hooks/useModal.js';
+import { useCallback } from 'react';
+import { useAuthorization } from '../../hooks/useAuthorization.js';
+import { useNavigate } from 'react-router-dom';
 
-const Modal = ({ info, title, ariaTitle, children }) => {
-  const { isModalOpen } = useModal();
-  const dispatch = useDispatch();
+const Modal = ({ title, ariaTitle, children }) => {
+  const { modalIngredient, modalOrder, closeAnyModal, isModalOpen } = useModal();
+  const { previousUrl } = useAuthorization();
+  const navigate = useNavigate();
+
+  const handleModalClose = useCallback(() => {
+    closeAnyModal();
+    (modalIngredient || modalOrder) &&
+    navigate(previousUrl, {
+      replace: true,
+      state: { background: null }
+    });
+  }, [closeAnyModal, modalIngredient, modalOrder, navigate, previousUrl]);
 
   return createPortal(
     <>
       {
         <>
-          { !info && <ModalOverlay/> }
+          <ModalOverlay handleModalClose={handleModalClose}/>
           <div
             className={clsx(
               styles.modal,
               { [styles.modal_opened]: isModalOpen },
-              { [styles.modal_content]: !info },
-              { [styles.modal_info]: info }
             )}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
@@ -40,9 +49,7 @@ const Modal = ({ info, title, ariaTitle, children }) => {
                   className={clsx(
                     styles.modal__title,
                     'text',
-                    { 'text_type_main-large': !info },
-                    { 'text_type_main-default': info },
-
+                    'text_type_main-large'
                   )}
                   id="modal-title">
                   {title}
@@ -58,7 +65,7 @@ const Modal = ({ info, title, ariaTitle, children }) => {
                 className={clsx(styles.modal__close)}
                 aria-label="Закрыть модальное окно"
                 type="button"
-                onClick={() => dispatch(closeModal())}
+                onClick={() => handleModalClose()}
               >
                 <CloseIcon type="primary"/>
               </button>
@@ -74,14 +81,9 @@ const Modal = ({ info, title, ariaTitle, children }) => {
 
 
 Modal.propTypes = {
-  info: PropTypes.bool,
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
   children: PropTypes.node
-};
-
-Modal.defaultProps = {
-  cornered: false
 };
 
 export default Modal;

@@ -1,8 +1,15 @@
 .container {
+  box-sizing: border-box;
   max-width: 1240px;
-  margin-top: 120px;
+  padding-top: 120px;
   display: grid;
   justify-content: center;
   grid-template-columns: minmax(320px, 1fr) 4fr minmax(0, 320px);
   gap: 60px;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
 }

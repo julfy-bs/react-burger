@@ -1,19 +1,21 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearErrorMessage, setMessage } from '../services/slices/profileSlice.js';
-import { closeModal, openModalWithMessage } from '../services/slices/modalSlice.js';
+import { useModal } from './useModal.js';
 
 export const useFetch = () => {
   const dispatch = useDispatch();
+  const { closeAnyModal, openNotificationModal } = useModal();
 
-  const openNotification = useCallback((message) => {
-    dispatch(openModalWithMessage(message));
-  }, [dispatch]);
+  const openNotification = useCallback(
+    (message) => openNotificationModal(message),
+    [openNotificationModal]
+  );
 
-  const closeNotification = useCallback(() => {
-    dispatch(closeModal());
-    dispatch(setMessage(''));
-  }, [dispatch]);
+  const closeNotification = useCallback(
+    () => closeAnyModal() && dispatch(setMessage('')),
+    [closeAnyModal, dispatch]
+  );
 
   const handleFulfilledFetch = useCallback(
     ({ fetchStatus, fetchError, message, handleFulfilledFetch = () => {} }) => {

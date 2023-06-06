@@ -67,7 +67,7 @@ const LoginLinks = ({ type }) => {
 
 
 LoginLinks.propTypes = {
-  type: PropTypes.oneOf(['login', 'register', 'forgot', 'reset'])
+  type: PropTypes.oneOf(['login', 'register', 'forgot', 'reset']).isRequired
 };
 
 export default LoginLinks;

@@ -13,18 +13,16 @@ import { PATH } from '../../utils/config.js';
 const ResetPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
-  const { isEmailSubmitted } = useSelector(store => store.profile);
-  const { isUserLoggedIn, handleUnprotectedRoute } = useAuthorization();
+  const { isEmailSubmitted, isPasswordChanged } = useSelector(store => store.profile);
+  const { isUserLoggedIn, handleProtectedRoute } = useAuthorization();
   const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
 
   useEffect(() => {
-    if (isUserLoggedIn) handleUnprotectedRoute(PATH.HOME);
-  }, [handleUnprotectedRoute, isUserLoggedIn]);
-
-  useEffect(() => {
-    if (!isEmailSubmitted) handleUnprotectedRoute(PATH.FORGOT_PASSWORD);
-  }, [handleUnprotectedRoute, isEmailSubmitted]);
+    if (isUserLoggedIn) handleProtectedRoute(PATH.HOME);
+    if (!isUserLoggedIn && !isEmailSubmitted) handleProtectedRoute(PATH.FORGOT_PASSWORD);
+    if (isPasswordChanged) handleProtectedRoute(PATH.LOGIN);
+  }, [handleProtectedRoute, isEmailSubmitted, isPasswordChanged, isUserLoggedIn]);
 
   useEffect(() => {
     resetForm();
@@ -34,15 +32,14 @@ const ResetPasswordPage = () => {
     handleFulfilledFetch({
       fetchStatus: profileFetchRequest,
       fetchError: profileFetchFailed,
-      messageContent: message,
-      handleFulfilledFetch: () => handleUnprotectedRoute(PATH.LOGIN)
+      message: message,
     });
     handleRejectedFetch({
       fetchStatus: profileFetchRequest,
       fetchError: profileFetchFailed,
       errorMessage: errorMessage,
     });
-  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, handleUnprotectedRoute, message, profileFetchFailed, profileFetchRequest]);
+  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, message, profileFetchFailed, profileFetchRequest]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

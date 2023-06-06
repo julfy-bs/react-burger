@@ -22,7 +22,7 @@ const Header = () => {
               </HeaderLink>
             </li>
             <li>
-              <HeaderLink text={'Лента заказов'} route={PATH.ORDERS}>
+              <HeaderLink text={'Лента заказов'} route={PATH.FEED}>
                 <ListIcon type="secondary"/>
               </HeaderLink>
             </li>

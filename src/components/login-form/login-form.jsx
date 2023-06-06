@@ -178,7 +178,22 @@ const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }
 
 
 LoginForm.propTypes = {
-  type: PropTypes.oneOf(['login', 'register', 'forgot', 'reset', 'profile'])
+  type: PropTypes.oneOf(['login', 'register', 'forgot', 'reset']),
+  values: PropTypes.shape({
+    'name': PropTypes.string,
+    'email': PropTypes.string,
+    'password': PropTypes.string,
+    'token': PropTypes.string,
+  }).isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  errors: PropTypes.shape({
+    'name': PropTypes.string,
+    'email': PropTypes.string,
+    'password': PropTypes.string,
+    'token': PropTypes.string,
+  }).isRequired,
+  isValid: PropTypes.bool.isRequired
 };
 
 export default LoginForm;

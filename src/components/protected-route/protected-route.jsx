@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useAuthorization } from '../../hooks/useAuthorization.js';
+import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children, redirectTo }) => {
-  const { isUserLoggedIn, handleProtectedRoute } = useAuthorization();
+  const { handleProtectedRoute, isUserLoggedIn } = useAuthorization();
 
   useEffect(() => {
     if (!isUserLoggedIn) {
@@ -11,6 +12,10 @@ const ProtectedRoute = ({ children, redirectTo }) => {
   }, [handleProtectedRoute, isUserLoggedIn, redirectTo])
 
   return children;
+};
+
+ProtectedRoute.propTypes = {
+  redirectTo: PropTypes.string.isRequired,
 };
 
 export default ProtectedRoute;

@@ -1,57 +1,53 @@
 import styles from './app.module.css';
 import Header from '../header/header.jsx';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import {
   ConstructorPage,
   LoginPage,
-  LogoutPage,
   RegisterPage,
   ForgotPasswordPage,
   ResetPasswordPage,
   NotFoundPage,
-  ProfilePage,
+  ProfileLayout,
   ProfileFormPage,
-  ProfileOrdersPage
+  ProfileOrdersPage,
+  IngredientPage
 } from '../../pages/index.js';
 import clsx from 'clsx';
 import Modal from '../modal/modal.jsx';
+import Notification from '../notification/notification.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
 import OrderDetails from '../order-details/order-details.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import AppDetails from '../app-details/app-details.jsx';
 import Loader from '../loader/loader.jsx';
 import ProtectedRoute from '../protected-route/protected-route.jsx';
 import { useEffect } from 'react';
 import { setLoading } from '../../services/slices/loadingSlice.js';
 import { useFetch } from '../../hooks/useFetch.js';
 import { useModal } from '../../hooks/useModal.js';
-import { getCookie } from '../../services/helpers/getCookie.js';
 import { fetchGetUser } from '../../services/asyncThunk/profileThunk.js';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 import { PATH } from '../../utils/config.js';
-import { ACCESS_TOKEN } from '../../utils/constants.js';
+import { useAuthorization } from '../../hooks/useAuthorization.js';
 
 const App = () => {
   const {
     ingredientsFetchRequest,
     ingredientsFetchFailed,
     ingredientsNotification,
-    ingredientsError
+    ingredientsError,
+    ingredients
   } = useSelector(store => store.ingredients);
   const {
-    modalIngredient,
-    isDetailedOrderOpened,
-    isDetailedIngredientOpened,
-    detailedInformation,
-    isDetailedInformationOpened
+    modalIngredient, modalOrder, modalNotification
   } = useModal();
+  const { isUserLoggedIn } = useAuthorization();
   const { errorMessage } = useSelector(store => store.profile);
   const { loading } = useSelector(store => store.loading);
-  const { orderNumber } = useSelector(store => store.order);
   const dispatch = useDispatch();
-
   const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
-
+  const location = useLocation();
+  const background = modalIngredient ? location.state.background : null;
 
   useEffect(() => {
     dispatch(setLoading({ loading: ingredientsFetchRequest }));
@@ -59,9 +55,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    const token = getCookie(ACCESS_TOKEN);
-    if (token) dispatch(fetchGetUser());
-  }, [dispatch]);
+    isUserLoggedIn && dispatch(fetchGetUser());
+  }, [dispatch, isUserLoggedIn]);
 
   useEffect(() => {
     handleFulfilledFetch({
@@ -84,49 +79,58 @@ const App = () => {
           loading
             ? (<Loader loading={loading}/>)
             : (
-              <Routes>
+              <Routes location={background || location}>
                 <Route
+                  exact
                   path={PATH.HOME}
-                  element={<ConstructorPage/>}
+                  element={
+                    ingredients.length > 0
+                    && !ingredientsFetchRequest
+                    && <ConstructorPage/>
+                  }
                 />
                 <Route
                   path={PATH.LOGIN}
-                  element={
-                    <LoginPage/>
-                  }
-                />
-                <Route
-                  path={PATH.LOGOUT}
-                  element={
-                    <LogoutPage/>
-                  }
+                  element={<LoginPage/>}
                 />
                 <Route
                   path={PATH.REGISTER}
-                  element={
-                    <RegisterPage/>
-                  }
+                  element={<RegisterPage/>}
                 />
                 <Route
                   path={PATH.FORGOT_PASSWORD}
-                  element={
-                    <ForgotPasswordPage/>
-                  }
+                  element={<ForgotPasswordPage/>}
                 />
                 <Route
                   path={PATH.RESET_PASSWORD}
-                  element={
-                    <ResetPasswordPage/>
-                  }
+                  element={<ResetPasswordPage/>}
                 />
-                <Route path={PATH.PROFILE} element={
-                  <ProtectedRoute redirectTo={PATH.LOGIN}>
-                    <ProfilePage/>
-                  </ProtectedRoute>
-                }>
-                  <Route index element={<ProfileFormPage/>}/>
-                  <Route path={PATH.ORDERS} element={<ProfileOrdersPage/>}/>
+                <Route
+                  path={PATH.PROFILE}
+                  element={
+                    <ProtectedRoute
+                      redirectTo={PATH.LOGIN}
+                    >
+                      <ProfileLayout/>
+                    </ProtectedRoute>
+                  }>
+                  <Route
+                    index
+                    element={<ProfileFormPage/>}
+                  />
+                  <Route
+                    path={PATH.ORDERS}
+                    element={<ProfileOrdersPage/>}
+                  />
                 </Route>
+                <Route
+                  path={PATH.FEED}
+                  element={<NotFoundPage/>}
+                />
+                <Route
+                  path={PATH.INGREDIENT}
+                  element={<IngredientPage/>}
+                />
                 <Route
                   path="*"
                   element={<NotFoundPage/>}
@@ -135,38 +139,36 @@ const App = () => {
         }
       </main>
 
+      <Notification
+        title={
+          modalNotification
+            ? modalNotification
+            : errorMessage
+              ? errorMessage
+              : ''
+        }
+      >
+      </Notification>
+
       <Modal
         title={
           modalIngredient
             ? 'Детали ингредиента'
-            : detailedInformation
-              ? detailedInformation
-              : errorMessage
-                ? errorMessage
-                : ''
+            : ''
         }
 
         ariaTitle={
-          isDetailedOrderOpened
+          modalOrder
             ? 'Идентификатор заказа'
             : ''
         }
-        info={!!detailedInformation || !!errorMessage}
       >
-        {modalIngredient && isDetailedIngredientOpened && (
+        {modalIngredient && (
           <IngredientDetails ingredient={modalIngredient}/>
         )}
 
-        {orderNumber && isDetailedOrderOpened && (
+        {modalOrder && (
           <OrderDetails/>
-        )}
-
-        {detailedInformation && isDetailedInformationOpened && (
-          <AppDetails message={detailedInformation}/>
-        )}
-
-        {(errorMessage) && (
-          <AppDetails/>
         )}
       </Modal>
     </>
