@@ -2,14 +2,13 @@ import styles from './modal-overlay.module.css';
 import clsx from 'clsx';
 
 import { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { closeModal } from '../../services/slices/modalSlice.js';
+import PropTypes from 'prop-types';
+import { useModal } from '../../hooks/useModal.js';
 
-const ModalOverlay = () => {
-  const { isModalOpen } = useSelector(state => state.modal);
-  const dispatch = useDispatch();
+const ModalOverlay = ({ handleModalClose }) => {
+  const { isModalOpen } = useModal();
 
-  const handleEscape = useCallback((e) => (e.key === 'Escape') && dispatch(closeModal()), [dispatch])
+  const handleEscape = useCallback((e) => (e.key === 'Escape') && handleModalClose(), [handleModalClose])
 
   useEffect(() => {
     if (!isModalOpen) return;
@@ -26,10 +25,14 @@ const ModalOverlay = () => {
           { [styles.modal__overlay_opened]: isModalOpen }
         )
       }
-      onClick={() => dispatch(closeModal())}
+      onClick={() => handleModalClose()}
     >
     </div>
   );
+};
+
+ModalOverlay.propTypes = {
+  handleModalClose: PropTypes.func.isRequired
 };
 
 export default ModalOverlay;

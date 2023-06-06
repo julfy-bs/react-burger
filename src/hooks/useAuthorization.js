@@ -18,7 +18,6 @@ export const useAuthorization = () => {
 
   const handleUnprotectedRoute = useCallback((to) => {
     navigate(to);
-    console.log(to);
   }, [navigate]);
 
   return { isUserLoggedIn, handleProtectedRoute, handleUnprotectedRoute, previousUrl };

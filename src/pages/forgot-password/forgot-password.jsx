@@ -16,10 +16,15 @@ const ForgotPasswordPage = () => {
   const { isUserLoggedIn, handleUnprotectedRoute } = useAuthorization();
   const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
+  const { isEmailSubmitted } = useSelector(store => store.profile);
 
   useEffect(() => {
     if (isUserLoggedIn) handleUnprotectedRoute(PATH.HOME);
   }, [handleUnprotectedRoute, isUserLoggedIn]);
+
+  useEffect(() => {
+    if (isEmailSubmitted && !isUserLoggedIn) handleUnprotectedRoute(PATH.RESET_PASSWORD);
+  }, [handleUnprotectedRoute, isEmailSubmitted, isUserLoggedIn]);
 
   useEffect(() => {
     resetForm();
@@ -29,8 +34,7 @@ const ForgotPasswordPage = () => {
     handleFulfilledFetch({
       fetchStatus: profileFetchRequest,
       fetchError: profileFetchFailed,
-      messageContent: message,
-      handleFulfilledFetch: () => handleUnprotectedRoute(PATH.RESET_PASSWORD)
+      message: message,
     });
     handleRejectedFetch({
       fetchStatus: profileFetchRequest,

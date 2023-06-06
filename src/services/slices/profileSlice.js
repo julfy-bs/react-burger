@@ -25,6 +25,7 @@ const initialState = {
   profileFetchRequest: false,
   profileFetchFailed: false,
   isEmailSubmitted: false,
+  isPasswordChanged: false,
   isLogin: false,
   user: {},
   message: '',
@@ -40,9 +41,6 @@ const profileSlice = createSlice({
     },
     clearErrorMessage(state) {
       state.errorMessage = '';
-    },
-    setIsLogin(state, action) {
-      state.isLogin = action.payload.isLogin;
     }
   },
   extraReducers: function (builder) {
@@ -126,6 +124,7 @@ const profileSlice = createSlice({
       .addCase(fetchForgotPassword.fulfilled, (state) => {
         state.profileFetchRequest = false;
         state.isEmailSubmitted = true;
+        state.isPasswordChanged = false;
         state.message = NOTIFICATION_EMAIL_SUBMITTED;
       })
       .addCase(fetchForgotPassword.rejected, (state) => {
@@ -139,11 +138,13 @@ const profileSlice = createSlice({
         state.profileFetchFailed = false;
         state.message = '';
         state.errorMessage = '';
+        state.isPasswordChanged = false;
       })
       .addCase(fetchResetPassword.fulfilled, (state) => {
         state.message = NOTIFICATION_PASSWORD_RESET;
         state.isEmailSubmitted = false;
         state.profileFetchRequest = false;
+        state.isPasswordChanged = true;
       })
       .addCase(fetchResetPassword.rejected.type, (state, action) => {
         (action.payload.message === SERVER_RESPOND_INCORRECT_TOKEN)
@@ -192,4 +193,4 @@ const profileSlice = createSlice({
 });
 
 export default profileSlice.reducer;
-export const { setMessage, clearErrorMessage, setIsLogin } = profileSlice.actions;
+export const { setMessage, clearErrorMessage } = profileSlice.actions;

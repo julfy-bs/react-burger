@@ -5,16 +5,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../../hooks/useForm.js';
 import { fetchGetUser, fetchUpdateUser } from '../../../services/asyncThunk/profileThunk.js';
-import { clearErrorMessage, setMessage } from '../../../services/slices/profileSlice.js';
-import { NOTIFICATION_USER_UPDATE_SUCCESS } from '../../../utils/constants.js';
-import { closeModal, openModalWithMessage } from '../../../services/slices/modalSlice.js';
+import { clearErrorMessage } from '../../../services/slices/profileSlice.js';
+import { useFetch } from '../../../hooks/useFetch.js';
 
 const ProfileForm = () => {
   const { user, profileFetchRequest, profileFetchFailed, message, errorMessage } = useSelector(store => store.profile);
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
-
-
+  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const [isEdit, setIsEdit] = useState({ name: false, email: false, password: false });
   const inputNameRef = useRef(null);
   const inputEmailRef = useRef(null);
@@ -26,6 +24,9 @@ const ProfileForm = () => {
       isValid && sameValues
     ), [isValid, sameValues]);
 
+  useEffect(() => {
+    dispatch(fetchGetUser());
+  }, [dispatch]);
 
   useEffect(() => {
     errorMessage && setTimeout(() => dispatch(clearErrorMessage()), 2000);
@@ -71,36 +72,19 @@ const ProfileForm = () => {
     }
   };
 
-  const handleFulfilledFetch = useCallback(() => {
-    const updateUserDataSuccessCondition = !profileFetchRequest
-      && !profileFetchFailed
-      && message === NOTIFICATION_USER_UPDATE_SUCCESS;
-    if (updateUserDataSuccessCondition) {
-      dispatch(openModalWithMessage(message));
-      setTimeout(() => {
-        dispatch(closeModal());
-        dispatch(setMessage(''));
-      }, 2000);
-      handleResetValue();
-    }
-  }, [dispatch, handleResetValue, message, profileFetchFailed, profileFetchRequest]);
-
-  const handleRejectedFetch = useCallback(() => {
-    const updateUserDataFailCondition = !profileFetchRequest
-      && profileFetchFailed
-      && errorMessage;
-    updateUserDataFailCondition && setTimeout(() => dispatch(clearErrorMessage()), 4000);
-  }, [dispatch, errorMessage, profileFetchFailed, profileFetchRequest]);
-
-
   useEffect(() => {
-    handleFulfilledFetch();
-    handleRejectedFetch();
-  }, [handleFulfilledFetch, handleRejectedFetch]);
-
-  useEffect(() => {
-    dispatch(fetchGetUser());
-  }, [dispatch]);
+    handleFulfilledFetch({
+      fetchStatus: profileFetchRequest,
+      fetchError: profileFetchFailed,
+      message,
+      handleFulfilledFetch: () => handleResetValue()
+    });
+    handleRejectedFetch({
+      fetchStatus: profileFetchRequest,
+      fetchError: profileFetchFailed,
+      errorMessage
+    });
+  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, handleResetValue, message, profileFetchFailed, profileFetchRequest]);
 
   return (
     <form className={clsx(styles.form)} onSubmit={handleSubmit}>

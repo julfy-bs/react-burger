@@ -3,7 +3,9 @@
 
 const ProfileOrders = () => {
   return (
-    <div></div>
+    <div>
+      HISTORY
+    </div>
   );
 };
 

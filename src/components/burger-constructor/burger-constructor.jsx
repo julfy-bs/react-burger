@@ -4,7 +4,6 @@ import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-de
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addIngredient, cleanCart, removeIngredient, sortIngredients } from '../../services/slices/cartSlice.js';
-import { openModal } from '../../services/slices/modalSlice.js';
 import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 import { useDrop } from 'react-dnd';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
@@ -13,6 +12,7 @@ import { getCookie } from '../../services/helpers/getCookie.js';
 import { ACCESS_TOKEN } from '../../utils/constants.js';
 import { PATH } from '../../utils/config.js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { setModalOrder } from '../../services/slices/modalSlice.js';
 
 const BurgerConstructor = () => {
   const { cart } = useSelector(state => state.cart);
@@ -44,8 +44,8 @@ const BurgerConstructor = () => {
   const handleBurgerConstructorButton = async () => {
     const token = getCookie(ACCESS_TOKEN);
     if (token) {
-      await dispatch(createOrder(cart));
-      dispatch(openModal({ type: 'order' }));
+      const order = await dispatch(createOrder(cart));
+      dispatch(setModalOrder(order));
       dispatch(cleanCart());
     } else {
       redirectToLoginPage();

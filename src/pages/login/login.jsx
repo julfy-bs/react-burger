@@ -18,7 +18,8 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const handleRouterLocation = useCallback(() => {
-    if (previousUrl) {
+    const isPreviousUrlNotLocked = previousUrl !== PATH.REGISTER && previousUrl !== PATH.FORGOT_PASSWORD && previousUrl !== PATH.RESET_PASSWORD
+    if (previousUrl && isPreviousUrlNotLocked) {
       handleUnprotectedRoute(previousUrl);
     } else {
       handleUnprotectedRoute(PATH.HOME);
@@ -37,8 +38,7 @@ const LoginPage = () => {
     handleFulfilledFetch({
       fetchStatus: profileFetchRequest,
       fetchError: profileFetchFailed,
-      messageContent: message,
-      handleFulfilledFetch: () => handleRouterLocation()
+      message: message,
     });
     handleRejectedFetch({
       fetchStatus: profileFetchRequest,

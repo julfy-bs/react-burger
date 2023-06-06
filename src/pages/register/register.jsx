@@ -29,8 +29,7 @@ const RegisterPage = () => {
     handleFulfilledFetch({
       fetchStatus: profileFetchRequest,
       fetchError: profileFetchFailed,
-      messageContent: message,
-      handleFulfilledFetch: () => handleUnprotectedRoute(PATH.HOME)
+      message: message,
     });
     handleRejectedFetch({
       fetchStatus: profileFetchRequest,

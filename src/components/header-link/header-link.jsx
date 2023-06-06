@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import styles from './header-link.module.css';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { PATH } from '../../utils/config.js';
 
 const HeaderLink = ({ text, route, children }) => {
   return (
@@ -21,12 +20,8 @@ const HeaderLink = ({ text, route, children }) => {
 
 HeaderLink.propTypes = {
   text: PropTypes.string.isRequired,
-  route: PropTypes.oneOf([PATH.HOME, PATH.PROFILE, PATH.ORDERS]).isRequired,
+  route: PropTypes.string.isRequired,
   children: PropTypes.any
-};
-
-HeaderLink.defaultProps = {
-  active: false
 };
 
 export default HeaderLink;
