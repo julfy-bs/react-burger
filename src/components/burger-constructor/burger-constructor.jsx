@@ -1,18 +1,25 @@
 import clsx from 'clsx';
 import styles from './burger-constructor.module.css';
-
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient, cleanCart, removeIngredient, sortIngredients } from '../../services/slices/cartSlice.js';
-import { openModal } from '../../services/slices/modalSlice.js';
+import { addIngredient, cleanCart, moveIngredients } from '../../services/slices/cartSlice.js';
 import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 import { useDrop } from 'react-dnd';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
 import uuid from 'react-uuid';
+import { PATH } from '../../utils/config.js';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { setModalOrder } from '../../services/slices/modalSlice.js';
+import { useAuthorization } from '../../hooks/useAuthorization.js';
+import { useModal } from '../../hooks/useModal.js';
 
 const BurgerConstructor = () => {
   const { cart } = useSelector(state => state.cart);
+  const { openNotificationModal, closeAnyModal } = useModal();
+  const { isUserLoggedIn } = useAuthorization();
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const isButtonDisabled = useMemo(() => !!(cart.bun === null
     || cart.ingredients.length === 0), [cart]);
@@ -20,22 +27,35 @@ const BurgerConstructor = () => {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
-      ingredient.type !== 'bun'
-        ? dispatch(addIngredient({
+      if (cart.bun === null && ingredient.type !== 'bun') {
+        openNotificationModal('Сначала выберите булку!');
+        setTimeout(() => closeAnyModal(), 2000);
+      } else if (ingredient.type !== 'bun') {
+        dispatch(addIngredient({
           ...ingredient,
           _uid: uuid()
-        }))
-        : dispatch(addIngredient(ingredient));
+        }));
+      } else {
+        dispatch(addIngredient(ingredient));
+      }
     },
     collect: monitor => ({
       isHover: monitor.isOver(),
     })
   });
 
+  const redirectToLoginPage = useCallback(() => {
+    navigate(PATH.LOGIN, { replace: true, state: { background: location.pathname } });
+  }, [location.pathname, navigate]);
+
   const handleBurgerConstructorButton = async () => {
-    await dispatch(createOrder(cart));
-    dispatch(openModal({ type: 'order' }));
-    dispatch(cleanCart());
+    if (isUserLoggedIn) {
+      const order = await dispatch(createOrder(cart));
+      dispatch(setModalOrder(order));
+      dispatch(cleanCart());
+    } else {
+      redirectToLoginPage();
+    }
   };
 
   const cartPrice = useMemo(() => {
@@ -62,8 +82,7 @@ const BurgerConstructor = () => {
   const moveIngredient = useCallback(
     (id, atIndex) => {
       const { ingredient, index } = findIngredient(id);
-      dispatch(removeIngredient({ index, _id: id }));
-      dispatch(sortIngredients({ index, atIndex, ingredient }));
+      dispatch(moveIngredients({ index, atIndex, ingredient }));
     },
     [dispatch, findIngredient],
   );

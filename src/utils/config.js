@@ -1,7 +1,6 @@
 export const serverConfig = {
   baseUrl: `https://norma.nomoreparties.space/api`,
   headers: {
-    authorization: '',
     'Content-Type': 'application/json',
   },
 };
@@ -20,3 +19,16 @@ export const ingredientTabs = [
     type: 'main'
   }
 ];
+
+export const PATH = {
+  HOME: '/',
+  LOGIN: '/login',
+  LOGOUT: '/auth/logout',
+  REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
+  PROFILE: '/profile',
+  ORDERS: '/profile/orders',
+  FEED: '/feed',
+  INGREDIENT: '/ingredients/:id'
+};

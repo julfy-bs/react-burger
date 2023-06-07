@@ -1,0 +1,32 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+}
+
+.plain_text {
+  color: #8585AD;
+}
+
+.app_link {
+  text-decoration: none;
+  color: #4C4CFF;
+}
+
+.error_text {
+  color: red;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, 0);
+  text-align: center;
+}
