@@ -5,8 +5,6 @@ const initialState = {
   ingredients: [],
   ingredientsFetchRequest: false,
   ingredientsFetchFailed: false,
-  ingredientsNotification: '',
-  ingredientsError: ''
 };
 
 const ingredientsSlice = createSlice({
@@ -17,20 +15,15 @@ const ingredientsSlice = createSlice({
     builder
       .addCase(fetchIngredients.pending, (state) => {
         state.ingredientsFetchRequest = true;
-        state.ingredientsFetchFailed = false;
-        state.ingredientsNotification = '';
-        state.ingredientsError =  '';
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        const { data } = action.payload;
-        state.ingredients = data;
+        state.ingredients = action.payload;
         state.ingredientsFetchRequest = false;
-        state.ingredientsNotification = '';
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.ingredientsFetchRequest = false;
         state.ingredientsFetchFailed = true;
-        state.ingredientsError = action.payload;
+        console.error(action.payload);
       });
   },
 });

@@ -1,8 +1,0 @@
-.container {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-  margin: 180px auto 0;
-  max-width: 1240px;
-}

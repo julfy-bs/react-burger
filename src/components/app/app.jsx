@@ -1,192 +1,79 @@
-import styles from './app.module.css';
-import Header from '../header/header.jsx';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import {
-  ConstructorPage,
-  LoginPage,
-  RegisterPage,
-  ForgotPasswordPage,
-  ResetPasswordPage,
-  NotFoundPage,
-  ProfileLayout,
-  ProfileFormPage,
-  ProfileOrdersPage,
-  IngredientPage
-} from '../../pages/index.js';
 import clsx from 'clsx';
+import styles from './app.module.css';
+
+import Header from '../header/header.jsx';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients.jsx';
+import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
+import Loader from '../loader/loader.jsx';
 import Modal from '../modal/modal.jsx';
-import Notification from '../notification/notification.jsx';
 import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
 import OrderDetails from '../order-details/order-details.jsx';
+
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../loader/loader.jsx';
-import ProtectedRoute from '../protected-route/protected-route.jsx';
-import { useCallback, useEffect } from 'react';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { setLoading } from '../../services/slices/loadingSlice.js';
-import { useFetch } from '../../hooks/useFetch.js';
-import { useModal } from '../../hooks/useModal.js';
-import { fetchGetUser } from '../../services/asyncThunk/profileThunk.js';
+import { resetError, setError } from '../../services/slices/errorSlice.js';
+import { DndProvider } from 'react-dnd';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
-import { PATH } from '../../utils/config.js';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
 
 const App = () => {
-  const {
-    ingredientsFetchRequest,
-    ingredientsFetchFailed,
-    ingredientsNotification,
-    ingredientsError,
-    ingredients
-  } = useSelector(store => store.ingredients);
-  const {
-    orderNumber
-  } = useSelector(store => store.order);
-  const {
-    modalIngredient, modalOrder, modalNotification, closeAnyModal, isModalOpen
-  } = useModal();
-  const { isUserLoggedIn } = useAuthorization();
-  const { errorMessage } = useSelector(store => store.profile);
-  const { loading } = useSelector(store => store.loading);
+  const { ingredients, ingredientsFetchRequest, ingredientsFetchFailed } = useSelector(state => state.ingredients);
+  const { loading } = useSelector(state => state.loading);
+  const { error } = useSelector(state => state.error);
+  const { orderNumber } = useSelector(state => state.order);
+  const { modalIngredient, isDetailedOrderOpened, isDetailedIngredientOpened } = useSelector(state => state.modal);
   const dispatch = useDispatch();
-  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
-  const location = useLocation();
-  const background = modalIngredient ? location.state.background : null;
-  const { previousUrl } = useAuthorization();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(setLoading({ loading: ingredientsFetchRequest }));
   }, [dispatch, ingredientsFetchRequest]);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-    isUserLoggedIn && dispatch(fetchGetUser());
-  }, [dispatch, isUserLoggedIn]);
+    ingredientsFetchFailed
+      ? dispatch(setError({
+        code: null,
+        message: 'Ошибка загрузки ингредиентов'
+      }))
+      : dispatch(resetError());
+  }, [dispatch, ingredientsFetchFailed]);
 
   useEffect(() => {
-    handleFulfilledFetch({
-      fetchStatus: ingredientsFetchRequest,
-      fetchError: ingredientsFetchFailed,
-      message: ingredientsNotification,
-    });
-    handleRejectedFetch({
-      fetchStatus: ingredientsFetchRequest,
-      fetchError: ingredientsFetchFailed,
-      errorMessage: ingredientsError,
-    });
-  });
-
-  const handleModalClose = useCallback(() => {
-    closeAnyModal();
-    (modalIngredient || modalOrder) &&
-    navigate(previousUrl, {
-      replace: true,
-      state: { background: null }
-    });
-  }, [closeAnyModal, modalIngredient, modalOrder, navigate, previousUrl]);
-
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <>
       <Header/>
       <main className={clsx(styles.main, 'pb-10')}>
         {
-          loading
-            ? (<Loader loading={loading}/>)
-            : (
-              <Routes location={background || location}>
-                <Route
-                  exact
-                  path={PATH.HOME}
-                  element={
-                    ingredients.length > 0
-                    && !ingredientsFetchRequest
-                    && <ConstructorPage/>
-                  }
-                />
-                <Route
-                  path={PATH.LOGIN}
-                  element={<LoginPage/>}
-                />
-                <Route
-                  path={PATH.REGISTER}
-                  element={<RegisterPage/>}
-                />
-                <Route
-                  path={PATH.FORGOT_PASSWORD}
-                  element={<ForgotPasswordPage/>}
-                />
-                <Route
-                  path={PATH.RESET_PASSWORD}
-                  element={<ResetPasswordPage/>}
-                />
-                <Route
-                  path={PATH.PROFILE}
-                  element={
-                    <ProtectedRoute
-                      redirectTo={PATH.LOGIN}
-                    >
-                      <ProfileLayout/>
-                    </ProtectedRoute>
-                  }>
-                  <Route
-                    index
-                    element={<ProfileFormPage/>}
-                  />
-                  <Route
-                    path={PATH.ORDERS}
-                    element={<ProfileOrdersPage/>}
-                  />
-                </Route>
-                <Route
-                  path={PATH.FEED}
-                  element={<NotFoundPage/>}
-                />
-                <Route
-                  path={PATH.INGREDIENT}
-                  element={<IngredientPage/>}
-                />
-                <Route
-                  path="*"
-                  element={<NotFoundPage/>}
-                />
-              </Routes>)
+          !loading && ingredients.length > 0
+            ?
+            <div className={clsx(styles.main_container)}>
+              <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients/>
+                <BurgerConstructor />
+              </DndProvider>
+            </div>
+            : <Loader loading={loading}/>
+        }
+        {
+          error.exists && <h1>{error.code !== null && error.code} {error.message}</h1>
         }
       </main>
 
-      <Notification
-        title={
-          modalNotification
-            ? modalNotification
-            : errorMessage
-              ? errorMessage
-              : ''
-        }
-      >
-      </Notification>
-
       <Modal
-        handleModalClose={handleModalClose}
-        isModalOpen={isModalOpen}
-        title={
-          modalIngredient
-            ? 'Детали ингредиента'
-            : ''
-        }
-
-        ariaTitle={
-          modalOrder
-            ? 'Идентификатор заказа'
-            : ''
-        }
+        title={modalIngredient ? 'Детали ингредиента' : ''}
+        ariaTitle={isDetailedOrderOpened ? 'Идентификатор заказа' : ''}
       >
-        {modalIngredient && (
+        {
+          (modalIngredient && isDetailedIngredientOpened) &&
           <IngredientDetails ingredient={modalIngredient}/>
-        )}
-
-        {orderNumber && modalOrder && (
+        }
+        {
+          (orderNumber && isDetailedOrderOpened) &&
           <OrderDetails/>
-        )}
+        }
       </Modal>
     </>
   );
