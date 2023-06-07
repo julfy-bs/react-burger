@@ -14,78 +14,38 @@ import { REFRESH_TOKEN } from '../../utils/constants.js';
 
 export const fetchRegister = createAsyncThunk(
   'profile/fetchRegister',
-  async ({ email, password, name }, { rejectWithValue }) => {
-    try {
-      return await registerUser({ email, password, name });
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  },
+  async ({ email, password, name }) => await registerUser({ email, password, name })
 );
 
 export const fetchLogin = createAsyncThunk(
   'profile/fetchLogin',
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      return await loginUser({ email, password });
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  },
+  async ({ email, password }) => await loginUser({ email, password })
 );
 
 export const fetchLogout = createAsyncThunk(
   'profile/fetchLogout',
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = getCookie(REFRESH_TOKEN);
-      return await logoutUser({ token });
-    } catch (e) {
-      return rejectWithValue(e);
-    }
+  async () => {
+    const token = getCookie(REFRESH_TOKEN);
+    return await logoutUser({ token });
   },
 );
 
 export const fetchGetUser = createAsyncThunk(
   'profile/fetchGetUser',
-  async (_, thunkApi) => {
-    try {
-      return await getUser();
-    } catch (e) {
-      return thunkApi.rejectWithValue(e);
-    }
-  },
+  async () => await getUser(),
 );
 
 export const fetchUpdateUser = createAsyncThunk(
   'profile/fetchUpdateUser',
-  async (data, thunkApi) => {
-    try {
-      return await patchUser(data);
-    } catch (e) {
-      return thunkApi.rejectWithValue(e);
-    }
-  },
+  async (data) => await patchUser(data)
 );
 
 export const fetchForgotPassword = createAsyncThunk(
   'profile/fetchForgotPassword',
-  async ({ email }, { rejectWithValue }) => {
-    try {
-      return await forgotPassword({ email });
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  },
+  async ({ email }) => await forgotPassword({ email }),
 );
 
 export const fetchResetPassword = createAsyncThunk(
   'profile/fetchResetPassword',
-  async ({ password, token }, { rejectWithValue }) => {
-    try {
-      return await resetPassword({ password, token });
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  },
+  async ({ password, token }) => await resetPassword({ password, token }),
 );

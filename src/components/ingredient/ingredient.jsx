@@ -12,7 +12,7 @@ import { ingredientType } from '../../utils/types.js';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Ingredient = ({ ingredient }) => {
-  const { cart, ingredientsCounter } = useSelector(state => state.cart);
+  const { ingredientsCounter } = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,12 +22,9 @@ const Ingredient = ({ ingredient }) => {
     item: ingredient,
   });
 
-  const isDisabled = useMemo(() => cart.bun === null, [cart]);
-
   const handleIngredientClick = useCallback(() => {
     dispatch(setModalIngredient(ingredient));
     navigate(`/ingredients/${ingredient._id}`, { state: {background: location}})
-    // location.pathname === PATH.HOME && dispatch(openModal({ type: 'ingredient' }));
   }, [dispatch, ingredient, location, navigate]);
 
   const ingredientCounter = useMemo(() => ingredientsCounter[ingredient._id] || 0, [ingredient._id, ingredientsCounter]);
@@ -39,7 +36,6 @@ const Ingredient = ({ ingredient }) => {
         className={
           clsx(
             styles.ingredients__item,
-            { [styles.ingredients__item_disabled]: ingredient.type !== 'bun' && isDisabled }
           )
         }
         onClick={handleIngredientClick}

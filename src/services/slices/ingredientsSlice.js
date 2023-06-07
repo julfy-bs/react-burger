@@ -22,14 +22,15 @@ const ingredientsSlice = createSlice({
         state.ingredientsError =  '';
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.ingredients = action.payload;
+        const { data } = action.payload;
+        state.ingredients = data;
         state.ingredientsFetchRequest = false;
         state.ingredientsNotification = '';
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.ingredientsFetchRequest = false;
         state.ingredientsFetchFailed = true;
-        state.ingredientsError =  action.payload;
+        state.ingredientsError = action.payload;
       });
   },
 });

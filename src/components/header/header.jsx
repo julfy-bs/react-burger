@@ -4,6 +4,7 @@ import styles from './header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import HeaderLink from '../header-link/header-link.jsx';
 import { PATH } from '../../utils/config.js';
+import { NavLink } from 'react-router-dom';
 
 
 const Header = () => {
@@ -29,9 +30,9 @@ const Header = () => {
           </ul>
         </nav>
 
-        <div className={clsx(styles.logo)}>
+        <NavLink to={PATH.HOME} className={clsx(styles.logo)}>
           <Logo></Logo>
-        </div>
+        </NavLink>
         <div className={clsx(styles.profile)}>
           <HeaderLink text={'Личный кабинет'} route={PATH.PROFILE}>
             <ProfileIcon type="secondary"/>
