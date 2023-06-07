@@ -8,24 +8,8 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
 
 import { MODAL_ID } from '../../utils/constants.js';
-import { useModal } from '../../hooks/useModal.js';
-import { useCallback } from 'react';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
-import { useNavigate } from 'react-router-dom';
 
-const Modal = ({ title, ariaTitle, children }) => {
-  const { modalIngredient, modalOrder, closeAnyModal, isModalOpen } = useModal();
-  const { previousUrl } = useAuthorization();
-  const navigate = useNavigate();
-
-  const handleModalClose = useCallback(() => {
-    closeAnyModal();
-    (modalIngredient || modalOrder) &&
-    navigate(previousUrl, {
-      replace: true,
-      state: { background: null }
-    });
-  }, [closeAnyModal, modalIngredient, modalOrder, navigate, previousUrl]);
+const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }) => {
 
   return createPortal(
     <>
@@ -83,7 +67,9 @@ const Modal = ({ title, ariaTitle, children }) => {
 Modal.propTypes = {
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  handleModalClose: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired
 };
 
 export default Modal;

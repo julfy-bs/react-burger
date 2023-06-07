@@ -1,6 +1,6 @@
 import styles from './app.module.css';
 import Header from '../header/header.jsx';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import {
   ConstructorPage,
   LoginPage,
@@ -21,7 +21,7 @@ import OrderDetails from '../order-details/order-details.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../loader/loader.jsx';
 import ProtectedRoute from '../protected-route/protected-route.jsx';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { setLoading } from '../../services/slices/loadingSlice.js';
 import { useFetch } from '../../hooks/useFetch.js';
 import { useModal } from '../../hooks/useModal.js';
@@ -39,7 +39,10 @@ const App = () => {
     ingredients
   } = useSelector(store => store.ingredients);
   const {
-    modalIngredient, modalOrder, modalNotification
+    orderNumber
+  } = useSelector(store => store.order);
+  const {
+    modalIngredient, modalOrder, modalNotification, closeAnyModal, isModalOpen
   } = useModal();
   const { isUserLoggedIn } = useAuthorization();
   const { errorMessage } = useSelector(store => store.profile);
@@ -48,6 +51,8 @@ const App = () => {
   const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const location = useLocation();
   const background = modalIngredient ? location.state.background : null;
+  const { previousUrl } = useAuthorization();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(setLoading({ loading: ingredientsFetchRequest }));
@@ -70,6 +75,16 @@ const App = () => {
       errorMessage: ingredientsError,
     });
   });
+
+  const handleModalClose = useCallback(() => {
+    closeAnyModal();
+    (modalIngredient || modalOrder) &&
+    navigate(previousUrl, {
+      replace: true,
+      state: { background: null }
+    });
+  }, [closeAnyModal, modalIngredient, modalOrder, navigate, previousUrl]);
+
 
   return (
     <>
@@ -151,6 +166,8 @@ const App = () => {
       </Notification>
 
       <Modal
+        handleModalClose={handleModalClose}
+        isModalOpen={isModalOpen}
         title={
           modalIngredient
             ? 'Детали ингредиента'
@@ -167,7 +184,7 @@ const App = () => {
           <IngredientDetails ingredient={modalIngredient}/>
         )}
 
-        {modalOrder && (
+        {orderNumber && modalOrder && (
           <OrderDetails/>
         )}
       </Modal>

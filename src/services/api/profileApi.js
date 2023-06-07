@@ -1,19 +1,10 @@
 import { serverConfig } from '../../utils/config.js';
-import checkResponse from '../helpers/checkResponse.js';
+import { checkResponse } from '../helpers/checkResponse.js';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../utils/constants.js';
 import { getCookie } from '../helpers/getCookie.js';
 import { setCookie } from '../helpers/setCookie.js';
 
 const profileApi = ({ baseUrl, headers }) => {
-
-  const request = async (url, options = {}) => {
-    const computedUrl = `${baseUrl}/${url}`;
-    const res = await fetch(computedUrl, {
-      headers: headers,
-      ...options,
-    });
-    return checkResponse(res);
-  };
 
   const authorizationRequest = async (url, options) => {
     const computedUrl = `${baseUrl}/${url}`;
@@ -32,9 +23,9 @@ const profileApi = ({ baseUrl, headers }) => {
       });
 
       if (updateTokenRequest.ok) {
-        const data = await updateTokenRequest;
-        setCookie(ACCESS_TOKEN, data.accessToken, 1200);
-        setCookie(REFRESH_TOKEN, data.refreshToken, 1200);
+        const { accessToken, refreshToken } = await updateTokenRequest;
+        setCookie(ACCESS_TOKEN, accessToken, 1200);
+        setCookie(REFRESH_TOKEN, refreshToken, 1200);
 
         const res = await fetch(computedUrl, {
           headers: {
@@ -49,53 +40,44 @@ const profileApi = ({ baseUrl, headers }) => {
     return checkResponse(res);
   };
 
-  const registerUser = ({ email, password, name }) => {
-    return request('auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ email, password, name })
-    });
-  };
+  const registerUser = async ({ email, password, name }) => checkResponse(await fetch(`${baseUrl}/auth/register`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ email, password, name })
+  }));
 
-  const loginUser = ({ email, password }) => {
-    return request('auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    });
-  };
+  const loginUser = async ({ email, password }) => checkResponse(await fetch(`${baseUrl}/auth/login`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  }));
 
-  const logoutUser = ({ token }) => {
-    return request('auth/logout', {
-      method: 'POST',
-      body: JSON.stringify({ token }),
-    });
-  };
+  const logoutUser = async ({ token }) => checkResponse(await fetch(`${baseUrl}/auth/logout`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ token }),
+  }));
 
-  const getUser = () => {
-    return authorizationRequest('auth/user', {
-      method: 'GET',
-    });
-  };
+  const getUser = () => authorizationRequest('auth/user', {
+    method: 'GET',
+  });
 
-  const patchUser = async (data) => {
-    return authorizationRequest('auth/user', {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    });
-  };
+  const patchUser = (data) => authorizationRequest('auth/user', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
 
-  const forgotPassword = ({ email }) => {
-    return request('password-reset', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    });
-  };
+  const forgotPassword = async ({ email }) => checkResponse(await fetch(`${baseUrl}/password-reset`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  }));
 
-  const resetPassword = ({ password, token }) => {
-    return request('password-reset/reset', {
-      method: 'POST',
-      body: JSON.stringify({ password, token }),
-    });
-  };
+  const resetPassword = async ({ password, token }) => checkResponse(await fetch(`${baseUrl}/password-reset/reset`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({ password, token }),
+  }));
 
   return { registerUser, loginUser, logoutUser, getUser, patchUser, forgotPassword: forgotPassword, resetPassword };
 };
