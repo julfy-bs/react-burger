@@ -3,8 +3,6 @@ import styles from './header.module.css';
 
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import HeaderLink from '../header-link/header-link.jsx';
-import { PATH } from '../../utils/config.js';
-import { NavLink } from 'react-router-dom';
 
 
 const Header = () => {
@@ -18,23 +16,23 @@ const Header = () => {
         <nav>
           <ul className={clsx(styles.navigation)}>
             <li>
-              <HeaderLink text={'Конструктор'} route={PATH.HOME}>
+              <HeaderLink text={'Конструктор'} active={true}>
                 <BurgerIcon type="primary"/>
               </HeaderLink>
             </li>
             <li>
-              <HeaderLink text={'Лента заказов'} route={PATH.FEED}>
+              <HeaderLink text={'Лента заказов'}>
                 <ListIcon type="secondary"/>
               </HeaderLink>
             </li>
           </ul>
         </nav>
 
-        <NavLink to={PATH.HOME} className={clsx(styles.logo)}>
+        <div className={clsx(styles.logo)}>
           <Logo></Logo>
-        </NavLink>
+        </div>
         <div className={clsx(styles.profile)}>
-          <HeaderLink text={'Личный кабинет'} route={PATH.PROFILE}>
+          <HeaderLink text={'Лента заказов'}>
             <ProfileIcon type="secondary"/>
           </HeaderLink>
         </div>

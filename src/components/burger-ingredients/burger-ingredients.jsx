@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { InView } from 'react-intersection-observer';
 
 import { ingredientTabs } from '../../utils/config.js';
-import { TABS } from '../../utils/constants.js';
+import { TABS } from '../../utils/enum.js';
 
 const BurgerIngredients = () => {
   const tabsRef = useRef(null);
