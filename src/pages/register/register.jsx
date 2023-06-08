@@ -5,21 +5,14 @@ import LoginLinks from '../../components/login-links/login-links.jsx';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
 import { useFetch } from '../../hooks/useFetch.js';
 import { fetchRegister } from '../../services/asyncThunk/profileThunk.js';
-import { PATH } from '../../utils/config.js';
 
 const RegisterPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
-  const { isUserLoggedIn, handleUnprotectedRoute } = useAuthorization();
   const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isUserLoggedIn) handleUnprotectedRoute(PATH.HOME);
-  }, [handleUnprotectedRoute, isUserLoggedIn]);
 
   useEffect(() => {
     resetForm();
@@ -36,7 +29,7 @@ const RegisterPage = () => {
       fetchError: profileFetchFailed,
       errorMessage: errorMessage,
     });
-  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, handleUnprotectedRoute, message, profileFetchFailed, profileFetchRequest]);
+  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, message, profileFetchFailed, profileFetchRequest]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

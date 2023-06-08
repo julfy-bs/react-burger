@@ -1,19 +1,7 @@
-import { serverConfig } from '../../utils/config.js';
-import { checkResponse } from '../helpers/checkResponse.js';
+import { request } from '../helpers/request.js';
 
-const IngredientsApi = ({ baseUrl, headers }) => {
-
-  const getIngredients = async () => checkResponse(await fetch(`${baseUrl}/ingredients`, {
-    headers,
-  }));
-
-  const postOrder = async (order) => checkResponse(await fetch(`${baseUrl}/orders`, {
-    headers,
-    method: 'POST',
-    body: JSON.stringify(order)
-  }));
-
-  return { getIngredients, postOrder };
-};
-
-export const { getIngredients, postOrder } = IngredientsApi(serverConfig);
+export const getIngredients = () => request('ingredients');
+export const postOrder = (order) => request('orders', {
+  method: 'POST',
+  body: JSON.stringify(order)
+});

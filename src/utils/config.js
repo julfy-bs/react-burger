@@ -1,6 +1,6 @@
-export const serverConfig = {
-  baseUrl: `https://norma.nomoreparties.space/api`,
-  headers: {
+export const SERVER_CONFIG = {
+  BASE_URL: `https://norma.nomoreparties.space/api/`,
+  HEADERS: {
     'Content-Type': 'application/json',
   },
 };

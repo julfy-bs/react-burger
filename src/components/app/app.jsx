@@ -38,13 +38,11 @@ const App = () => {
     ingredientsError,
     ingredients
   } = useSelector(store => store.ingredients);
-  const {
-    orderNumber
-  } = useSelector(store => store.order);
+  const { orderNumber } = useSelector(store => store.order);
+  const { isUserLoggedIn, isTokenExpired } = useModal();
   const {
     modalIngredient, modalOrder, modalNotification, closeAnyModal, isModalOpen
   } = useModal();
-  const { isUserLoggedIn } = useAuthorization();
   const { errorMessage } = useSelector(store => store.profile);
   const { loading } = useSelector(store => store.loading);
   const dispatch = useDispatch();
@@ -60,8 +58,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    isUserLoggedIn && dispatch(fetchGetUser());
-  }, [dispatch, isUserLoggedIn]);
+    (isUserLoggedIn || isTokenExpired) && dispatch(fetchGetUser());
+  }, [dispatch, isUserLoggedIn, isTokenExpired]);
 
   useEffect(() => {
     handleFulfilledFetch({
@@ -106,19 +104,47 @@ const App = () => {
                 />
                 <Route
                   path={PATH.LOGIN}
-                  element={<LoginPage/>}
+                  element={
+                    <ProtectedRoute
+                      anonymous={true}
+                      redirectTo={PATH.HOME}
+                    >
+                      <LoginPage/>
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path={PATH.REGISTER}
-                  element={<RegisterPage/>}
+                  element={
+                    <ProtectedRoute
+                      anonymous={true}
+                      redirectTo={PATH.HOME}
+                    >
+                      <RegisterPage/>
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path={PATH.FORGOT_PASSWORD}
-                  element={<ForgotPasswordPage/>}
+                  element={
+                    <ProtectedRoute
+                      anonymous={true}
+                      redirectTo={PATH.HOME}
+                    >
+                      <ForgotPasswordPage/>
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path={PATH.RESET_PASSWORD}
-                  element={<ResetPasswordPage/>}
+                  element={
+                    <ProtectedRoute
+                      anonymous={true}
+                      redirectTo={PATH.HOME}
+                    >
+                      <ResetPasswordPage/>
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path={PATH.PROFILE}

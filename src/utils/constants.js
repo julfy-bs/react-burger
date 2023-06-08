@@ -1,5 +1,10 @@
 export const ACCESS_TOKEN = 'accessToken';
 export const REFRESH_TOKEN = 'refreshToken';
+export const EXPIRES_AT = 'expiresAt';
+export const ACCESS_TOKEN_EXPIRES = 1200;
+export const REFRESH_TOKEN_EXPIRES = 2000;
+export const TOKEN_EXPIRES_NOW = 1;
+
 export const MODAL_ID = '#modal';
 export const ERROR_LOGIN = 'Неверное имя пользователя или пароль.';
 export const ERROR_USER_EXISTS = 'Пользователь с таким Email уже существует.';
