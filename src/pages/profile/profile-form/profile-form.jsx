@@ -17,7 +17,7 @@ const ProfileForm = () => {
   const inputNameRef = useRef(null);
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
-  const sameValues = (user.name !== values.name || user.email !== values.email || values.password);
+  const sameValues = (user !== null && (user.name !== values.name || user.email !== values.email || values.password));
 
   const isButtonActive = useMemo(
     () => (
@@ -25,16 +25,16 @@ const ProfileForm = () => {
     ), [isValid, sameValues]);
 
   useEffect(() => {
-    dispatch(fetchGetUser());
-  }, [dispatch]);
-
-  useEffect(() => {
     errorMessage && setTimeout(() => dispatch(clearErrorMessage()), 2000);
   }, [dispatch, errorMessage]);
 
   useEffect(() => {
-    resetForm({ name: user.name, email: user.email, password: '' });
+    user && resetForm({ name: user.name, email: user.email, password: '' });
   }, [resetForm, user]);
+
+  useEffect(() => {
+    dispatch(fetchGetUser());
+  }, [dispatch]);
 
   const onIconNameClick = () => {
     setIsEdit({ ...isEdit, name: !isEdit.name });
@@ -56,8 +56,8 @@ const ProfileForm = () => {
   };
 
   const handleResetValue = useCallback(() => {
-    resetForm({ name: user.name, email: user.email, password: '' });
-  }, [resetForm, user.email, user.name]);
+    user && resetForm({ name: user.name, email: user.email, password: '' });
+  }, [resetForm, user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

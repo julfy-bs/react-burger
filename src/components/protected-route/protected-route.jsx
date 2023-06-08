@@ -25,6 +25,7 @@ const ProtectedRoute = ({ children, anonymous = false }) => {
 
 ProtectedRoute.propTypes = {
   redirectTo: PropTypes.string.isRequired,
+  anonymous: PropTypes.bool
 };
 
 export default ProtectedRoute;

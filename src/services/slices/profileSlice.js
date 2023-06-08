@@ -7,17 +7,17 @@ import {
   fetchResetPassword, fetchUpdateUser
 } from '../asyncThunk/profileThunk';
 import {
-  ACCESS_TOKEN,
+  ACCESS_TOKEN, ACCESS_TOKEN_EXPIRES,
   ERROR_LOGIN,
-  ERROR_USER_EXISTS,
+  ERROR_USER_EXISTS, EXPIRES_AT,
   NOTIFICATION_EMAIL_SUBMITTED, NOTIFICATION_INCORRECT_TOKEN,
   NOTIFICATION_LOGIN_SUCCESS,
   NOTIFICATION_LOGOUT_SUCCESS,
   NOTIFICATION_PASSWORD_RESET,
   NOTIFICATION_USER_CREATED, NOTIFICATION_USER_UPDATE_ERROR, NOTIFICATION_USER_UPDATE_SUCCESS,
-  REFRESH_TOKEN, SERVER_RESPOND_INCORRECT_TOKEN,
+  REFRESH_TOKEN, REFRESH_TOKEN_EXPIRES, SERVER_RESPOND_INCORRECT_TOKEN,
   SERVER_RESPOND_INCORRECT_VALUES,
-  SERVER_RESPOND_USER_EXISTS
+  SERVER_RESPOND_USER_EXISTS, TOKEN_EXPIRES_NOW
 } from '../../utils/constants.js';
 import { setCookie } from '../helpers/setCookie.js';
 
@@ -29,7 +29,8 @@ const initialState = {
   isLogin: false,
   user: {},
   message: '',
-  errorMessage: ''
+  errorMessage: '',
+  token: null
 };
 
 const profileSlice = createSlice({
@@ -57,12 +58,16 @@ const profileSlice = createSlice({
         state.user = user;
         state.user.password = action.meta.arg.password;
         state.isLogin = true;
-        setCookie(ACCESS_TOKEN, accessToken, { expires: 1200 });
-        setCookie(REFRESH_TOKEN, refreshToken, { expires: 1200 });
+        const expiresAt = Date.now() + ACCESS_TOKEN_EXPIRES * 1000
+        state.token = { refreshToken, accessToken, expiresAt };
+        setCookie(ACCESS_TOKEN, accessToken, { expires: ACCESS_TOKEN_EXPIRES });
+        setCookie(REFRESH_TOKEN, refreshToken, { expires: REFRESH_TOKEN_EXPIRES });
+        setCookie(EXPIRES_AT, expiresAt, { expires: REFRESH_TOKEN_EXPIRES });
         state.profileFetchRequest = false;
         state.message = NOTIFICATION_USER_CREATED;
       })
       .addCase(fetchRegister.rejected, (state, action) => {
+        console.log(action);
         state.profileFetchRequest = false;
         state.profileFetchFailed = true;
         (action.payload.message === SERVER_RESPOND_USER_EXISTS)
@@ -81,12 +86,16 @@ const profileSlice = createSlice({
         state.user = user;
         state.user.password = action.meta.arg.password;
         state.isLogin = true;
-        setCookie(ACCESS_TOKEN, accessToken, { expires: 1200 });
-        setCookie(REFRESH_TOKEN, refreshToken, { expires: 1200 });
+        const expiresAt = Date.now() + ACCESS_TOKEN_EXPIRES * 1000
+        state.token = { refreshToken, accessToken, expiresAt };
+        setCookie(ACCESS_TOKEN, accessToken, { expires: ACCESS_TOKEN_EXPIRES });
+        setCookie(REFRESH_TOKEN, refreshToken, { expires: REFRESH_TOKEN_EXPIRES });
+        setCookie(EXPIRES_AT, expiresAt, { expires: REFRESH_TOKEN_EXPIRES });
         state.profileFetchRequest = false;
         state.message = NOTIFICATION_LOGIN_SUCCESS;
       })
       .addCase(fetchLogin.rejected, (state, action) => {
+        console.log(action);
         state.profileFetchRequest = false;
         state.profileFetchFailed = true;
         (action.payload.message === SERVER_RESPOND_INCORRECT_VALUES)
@@ -104,10 +113,11 @@ const profileSlice = createSlice({
         state.profileFetchRequest = false;
         state.message = NOTIFICATION_LOGOUT_SUCCESS;
         state.isLogin = false;
-        state.user = {};
-        setCookie(ACCESS_TOKEN, '', { expires: 1 });
-        setCookie(REFRESH_TOKEN, '', { expires: 1 });
-
+        state.user = null;
+        state.token = null;
+        setCookie(ACCESS_TOKEN, '', { expires: TOKEN_EXPIRES_NOW });
+        setCookie(REFRESH_TOKEN, '', { expires: TOKEN_EXPIRES_NOW });
+        setCookie(EXPIRES_AT, '', { expires: TOKEN_EXPIRES_NOW });
       })
       .addCase(fetchLogout.rejected, (state, action) => {
         state.errorMessage = action.payload.message;

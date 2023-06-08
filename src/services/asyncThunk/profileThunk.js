@@ -11,15 +11,25 @@ import {
 import { getCookie } from '../helpers/getCookie.js';
 import { REFRESH_TOKEN } from '../../utils/constants.js';
 
-
 export const fetchRegister = createAsyncThunk(
   'profile/fetchRegister',
-  async ({ email, password, name }) => await registerUser({ email, password, name })
+  async ({ name, email, password }, thunkAPI) => {
+    try {
+      const res = await registerUser({ name, email, password });
+      console.log(res);
+      return res;
+    } catch (e) {
+      console.log(e);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
 );
 
 export const fetchLogin = createAsyncThunk(
   'profile/fetchLogin',
-  async ({ email, password }) => await loginUser({ email, password })
+  ({ email, password }, thunkAPI) =>
+    loginUser({ email, password })
+      .catch(e => thunkAPI.rejectWithValue(e))
 );
 
 export const fetchLogout = createAsyncThunk(
@@ -32,20 +42,26 @@ export const fetchLogout = createAsyncThunk(
 
 export const fetchGetUser = createAsyncThunk(
   'profile/fetchGetUser',
-  async () => await getUser(),
+  getUser
 );
 
 export const fetchUpdateUser = createAsyncThunk(
   'profile/fetchUpdateUser',
-  async (data) => await patchUser(data)
+  ({ name, email, password }, thunkAPI) =>
+    patchUser({ name, email, password })
+      .catch(e => thunkAPI.rejectWithValue(e))
 );
 
 export const fetchForgotPassword = createAsyncThunk(
   'profile/fetchForgotPassword',
-  async ({ email }) => await forgotPassword({ email }),
+  ({ email }, thunkAPI) =>
+    forgotPassword({ email })
+      .catch(e => thunkAPI.rejectWithValue(e))
 );
 
 export const fetchResetPassword = createAsyncThunk(
   'profile/fetchResetPassword',
-  async ({ password, token }) => await resetPassword({ password, token }),
+  ({ password, token }, thunkAPI) =>
+    resetPassword({ password, token })
+      .catch(e => thunkAPI.rejectWithValue(e))
 );
