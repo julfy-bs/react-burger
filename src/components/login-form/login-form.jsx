@@ -2,14 +2,12 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './login-form.module.css';
 import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useMemo, useState } from 'react';
 
 const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }) => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-  const { profileFetchRequest } = useSelector(store => store.profile);
   const onIconClick = () => setIsVisiblePassword(!isVisiblePassword);
-
+  const fetchRequest = useMemo(() => false, [])
   const determineType = () => {
     switch (type) {
       case 'login':
@@ -45,7 +43,7 @@ const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }
             htmlType="submit"
             type="primary"
             size="medium"
-            disabled={!isValid || profileFetchRequest}
+            disabled={!isValid || fetchRequest}
           >
             Войти
           </Button>
@@ -97,7 +95,7 @@ const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }
             htmlType="submit"
             type="primary"
             size="medium"
-            disabled={!isValid || profileFetchRequest}
+            disabled={!isValid || fetchRequest}
           >
             Зарегистрироваться
           </Button>
@@ -121,7 +119,7 @@ const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }
             htmlType="submit"
             type="primary"
             size="medium"
-            disabled={!isValid || profileFetchRequest}
+            disabled={!isValid || fetchRequest}
           >
             Восстановить
           </Button>
@@ -159,7 +157,7 @@ const LoginForm = ({ type, values, handleSubmit, handleChange, errors, isValid }
             htmlType="submit"
             type="primary"
             size="medium"
-            disabled={!isValid || profileFetchRequest}
+            disabled={!isValid || fetchRequest}
           >
             Сохранить
           </Button>

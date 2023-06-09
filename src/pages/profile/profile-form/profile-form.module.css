@@ -35,3 +35,11 @@
   text-align: center;
   color: red
 }
+
+.loader_wrapper {
+  width: 100%;
+  min-height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

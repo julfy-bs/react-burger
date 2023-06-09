@@ -1,5 +1,5 @@
 export const getCookie = (name) => {
-  const regex = /([\.$?*|{}\(\)\[\]\\\/\+^])/g;
+  const regex = /([.$?*|{}()[\]\\/+^])/g;
   // const regex = /([.$?*|{}()[\]\\/+^])/g;
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(regex, '\\$1') + '=([^;]*)')

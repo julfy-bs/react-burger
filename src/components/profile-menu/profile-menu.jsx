@@ -2,31 +2,10 @@ import clsx from 'clsx';
 import styles from './profile-menu.module.css';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
-import { useEffect } from 'react';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
-import { useFetch } from '../../hooks/useFetch.js';
-import { useSelector } from 'react-redux';
 import { useLogout } from '../../hooks/useLogout.js';
 
 const ProfileMenu = () => {
-  const { handleProtectedRoute } = useAuthorization();
-  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const { handleLogout } = useLogout();
-  const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
-
-  useEffect(() => {
-    handleFulfilledFetch({
-      fetchStatus: profileFetchRequest,
-      fetchError: profileFetchFailed,
-      message: message,
-      handleFulfilledFetch: () => handleProtectedRoute(PATH.LOGIN)
-    });
-    handleRejectedFetch({
-      fetchStatus: profileFetchRequest,
-      fetchError: profileFetchFailed,
-      errorMessage: errorMessage
-    });
-  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, handleProtectedRoute, message, profileFetchFailed, profileFetchRequest]);
 
   return (
     <nav>

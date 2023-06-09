@@ -11,13 +11,14 @@ import uuid from 'react-uuid';
 import { PATH } from '../../utils/config.js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { setModalOrder } from '../../services/slices/modalSlice.js';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
 import { useModal } from '../../hooks/useModal.js';
 
 const BurgerConstructor = () => {
   const { cart } = useSelector(state => state.cart);
+
   const { openNotificationModal, closeAnyModal } = useModal();
-  const { isUserLoggedIn } = useAuthorization();
+  const { isLogin } = useSelector(store => store.user.user);
+
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -49,9 +50,9 @@ const BurgerConstructor = () => {
   }, [location.pathname, navigate]);
 
   const handleBurgerConstructorButton = async () => {
-    if (isUserLoggedIn) {
-      const order = await dispatch(createOrder(cart));
-      dispatch(setModalOrder(order));
+    if (isLogin) {
+      const res = await dispatch(createOrder(cart));
+      dispatch(setModalOrder(res));
       dispatch(cleanCart());
     } else {
       redirectToLoginPage();

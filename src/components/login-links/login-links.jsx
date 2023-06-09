@@ -3,10 +3,12 @@ import clsx from 'clsx';
 import styles from './login-links.module.css';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
-import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 
 const LoginLinks = ({ type }) => {
-  const { errorMessage } = useSelector(store => store.profile);
+
+
+  const errorMessage = useMemo(() => false, []);
 
   const determineType = () => {
     switch (type) {
