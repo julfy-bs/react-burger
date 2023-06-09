@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import styles from './profile.module.css';
 import ProfileMenu from '../../components/profile-menu/profile-menu.jsx';
 import { Outlet } from 'react-router-dom';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
 import Loader from '../../components/loader/loader.jsx';
+import { useSelector } from 'react-redux';
 
 const ProfileLayout = () => {
-  const { isUserLoggedIn } = useAuthorization();
+  const { isLogin } = useSelector(store => store.user.user);
 
   return (
-    isUserLoggedIn
+    isLogin
       ? (
         <div className={clsx(styles.container)}>
           <aside className={clsx(styles.aside)}>
@@ -24,7 +24,7 @@ const ProfileLayout = () => {
           </section>
         </div>
       )
-      : (<Loader loading={!isUserLoggedIn} />)
+      : (<Loader loading={!isLogin} />)
 
   );
 };

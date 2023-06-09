@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useMemo } from 'react';
 import {
-  closeAllModal,
   setModalIngredient,
   setModalNotification,
   setModalOrder
 } from '../services/slices/modalSlice.js';
+
 
 export const useModal = () => {
   const { modalIngredient, modalOrder, modalNotification } = useSelector(store => store.modal);
@@ -21,10 +21,6 @@ export const useModal = () => {
     [modalNotification]
   );
 
-  const closeAnyModal = useCallback(
-    () => dispatch(closeAllModal()),
-    [dispatch]
-  );
   const openIngredientModal = useCallback(
     (ingredient) => dispatch(setModalIngredient(ingredient)),
     [dispatch]
@@ -39,10 +35,6 @@ export const useModal = () => {
   );
 
   return {
-    modalIngredient,
-    modalOrder,
-    modalNotification,
-    closeAnyModal,
     openIngredientModal,
     openOrderModal,
     openNotificationModal,

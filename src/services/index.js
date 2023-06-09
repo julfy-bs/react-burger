@@ -5,7 +5,11 @@ import loadingSlice from './slices/loadingSlice.js';
 import cartSlice from './slices/cartSlice.js';
 import modalSlice from './slices/modalSlice.js';
 import orderSlice from './slices/orderSlice.js';
-import profileSlice from './slices/profileSlice.js';
+import userSlice from './slices/userSlice.js';
+import loginSlice from './slices/loginSlice.js';
+import logoutSlice from './slices/logoutSlice.js';
+import registerSlice from './slices/registerSlice.js';
+import passwordSlice from './slices/passwordSlice.js';
 
 const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
@@ -13,7 +17,11 @@ const rootReducer = combineReducers({
   cart: cartSlice,
   modal: modalSlice,
   order: orderSlice,
-  profile: profileSlice
+  user: userSlice,
+  login: loginSlice,
+  logout: logoutSlice,
+  register: registerSlice,
+  password: passwordSlice
 });
 
 export const store = configureStore({

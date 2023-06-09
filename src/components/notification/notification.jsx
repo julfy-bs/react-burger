@@ -7,13 +7,16 @@ import { createPortal } from 'react-dom';
 import { MODAL_ID } from '../../utils/constants.js';
 import { useModal } from '../../hooks/useModal.js';
 import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { closeAllModal } from '../../services/slices/modalSlice.js';
 
 const Notification = ({ title, children }) => {
-  const { closeAnyModal, isNotificationOpen } = useModal();
+  const { isNotificationOpen } = useModal();
+  const dispatch = useDispatch();
 
   const handleModalClose = useCallback(() => {
-    closeAnyModal();
-  }, [closeAnyModal]);
+    dispatch(closeAllModal());
+  }, [dispatch]);
 
   return createPortal(
     <div

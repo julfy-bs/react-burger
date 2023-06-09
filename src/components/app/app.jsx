@@ -23,65 +23,54 @@ import Loader from '../loader/loader.jsx';
 import ProtectedRoute from '../protected-route/protected-route.jsx';
 import { useCallback, useEffect } from 'react';
 import { setLoading } from '../../services/slices/loadingSlice.js';
-import { useFetch } from '../../hooks/useFetch.js';
 import { useModal } from '../../hooks/useModal.js';
-import { fetchGetUser } from '../../services/asyncThunk/profileThunk.js';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 import { PATH } from '../../utils/config.js';
 import { useAuthorization } from '../../hooks/useAuthorization.js';
+import { closeAllModal } from '../../services/slices/modalSlice.js';
+import { fetchGetUser } from '../../services/asyncThunk/getUserThunk.js';
 
 const App = () => {
   const {
     ingredientsFetchRequest,
-    ingredientsFetchFailed,
-    ingredientsNotification,
-    ingredientsError,
     ingredients
   } = useSelector(store => store.ingredients);
   const { orderNumber } = useSelector(store => store.order);
-  const { isUserLoggedIn, isTokenExpired } = useModal();
-  const {
-    modalIngredient, modalOrder, modalNotification, closeAnyModal, isModalOpen
-  } = useModal();
-  const { errorMessage } = useSelector(store => store.profile);
+  const { isLogin, isLogout } = useSelector(store => store.user.user);
+  const { isTokenExpired } = useAuthorization();
+  const { isModalOpen } = useModal();
+  const { modalIngredient, modalOrder, modalNotification } = useSelector(store => store.modal);
   const { loading } = useSelector(store => store.loading);
   const dispatch = useDispatch();
-  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
   const location = useLocation();
   const background = modalIngredient ? location.state.background : null;
-  const { previousUrl } = useAuthorization();
+  const { previousUrl, tokenData } = useAuthorization();
   const navigate = useNavigate();
+  const { user } = useSelector(store => store.user);
+
 
   useEffect(() => {
     dispatch(setLoading({ loading: ingredientsFetchRequest }));
   }, [dispatch, ingredientsFetchRequest]);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-    (isUserLoggedIn || isTokenExpired) && dispatch(fetchGetUser());
-  }, [dispatch, isUserLoggedIn, isTokenExpired]);
-
-  useEffect(() => {
-    handleFulfilledFetch({
-      fetchStatus: ingredientsFetchRequest,
-      fetchError: ingredientsFetchFailed,
-      message: ingredientsNotification,
-    });
-    handleRejectedFetch({
-      fetchStatus: ingredientsFetchRequest,
-      fetchError: ingredientsFetchFailed,
-      errorMessage: ingredientsError,
-    });
-  });
+    if (ingredients && ingredients.length === 0) {
+      dispatch(fetchIngredients());
+    }
+    if ((!isLogout && !isLogin && isTokenExpired)
+      || (isLogin && (!user.name || !user.email))) {
+      dispatch(fetchGetUser());
+    }
+  }, [dispatch, isLogin, isTokenExpired, user, ingredients, isLogout, tokenData?.refreshToken]);
 
   const handleModalClose = useCallback(() => {
-    closeAnyModal();
+    dispatch(closeAllModal());
     (modalIngredient || modalOrder) &&
     navigate(previousUrl, {
       replace: true,
       state: { background: null }
     });
-  }, [closeAnyModal, modalIngredient, modalOrder, navigate, previousUrl]);
+  }, [dispatch, modalIngredient, modalOrder, navigate, previousUrl]);
 
 
   return (
@@ -150,6 +139,7 @@ const App = () => {
                   path={PATH.PROFILE}
                   element={
                     <ProtectedRoute
+                      anonymous={false}
                       redirectTo={PATH.LOGIN}
                     >
                       <ProfileLayout/>
@@ -180,16 +170,12 @@ const App = () => {
         }
       </main>
 
-      <Notification
-        title={
-          modalNotification
-            ? modalNotification
-            : errorMessage
-              ? errorMessage
-              : ''
-        }
-      >
-      </Notification>
+
+      {
+        modalNotification && (
+          <Notification title={modalNotification}/>
+        )
+      }
 
       <Modal
         handleModalClose={handleModalClose}

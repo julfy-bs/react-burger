@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createOrder } from '../asyncThunk/orderThunk.js';
+import modalSlice from './modalSlice.js';
 
 const initialState = {
+  order: null,
   orderNumber: null,
   orderFetchRequest: false,
   orderFetchFailed: false,
@@ -18,7 +20,10 @@ const orderSlice = createSlice({
         state.orderFetchFailed = false;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
+        const { order } = action.payload
         const { number } = action.payload.order
+        modalSlice.caseReducers.setModalNotification(order)
+        state.order = order;
         state.orderNumber = number.toString();
         state.orderFetchRequest = false;
       })

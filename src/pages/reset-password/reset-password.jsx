@@ -6,40 +6,23 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
 import { useAuthorization } from '../../hooks/useAuthorization.js';
-import { useFetch } from '../../hooks/useFetch.js';
-import { fetchResetPassword } from '../../services/asyncThunk/profileThunk.js';
 import { PATH } from '../../utils/config.js';
+import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk.js';
 
 const ResetPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
-  const { isEmailSubmitted, isPasswordChanged } = useSelector(store => store.profile);
-  const { isUserLoggedIn, handleProtectedRoute } = useAuthorization();
-  const { handleFulfilledFetch, handleRejectedFetch } = useFetch();
-  const { message, profileFetchRequest, profileFetchFailed, errorMessage } = useSelector(store => store.profile);
+  const { isEmailSubmitted, isPasswordChanged } = useSelector(store => store.password);
+  const { handleProtectedRoute } = useAuthorization();
 
   useEffect(() => {
-    if (isUserLoggedIn) handleProtectedRoute(PATH.HOME);
-    if (!isUserLoggedIn && !isEmailSubmitted) handleProtectedRoute(PATH.FORGOT_PASSWORD);
+    if (!isEmailSubmitted) handleProtectedRoute(PATH.FORGOT_PASSWORD);
     if (isPasswordChanged) handleProtectedRoute(PATH.LOGIN);
-  }, [handleProtectedRoute, isEmailSubmitted, isPasswordChanged, isUserLoggedIn]);
+  }, [handleProtectedRoute, isEmailSubmitted, isPasswordChanged]);
 
   useEffect(() => {
     resetForm();
   }, [resetForm]);
-
-  useEffect(() => {
-    handleFulfilledFetch({
-      fetchStatus: profileFetchRequest,
-      fetchError: profileFetchFailed,
-      message: message,
-    });
-    handleRejectedFetch({
-      fetchStatus: profileFetchRequest,
-      fetchError: profileFetchFailed,
-      errorMessage: errorMessage,
-    });
-  }, [errorMessage, handleFulfilledFetch, handleRejectedFetch, message, profileFetchFailed, profileFetchRequest]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -8,7 +8,7 @@ export const TOKEN_EXPIRES_NOW = 1;
 export const MODAL_ID = '#modal';
 export const ERROR_LOGIN = 'Неверное имя пользователя или пароль.';
 export const ERROR_USER_EXISTS = 'Пользователь с таким Email уже существует.';
-
+export const ERROR_DEFAULT = 'Ууупс! Что-то пошло не так!';
 export const NOTIFICATION_USER_CREATED = 'Пользователь успешно создан.';
 export const NOTIFICATION_LOGIN_SUCCESS = 'Вход выполнен успешно.';
 export const NOTIFICATION_EMAIL_SUBMITTED = 'На указанную почту успешно отправлено письмо с кодом для сброса пароля.';
