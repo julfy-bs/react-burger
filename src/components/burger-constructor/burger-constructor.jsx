@@ -3,34 +3,34 @@ import styles from './burger-constructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient, cleanCart, moveIngredients } from '../../services/slices/cartSlice.js';
+import { addIngredient, moveIngredients } from '../../services/slices/cartSlice.js';
 import { createOrder } from '../../services/asyncThunk/orderThunk.js';
 import { useDrop } from 'react-dnd';
 import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
 import uuid from 'react-uuid';
 import { PATH } from '../../utils/config.js';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { setModalOrder } from '../../services/slices/modalSlice.js';
+import { closeAllModal } from '../../services/slices/modalSlice.js';
 import { useModal } from '../../hooks/useModal.js';
 
 const BurgerConstructor = () => {
   const { cart } = useSelector(state => state.cart);
 
-  const { openNotificationModal, closeAnyModal } = useModal();
+  const { openNotificationModal } = useModal();
   const { isLogin } = useSelector(store => store.user.user);
-
+  const { fetch } = useSelector(store => store.order);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const isButtonDisabled = useMemo(() => !!(cart.bun === null
-    || cart.ingredients.length === 0), [cart]);
+    || cart.ingredients.length === 0 || fetch), [cart.bun, cart.ingredients.length, fetch]);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
       if (cart.bun === null && ingredient.type !== 'bun') {
         openNotificationModal('Сначала выберите булку!');
-        setTimeout(() => closeAnyModal(), 2000);
+        setTimeout(() => dispatch(closeAllModal()), 2000);
       } else if (ingredient.type !== 'bun') {
         dispatch(addIngredient({
           ...ingredient,
@@ -49,15 +49,11 @@ const BurgerConstructor = () => {
     navigate(PATH.LOGIN, { replace: true, state: { background: location.pathname } });
   }, [location.pathname, navigate]);
 
-  const handleBurgerConstructorButton = async () => {
-    if (isLogin) {
-      const res = await dispatch(createOrder(cart));
-      dispatch(setModalOrder(res));
-      dispatch(cleanCart());
-    } else {
-      redirectToLoginPage();
-    }
-  };
+  const handleBurgerConstructorButton = useCallback(
+    () => (isLogin)
+      ? dispatch(createOrder(cart))
+      : redirectToLoginPage(), [cart, dispatch, isLogin, redirectToLoginPage]);
+
 
   const cartPrice = useMemo(() => {
     if (cart.bun !== null) {
@@ -177,7 +173,11 @@ const BurgerConstructor = () => {
             onClick={handleBurgerConstructorButton}
             disabled={isButtonDisabled}
           >
-            Оформить заказ
+            {
+              fetch
+                ? 'Оформляем заказ...'
+                : 'Оформить заказ'
+            }
           </Button>
         </div>
       </section>

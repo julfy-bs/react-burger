@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { registerUser } from '../api/profileApi.js';
 import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout.js';
 import { updateUserData } from '../helpers/updateUserData.js';
-import { setMessage } from '../slices/registerSlice.js';
+import { setMessage, setErrorMessage } from '../slices/registerSlice.js';
 
 export const fetchRegister = createAsyncThunk(
   'profile/fetchRegister',
@@ -17,5 +17,15 @@ export const fetchRegister = createAsyncThunk(
         const { register } = getState();
         showNotificationWithTimeout(register.messageContent, dispatch, setMessage);
       })
-      .catch(e => rejectWithValue(e))
+      .catch(e => {
+        dispatch(setErrorMessage({
+          errorMessage: true
+        }));
+        setTimeout(() => {
+          dispatch(setErrorMessage({
+            errorMessage: false
+          }));
+        }, 4000);
+        return rejectWithValue(e);
+      })
 );

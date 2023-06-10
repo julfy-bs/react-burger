@@ -4,6 +4,7 @@
   gap: 24px;
   align-items: center;
   max-width: 480px;
+  position: relative;
 }
 
 .button_container {

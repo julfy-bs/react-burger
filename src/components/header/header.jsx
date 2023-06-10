@@ -5,9 +5,17 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 import HeaderLink from '../header-link/header-link.jsx';
 import { PATH } from '../../utils/config.js';
 import { NavLink } from 'react-router-dom';
+import { updateUser } from '../../services/slices/userSlice.js';
+import { useDispatch } from 'react-redux';
 
 
 const Header = () => {
+  const dispatch = useDispatch();
+
+  const handleOpenProfile = () => {
+    dispatch(updateUser({ isLogout: false }))
+  };
+
   return (
     <header
       className={
@@ -34,7 +42,7 @@ const Header = () => {
           <Logo></Logo>
         </NavLink>
         <div className={clsx(styles.profile)}>
-          <HeaderLink text={'Личный кабинет'} route={PATH.PROFILE}>
+          <HeaderLink text={'Личный кабинет'} route={PATH.PROFILE} onClick={() => handleOpenProfile()}>
             <ProfileIcon type="secondary"/>
           </HeaderLink>
         </div>

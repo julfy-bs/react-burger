@@ -14,17 +14,17 @@ const initialState = {
   forgotPasswordRequest: {
     fetch: false,
     error: false,
-    message: null,
+    message: false,
     messageContent: NOTIFICATION_EMAIL_SUBMITTED,
-    errorMessage: null,
+    errorMessage: false,
     errorMessageContent: ERROR_DEFAULT,
   },
   resetPasswordRequest: {
     fetch: false,
     error: false,
-    message: null,
+    message: false,
     messageContent: NOTIFICATION_PASSWORD_RESET,
-    errorMessage: null,
+    errorMessage: false,
     errorMessageContent: ERROR_DEFAULT,
   },
 };
@@ -42,6 +42,11 @@ const passwordSlice = createSlice({
     setMessage(state, action) {
       state.forgotPasswordRequest.message = action.payload;
       state.resetPasswordRequest.message = action.payload;
+    },
+    setErrorMessage(state, action) {
+      const { errorMessage } = action.payload;
+      state.forgotPasswordRequest.errorMessage = errorMessage;
+      state.resetPasswordRequest.errorMessage = errorMessage;
     }
   },
   extraReducers: (builder) => {
@@ -59,7 +64,7 @@ const passwordSlice = createSlice({
         state.forgotPasswordRequest = {
           ...state.forgotPasswordRequest,
           fetch: false,
-          message: NOTIFICATION_EMAIL_SUBMITTED,
+          message: true
         };
       })
       .addCase(fetchForgotPassword.rejected, (state, action) => {
@@ -68,8 +73,8 @@ const passwordSlice = createSlice({
         state.forgotPasswordRequest = {
           fetch: false,
           error: true,
-          message: null,
-          errorMessage: message || ERROR_DEFAULT,
+          errorMessage: true,
+          errorMessageContent: message || ERROR_DEFAULT,
         };
       })
       // Password reset
@@ -86,23 +91,25 @@ const passwordSlice = createSlice({
         state.resetPasswordRequest = {
           ...state.resetPasswordRequest,
           fetch: false,
-          message: NOTIFICATION_PASSWORD_RESET
+          message: true
         };
       })
       .addCase(fetchResetPassword.rejected.type, (state, action) => {
         state.isPasswordChanged = false;
-        const { message } = action.payload;
+        const { data } = action.payload;
+        const { message } = data;
         state.resetPasswordRequest = {
           ...state.resetPasswordRequest,
           fetch: false,
           error: true,
-          errorMessage: (message && message === SERVER_RESPOND_INCORRECT_TOKEN)
+          errorMessage: true,
+          errorMessageContent: (message && message === SERVER_RESPOND_INCORRECT_TOKEN)
             ? state.resetPasswordRequest.errorMessage = NOTIFICATION_INCORRECT_TOKEN
             : state.resetPasswordRequest.errorMessage = message || ERROR_DEFAULT,
         };
-      })
+      });
   }
 });
 
-export const { setIsEmailSubmitted, setIsPasswordChanged, setMessage } = passwordSlice.actions;
+export const { setMessage, setErrorMessage } = passwordSlice.actions;
 export default passwordSlice.reducer;

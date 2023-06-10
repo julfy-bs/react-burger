@@ -9,12 +9,11 @@ import { setCookie } from './setCookie.js';
 import { updateUser } from '../slices/userSlice.js';
 
 export const updateUserData = ({ user = null, accessToken = null, refreshToken = null, dispatch } = {}) => {
-  const { email, name } = user;
 
-  // if (user === null) {
-  //   dispatch(updateUser({ isLogin: false, isLogout: true }));
-  // }
-  if (accessToken && refreshToken && email && name) {
+  if (user === null) {
+    dispatch(updateUser({ isLogin: false, isLogout: true }));
+  }
+  if (accessToken && refreshToken && user.email && user.name) {
     const expiresAt = Date.now() + ACCESS_TOKEN_EXPIRES * 1000;
     setCookie(ACCESS_TOKEN, accessToken, { expires: ACCESS_TOKEN_EXPIRES });
     setCookie(REFRESH_TOKEN, refreshToken, { expires: REFRESH_TOKEN_EXPIRES });
@@ -22,8 +21,8 @@ export const updateUserData = ({ user = null, accessToken = null, refreshToken =
     dispatch(updateUser({
       isLogin: true,
       token: { refreshToken, accessToken, expiresAt },
-      email,
-      name
+      email: user.email,
+      name: user.name
     }));
   } else {
     setCookie(ACCESS_TOKEN, '', { expires: TOKEN_EXPIRES_NOW });
