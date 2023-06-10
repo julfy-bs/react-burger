@@ -2,25 +2,30 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getCookie } from '../helpers/getCookie.js';
 import {
   ACCESS_TOKEN,
-  ERROR_DEFAULT,
+  ERROR_DEFAULT, ERROR_USER_EXISTS, NOTIFICATION_LOGIN_SUCCESS,
   NOTIFICATION_USER_UPDATE_ERROR,
   NOTIFICATION_USER_UPDATE_SUCCESS
 } from '../../utils/constants.js';
 import { fetchUpdateUser } from '../asyncThunk/updateUserThunk.js';
 import { fetchGetUser } from '../asyncThunk/getUserThunk.js';
+import { setErrorMessage } from '../helpers/setErrorMessage.js';
 
 const initialState = {
   getUserRequest: {
     fetch: false,
     error: false,
-    message: null,
-    errorMessage: null,
+    message: false,
+    messageContent: NOTIFICATION_LOGIN_SUCCESS,
+    errorMessage: false,
+    errorMessageContent: ERROR_DEFAULT
   },
   patchUserRequest: {
     fetch: false,
     error: false,
-    message: null,
-    errorMessage: null,
+    message: false,
+    messageContent: NOTIFICATION_USER_UPDATE_SUCCESS,
+    errorMessage: false,
+    errorMessageContent: NOTIFICATION_USER_UPDATE_ERROR
   },
   user: {
     isLogin: !!getCookie(ACCESS_TOKEN) || false,
@@ -39,8 +44,9 @@ const userSlice = createSlice({
       state.user = {
         ...state.user,
         ...action.payload
-      }
-    }
+      };
+    },
+    setError: setErrorMessage
   },
   extraReducers: (builder) => {
     builder
@@ -83,8 +89,8 @@ const userSlice = createSlice({
       })
       // Update user
       .addCase(fetchUpdateUser.pending, (state) => {
-        state.updateUserRequest = {
-          ...initialState.updateUserRequest,
+        state.patchUserRequest = {
+          ...initialState.patchUserRequest,
           fetch: true
         };
       })
@@ -92,10 +98,10 @@ const userSlice = createSlice({
         const { user } = action.payload;
         const { email, name } = user;
 
-        state.updateUserRequest = {
-          ...state.updateUserRequest,
+        state.patchUserRequest = {
+          ...state.patchUserRequest,
           fetch: false,
-          message: NOTIFICATION_USER_UPDATE_SUCCESS
+          message: true
         };
 
         state.user = {
@@ -106,16 +112,19 @@ const userSlice = createSlice({
         };
       })
       .addCase(fetchUpdateUser.rejected.type, (state, action) => {
-        const { message } = action.payload;
-        state.updateUserRequest = {
-          ...state.updateUserRequest,
+        const { message } = action.payload.data;
+        state.patchUserRequest = {
+          ...state.patchUserRequest,
           fetch: false,
           error: true,
-          errorMessage: message || NOTIFICATION_USER_UPDATE_ERROR
+          errorMessage: true
         };
+        (message && message === 'User with such email already exists')
+          ? state.patchUserRequest.errorMessageContent = ERROR_USER_EXISTS
+          : state.patchUserRequest.errorMessageContent = message || NOTIFICATION_USER_UPDATE_ERROR;
       });
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, setError } = userSlice.actions;
 export default userSlice.reducer;

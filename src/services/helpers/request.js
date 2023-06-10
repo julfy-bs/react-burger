@@ -29,11 +29,9 @@ export const authorizationRequest = async (endpoint, options) => {
   const token = getCookie(REFRESH_TOKEN);
 
   if (access) {
-    console.log('USER GER');
     return request(endpoint, options, access);
   }
   if (!access && token) {
-    console.log(token, 'TRY TO UPDATE');
     const res = request(tokenUrl, {
       method: 'POST',
       body: JSON.stringify({ token }),

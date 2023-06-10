@@ -1,24 +1,34 @@
 import clsx from 'clsx';
 import styles from './reset-password.module.css';
-import LoginForm from '../../components/login-form/login-form.jsx';
-import LoginLinks from '../../components/login-links/login-links.jsx';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
 import { PATH } from '../../utils/config.js';
 import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk.js';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const ResetPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
   const { isEmailSubmitted, isPasswordChanged } = useSelector(store => store.password);
-  const { handleProtectedRoute } = useAuthorization();
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+  const { fetch, errorMessage, errorMessageContent } = useSelector(store => store.password.resetPasswordRequest);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const onIconClick = useCallback(() => setIsVisiblePassword(!isVisiblePassword), [isVisiblePassword]);
 
   useEffect(() => {
-    if (!isEmailSubmitted) handleProtectedRoute(PATH.FORGOT_PASSWORD);
-    if (isPasswordChanged) handleProtectedRoute(PATH.LOGIN);
-  }, [handleProtectedRoute, isEmailSubmitted, isPasswordChanged]);
+    if (!isEmailSubmitted)  {
+      const { pathname } = location;
+      navigate((PATH.FORGOT_PASSWORD), { state: { background: pathname } });
+    }
+    if (isPasswordChanged) {
+      const { pathname } = location;
+      navigate(((PATH.LOGIN)), { state: { background: pathname } });
+    }
+  }, [isEmailSubmitted, isPasswordChanged, location, navigate]);
 
   useEffect(() => {
     resetForm();
@@ -34,15 +44,59 @@ const ResetPasswordPage = () => {
 
   return (
     <section className={clsx(styles.container)}>
-      <LoginForm
-        type={'reset'}
-        errors={errors}
-        isValid={isValid}
-        values={values}
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-      />
-      <LoginLinks type={'reset'}/>
+      <form className={clsx(styles.login_form)} onSubmit={handleSubmit}>
+        <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
+        <Input
+          type={isVisiblePassword ? 'text' : 'password'}
+          placeholder={'Введите новый пароль'}
+          onChange={handleChange}
+          icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
+          value={values.password || ''}
+          name={'password'}
+          error={!!errors.password}
+          onIconClick={onIconClick}
+          errorText={errors.password}
+          size={'default'}
+          minLength={8}
+          maxLength={20}
+          required
+          extraClass={clsx(styles.input_error)}
+        />
+        <Input
+          type={'text'}
+          value={values.token || ''}
+          onChange={handleChange}
+          placeholder={'Введите код из письма'}
+          name={'token'}
+          size={'default'}
+          error={!!errors.token}
+          errorText={errors.token}
+          extraClass={clsx(styles.input_error)}
+        />
+        <Button
+          htmlType="submit"
+          type="primary"
+          size="medium"
+          disabled={!isValid || fetch}
+        >
+          Сохранить
+        </Button>
+      </form>
+      <ul className={clsx('page__list', styles.list)}>
+        {
+          errorMessage && (
+            <li className={clsx('text', 'text_type_main-small', styles.item)}>
+              <span className={clsx(styles.plain_text, styles.error_text)}>
+                {errorMessageContent}
+              </span>
+            </li>
+          )
+        }
+        <li className={clsx('text', 'text_type_main-small', styles.item)}>
+          <span className={clsx(styles.plain_text)}>Вспомнили пароль?</span>
+          <NavLink className={clsx(styles.app_link)} to={PATH.LOGIN}>Войти</NavLink>
+        </li>
+      </ul>
     </section>
   );
 };

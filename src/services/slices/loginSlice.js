@@ -21,7 +21,11 @@ const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    setMessage: showMessage
+    setMessage: showMessage,
+    setErrorMessage(state, action) {
+      const { errorMessage } = action.payload;
+      state.errorMessage = errorMessage;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -36,7 +40,9 @@ const loginSlice = createSlice({
         state.fetch = false;
       })
       .addCase(fetchLogin.rejected, (state, action) => {
-        const { message } = action.payload;
+        const { data } = action.payload;
+        const { message } = data;
+        state.errorMessage = true;
         state.errorMessageContent = (message && message === SERVER_RESPOND_INCORRECT_VALUES)
           ? state.errorMessageContent = ERROR_LOGIN
           : state.errorMessageContent = message || ERROR_DEFAULT;
@@ -47,5 +53,5 @@ const loginSlice = createSlice({
   }
 });
 
-export const { setMessage } = loginSlice.actions;
+export const { setMessage, setErrorMessage } = loginSlice.actions;
 export default loginSlice.reducer;

@@ -16,15 +16,15 @@ const ProfileForm = () => {
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
   const sameValues = (user !== null && (user.name !== values.name || user.email !== values.email || values.password));
-
+  const { patchUserRequest } = useSelector(store => store.user);
   const isButtonActive = useMemo(
     () => (
       isValid && sameValues
     ), [isValid, sameValues]);
-
-  const userRequest = useMemo(
-    () => false,
-    []);
+  //
+  // const userRequest = useMemo(
+  //   () => false,
+  //   []);
 
   // useEffect(() => {
   //   patchUserRequest.errorMessage && setTimeout(() => dispatch(), 2000);
@@ -138,14 +138,20 @@ const ProfileForm = () => {
               type="primary"
               size="medium"
               extraClass={styles.button}
-              disabled={!isButtonActive || userRequest.fetch || !values.email || values.name.length < 2}
+              disabled={!isButtonActive || patchUserRequest.fetch || !values.email || values.name.length < 2}
             >
-              {userRequest.fetch ? 'Сохранение...' : 'Сохранить'}
+              {patchUserRequest.fetch ? 'Сохранение...' : 'Сохранить'}
             </Button>
           </div>}
-          <span className={clsx('text', 'text_type_main-default', styles.errorMessage)}>
-        {userRequest.errorMessage}
-      </span>
+          {
+            patchUserRequest.errorMessage
+              ? (
+                <span className={clsx('text', 'text_type_main-default', styles.errorMessage)}>
+        {patchUserRequest.errorMessageContent}
+          </span>
+              )
+              : <></>
+          }
         </form>
       )
       : (

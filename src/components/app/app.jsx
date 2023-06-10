@@ -57,7 +57,7 @@ const App = () => {
     if (ingredients && ingredients.length === 0) {
       dispatch(fetchIngredients());
     }
-    if ((!isLogout && !isLogin && isTokenExpired)
+    if ((!isLogout && !isLogin && isTokenExpired && tokenData?.refreshToken)
       || (isLogin && (!user.name || !user.email))) {
       dispatch(fetchGetUser());
     }

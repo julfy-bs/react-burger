@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { resetPassword } from '../api/profileApi.js';
 import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout.js';
-import { setMessage } from '../slices/passwordSlice.js';
+import { setMessage, setErrorMessage } from '../slices/passwordSlice.js';
 
 export const fetchResetPassword = createAsyncThunk(
   'profile/fetchResetPassword',
@@ -13,5 +13,15 @@ export const fetchResetPassword = createAsyncThunk(
         showNotificationWithTimeout(password.resetPasswordRequest.messageContent,
           dispatch, setMessage);
       })
-      .catch(e => rejectWithValue(e))
+      .catch(e => {
+        dispatch(setErrorMessage({
+          errorMessage: true
+        }));
+        setTimeout(() => {
+          dispatch(setErrorMessage({
+            errorMessage: false
+          }));
+        }, 4000);
+        return rejectWithValue(e);
+      })
 );
