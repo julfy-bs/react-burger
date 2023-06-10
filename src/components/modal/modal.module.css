@@ -5,21 +5,21 @@
   box-shadow: 0 24px 32px rgba(0, 0, 0, 0.04), 0 16px 24px rgba(0, 0, 0, 0.04),
   0 4px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  left: 50%;
   max-width: 720px;
   min-height: 300px;
   min-width: 720px;
   opacity: 0;
   padding: 40px 40px 60px;
-  position: fixed;
-  top: 50%;
   transform: translate(-50%, -200%);
   transition: transform 0.3s ease, visibility 0.25s ease, opacity 0.25s ease;
   visibility: hidden;
   z-index: 2000;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .modal_opened {
@@ -57,7 +57,7 @@
 }
 
 .screenReader {
-  margin: 0;
-  opacity: 0;
   visibility: hidden;
+  opacity: 0;
+  margin: 0;
 }

@@ -6,21 +6,22 @@ import ModalOverlay from '../modal-overlay/modal-overlay.jsx';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal } from '../../services/slices/modalSlice.js';
 
-import { MODAL_ID } from '../../utils/constants.js';
+import { MODAL_ID } from '../../utils/enum.js';
 
-const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }) => {
+const Modal = ({ title, ariaTitle, children }) => {
+  const { isModalOpen } = useSelector(state => state.modal);
+  const dispatch = useDispatch();
 
   return createPortal(
     <>
       {
         <>
-          <ModalOverlay handleModalClose={handleModalClose}/>
+          <ModalOverlay/>
           <div
-            className={clsx(
-              styles.modal,
-              { [styles.modal_opened]: isModalOpen },
-            )}
+            className={clsx(styles.modal, { [styles.modal_opened]: isModalOpen })}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-labelledby={title ? 'modal-title' : 'aria-title'}
@@ -29,13 +30,7 @@ const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }) =>
             <div className={clsx(styles.modal__header)}>
               {
                 title &&
-                <h3
-                  className={clsx(
-                    styles.modal__title,
-                    'text',
-                    'text_type_main-large'
-                  )}
-                  id="modal-title">
+                <h3 className={clsx(styles.modal__title, 'text text_type_main-large')} id="modal-title">
                   {title}
                 </h3>
               }
@@ -49,7 +44,7 @@ const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }) =>
                 className={clsx(styles.modal__close)}
                 aria-label="Закрыть модальное окно"
                 type="button"
-                onClick={() => handleModalClose()}
+                onClick={() => dispatch(closeModal())}
               >
                 <CloseIcon type="primary"/>
               </button>
@@ -67,9 +62,7 @@ const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }) =>
 Modal.propTypes = {
   title: PropTypes.string,
   ariaTitle: PropTypes.string,
-  children: PropTypes.node,
-  handleModalClose: PropTypes.func.isRequired,
-  isModalOpen: PropTypes.bool.isRequired
+  children: PropTypes.node
 };
 
 export default Modal;
