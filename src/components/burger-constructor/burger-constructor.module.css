@@ -44,9 +44,15 @@
   gap: 16px;
   list-style: none;
   margin: 0;
-  max-height: 464px;
+  max-height: calc(100vh - 88px - 125px - 208px - 104px);
   overflow-y: auto;
   padding: 0;
+}
+
+@media screen and (max-width: 968px) {
+  .cart__ingredients_list {
+    max-height: 464px;
+  }
 }
 
 .cart__ingredients_list_hovered {

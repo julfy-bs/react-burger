@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './loader.module.css';
 
-const Loader = ({ loading }) => {
+const Loader = () => {
   return (
-    <div className={clsx(styles.loader, {[styles.loader_active]: loading})}>
+    <div className={clsx(styles.loader, styles.loader_active)}>
       <div className={styles.loader__circle}>
         <div className={styles.loader__inner}></div>
       </div>
@@ -22,11 +21,6 @@ const Loader = ({ loading }) => {
       </div>
     </div>
   );
-};
-
-
-Loader.propTypes = {
-  loading: PropTypes.bool.isRequired
 };
 
 export default Loader;

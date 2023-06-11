@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getCookie } from '../helpers/getCookie.js';
 import {
   ACCESS_TOKEN,
-  ERROR_DEFAULT, ERROR_USER_EXISTS, NOTIFICATION_LOGIN_SUCCESS,
+  ERROR_DEFAULT, ERROR_USER_EXISTS, EXPIRES_AT, NOTIFICATION_LOGIN_SUCCESS,
   NOTIFICATION_USER_UPDATE_ERROR,
-  NOTIFICATION_USER_UPDATE_SUCCESS
+  NOTIFICATION_USER_UPDATE_SUCCESS, REFRESH_TOKEN
 } from '../../utils/constants.js';
 import { fetchUpdateUser } from '../asyncThunk/updateUserThunk.js';
 import { fetchGetUser } from '../asyncThunk/getUserThunk.js';
@@ -30,7 +30,11 @@ const initialState = {
   user: {
     isLogin: !!getCookie(ACCESS_TOKEN) || false,
     isLogout: false,
-    token: null,
+    token: {
+      accessToken: getCookie(ACCESS_TOKEN) || null,
+      refreshToken: getCookie(REFRESH_TOKEN) || null,
+      expiresAt: getCookie(EXPIRES_AT) || null
+    },
     email: null,
     name: null
   }
