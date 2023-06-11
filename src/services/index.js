@@ -10,6 +10,7 @@ import loginSlice from './slices/loginSlice.js';
 import logoutSlice from './slices/logoutSlice.js';
 import registerSlice from './slices/registerSlice.js';
 import passwordSlice from './slices/passwordSlice.js';
+import wsSlice from './slices/wsSlice.js';
 
 const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   login: loginSlice,
   logout: logoutSlice,
   register: registerSlice,
-  password: passwordSlice
+  password: passwordSlice,
+  websocket: wsSlice
 });
 
 export const store = configureStore({

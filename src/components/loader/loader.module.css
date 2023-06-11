@@ -9,6 +9,7 @@
   transition: visibility .5s ease, opacity .5s ease;
   visibility: hidden;
   width: 60px;
+  margin: auto;
 }
 
 @keyframes spin {

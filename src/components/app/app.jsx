@@ -76,7 +76,7 @@ const App = () => {
   return (
     <>
       <Header/>
-      <main className={clsx(styles.main, 'pb-10')}>
+      <main className={clsx(styles.main)}>
         {
           loading
             ? (<Loader loading={loading}/>)
