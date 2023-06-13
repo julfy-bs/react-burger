@@ -7,7 +7,6 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   left: 50%;
   max-width: 720px;
   min-height: 300px;
@@ -20,7 +19,28 @@
   transition: transform 0.3s ease, visibility 0.25s ease, opacity 0.25s ease;
   visibility: hidden;
   z-index: 2000;
+  max-height: 95vh;
+  overflow-y: auto;
 }
+
+.modal::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 30px 0;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+  border-radius: 10px;
+}
+
+::-webkit-resizer,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner { display: none; }
+
 
 .modal_opened {
   opacity: 1;

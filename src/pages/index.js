@@ -7,6 +7,8 @@ import ProfileLayout from './profile/profile.jsx';
 import ProfileFormPage from './profile/profile-form/profile-form.jsx';
 import ProfileOrdersPage from './profile/profile-orders/profile-orders.jsx';
 import IngredientPage from './ingredient/ingredient.jsx';
+import OrderPage from './order/order.jsx';
+import FeedPage from './feed/feed.jsx';
 import NotFoundPage from './not-found/not-found.jsx';
 
 export {
@@ -19,5 +21,7 @@ export {
   ProfileFormPage,
   ProfileOrdersPage,
   IngredientPage,
+  OrderPage,
+  FeedPage,
   NotFoundPage
 };

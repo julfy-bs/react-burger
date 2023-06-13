@@ -33,7 +33,7 @@ const ProfileLayout = () => {
               }
             </>
           </aside>
-          <section>
+          <section className={clsx(styles.section)}>
             <Outlet/>
           </section>
         </div>
