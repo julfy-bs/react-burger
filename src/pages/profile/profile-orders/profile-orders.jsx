@@ -1,11 +1,9 @@
-import clsx from 'clsx';
-import styles from './profile-orders.module.css';
-import { useEffect, useMemo } from 'react';
-import Order from '../../../components/order/order.jsx';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useWebSocket } from '../../../hooks/useWebSocket.js';
-import Loader from '../../../components/loader/loader.jsx';
 import { WSS_FOR_PROFILE_ORDERS } from '../../../utils/config.js';
+import OrderList from '../../../components/order-list/order-list.jsx';
+import Loader from '../../../components/loader/loader.jsx';
 
 const ProfileOrders = () => {
   const { connect, closeWs } = useWebSocket();
@@ -24,26 +22,15 @@ const ProfileOrders = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenWithoutBearer]);
 
-  const ordersFeed = useMemo(
-    () =>
-      orders?.map((item) => (
-        <li key={item._id}>
-          <Order order={item}/>
-        </li>
-      )),
-    [orders]
-  );
-
   return (
-    <ul className={clsx(styles.orders, 'page__list')}>
+    <>
       {
-        !!ordersFeed
-          ? (<>{ordersFeed.reverse()}</>)
-          : (<Loader/>)
+        orders
+          ? (<OrderList orders={[...orders].reverse()}/>)
+          : (<Loader />)
       }
-    </ul>
+    </>
   );
-
 };
 
 

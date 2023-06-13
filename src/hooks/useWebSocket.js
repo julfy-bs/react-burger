@@ -7,7 +7,7 @@ export const useWebSocket = () => {
   const dispatch = useDispatch();
   const ws = useRef(null);
   const connect = useCallback((url, token) => {
-    ws.current = new WebSocket(`${url}?token=${token}`);
+    ws.current = token ? new WebSocket(`${url}?token=${token}`) : new WebSocket(url);
     ws.current.onopen = () => dispatch(setWsConnected(true));
     ws.current.onmessage = (e) => {
       const message = JSON.parse(e.data);

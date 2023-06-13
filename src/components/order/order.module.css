@@ -64,6 +64,7 @@
   border: 2px solid #801AB2;
   border-radius: 100%;
   object-fit: cover;
+  box-sizing: border-box;
 }
 
 .image_last {

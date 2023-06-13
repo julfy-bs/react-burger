@@ -33,6 +33,8 @@ export const PATH = {
   RESET_PASSWORD: '/reset-password',
   PROFILE: '/profile',
   ORDERS: '/profile/orders',
+  ORDER: '/profile/orders/:id',
   FEED: '/feed',
+  FEED_ORDER: '/feed/:id',
   INGREDIENT: '/ingredients/:id'
 };

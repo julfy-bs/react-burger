@@ -2,13 +2,17 @@ import clsx from 'clsx';
 import styles from './order.module.css';
 import { useMemo } from 'react';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { orderType } from '../../utils/types.js';
+import { setModalOrder } from '../../services/slices/modalSlice.js';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Order = ({ order }) => {
   const { ingredients } = useSelector(store => store.ingredients);
   const date = new Date(order.createdAt);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const orderIngredients = order.ingredients.map((orderIngredientId) => ingredients.find(ingredient => ingredient._id === orderIngredientId));
   const checkTotalPrice = (ingredientsArray) => ingredientsArray.reduce((prev, current) => prev + current.price, 0);
 
@@ -55,8 +59,20 @@ const Order = ({ order }) => {
     ), [ingredients, order.ingredients]);
 
 
+  const handleArticleClick = () => {
+    dispatch(setModalOrder(order));
+    if (location.pathname === '/feed') {
+      navigate(`/feed/${order.number}`, { state: { background: location } });
+    } else if (location.pathname === '/profile/orders') {
+      navigate(`/profile/orders/${order.number}`, { state: { background: location } });
+    }
+  };
+
   return (
-    <article className={clsx(styles.item)}>
+    <article
+      className={clsx(styles.item)}
+      onClick={handleArticleClick}
+    >
       <div className={clsx(styles.numbers)}>
         <span className={clsx('text', 'text_type_digits-default')}>
           #{order.number}

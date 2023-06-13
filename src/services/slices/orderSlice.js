@@ -24,6 +24,9 @@ const orderSlice = createSlice({
     setErrorMessage(state, action) {
       const { boolean } = action.payload;
       state.errorMessage = boolean;
+    },
+    setOrder(state, action) {
+      state.order = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -53,6 +56,6 @@ const orderSlice = createSlice({
       });
   },
 });
-export const { setMessage, setErrorMessage } = orderSlice.actions;
+export const { setMessage, setErrorMessage, setOrder } = orderSlice.actions;
 
 export default orderSlice.reducer;

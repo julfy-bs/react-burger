@@ -1,43 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useCallback, useMemo } from 'react';
-import {
-  setModalIngredient,
-  setModalNotification,
-  setModalOrder
-} from '../services/slices/modalSlice.js';
+import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 
 
 export const useModal = () => {
-  const { modalIngredient, modalOrder, modalNotification } = useSelector(store => store.modal);
-  const dispatch = useDispatch();
+  const { modalIngredient, modalOrder, modalOrderSuccess, modalNotification } = useSelector(store => store.modal);
 
   const isModalOpen = useMemo(
-    () => !!modalIngredient || !!modalOrder,
-    [modalIngredient, modalOrder]
+    () => !!modalIngredient || !!modalOrder || !!modalOrderSuccess,
+    [modalIngredient, modalOrder, modalOrderSuccess]
   );
 
   const isNotificationOpen = useMemo(
     () => !!modalNotification,
     [modalNotification]
   );
-
-  const openIngredientModal = useCallback(
-    (ingredient) => dispatch(setModalIngredient(ingredient)),
-    [dispatch]
-  );
-  const openOrderModal = useCallback(
-    (order) => dispatch(setModalOrder(order)),
-    [dispatch]
-  );
-  const openNotificationModal = useCallback(
-    (notification) => dispatch(setModalNotification(notification)),
-    [dispatch]
-  );
-
   return {
-    openIngredientModal,
-    openOrderModal,
-    openNotificationModal,
     isModalOpen,
     isNotificationOpen
   };
