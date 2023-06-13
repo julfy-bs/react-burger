@@ -3,13 +3,13 @@ import styles from './order-details.module.css';
 import { useSelector } from 'react-redux';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { orderType } from '../../utils/types.js';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 const OrderDetails = ({ order }) => {
   const date = new Date(order.createdAt);
   const { ingredients } = useSelector(store => store.ingredients);
-  const ingredientsArray = order.ingredients.map((item) => ingredients.find(i => i._id === item));
-  const sortArray = useCallback(
+  const ingredientsArray = useMemo(() => order.ingredients.map((item) => ingredients.find(i => i._id === item)), [ingredients, order.ingredients]);
+  const sortArray = useMemo(
     () => ingredientsArray.reduce((acc, item) => {
       if (acc.find(i => i._id === item._id)) {
         return acc.map((value) => value._id === item._id
