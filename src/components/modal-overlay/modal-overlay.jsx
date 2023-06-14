@@ -1,14 +1,16 @@
 import styles from './modal-overlay.module.css';
 import clsx from 'clsx';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useModal } from '../../hooks/useModal.js';
+import { useSelector } from 'react-redux';
+import { getModal } from '../../services/helpers/getSelector.js';
 
 const ModalOverlay = ({ handleModalClose }) => {
-  const { isModalOpen } = useModal();
-
+  const { modalIngredient, modalOrder, modalOrderSuccess } = useSelector(getModal)
   const handleEscape = useCallback((e) => (e.key === 'Escape') && handleModalClose(), [handleModalClose])
+
+  const isModalOpen = useMemo(() => !!modalIngredient || !!modalOrder || !!modalOrderSuccess, [modalIngredient, modalOrder, modalOrderSuccess])
 
   useEffect(() => {
     if (!isModalOpen) return;

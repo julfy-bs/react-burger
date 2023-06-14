@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../../hooks/useForm.js';
 import Loader from '../../../components/loader/loader.jsx';
 import { fetchUpdateUser } from '../../../services/asyncThunk/updateUserThunk.js';
+import { getUser } from '../../../services/helpers/getSelector.js';
 
 const ProfileForm = () => {
-  const { user } = useSelector(store => store.user);
+  const { user, patchUserRequest } = useSelector(getUser);
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState({ name: false, email: false, password: false });
@@ -16,7 +17,6 @@ const ProfileForm = () => {
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
   const sameValues = (user !== null && (user.name !== values.name || user.email !== values.email || values.password));
-  const { patchUserRequest } = useSelector(store => store.user);
   const isButtonActive = useMemo(
     () => (
       isValid && sameValues

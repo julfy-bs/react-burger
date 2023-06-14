@@ -7,13 +7,13 @@ import { PATH } from '../../utils/config.js';
 import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk.js';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { getPassword } from '../../services/helpers/getSelector.js';
 
 const ResetPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
-  const { isEmailSubmitted, isPasswordChanged } = useSelector(store => store.password);
+  const { isEmailSubmitted, isPasswordChanged, resetPasswordRequest } = useSelector(getPassword);
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-  const { fetch, errorMessage, errorMessageContent } = useSelector(store => store.password.resetPasswordRequest);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -77,17 +77,17 @@ const ResetPasswordPage = () => {
           htmlType="submit"
           type="primary"
           size="medium"
-          disabled={!isValid || fetch}
+          disabled={!isValid || resetPasswordRequest.fetch}
         >
           Сохранить
         </Button>
       </form>
       <ul className={clsx('page__list', styles.list)}>
         {
-          errorMessage && (
+          resetPasswordRequest.errorMessage && (
             <li className={clsx('text', 'text_type_main-small', styles.item)}>
               <span className={clsx(styles.plain_text, styles.error_text)}>
-                {errorMessageContent}
+                {resetPasswordRequest.errorMessageContent}
               </span>
             </li>
           )

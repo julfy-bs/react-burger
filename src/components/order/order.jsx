@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { orderType } from '../../utils/types.js';
 import { setModalOrder } from '../../services/slices/modalSlice.js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getIngredients } from '../../services/helpers/getSelector.js';
 
 const Order = ({ order }) => {
-  const { ingredients } = useSelector(store => store.ingredients);
+  const { ingredients } = useSelector(getIngredients);
   const date = new Date(order.createdAt);
   const dispatch = useDispatch();
   const navigate = useNavigate();

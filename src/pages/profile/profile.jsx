@@ -5,13 +5,14 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Loader from '../../components/loader/loader.jsx';
 import { useSelector } from 'react-redux';
 import { PATH } from '../../utils/config.js';
+import { getUser } from '../../services/helpers/getSelector.js';
 
 const ProfileLayout = () => {
-  const { isLogin } = useSelector(store => store.user.user);
+  const { user } = useSelector(getUser);
   const location = useLocation();
 
   return (
-    isLogin
+    user.isLogin
       ? (
         <div className={clsx(styles.container)}>
           <aside className={clsx(styles.aside)}>
@@ -38,7 +39,7 @@ const ProfileLayout = () => {
           </section>
         </div>
       )
-      : (<Loader loading={!isLogin}/>)
+      : (<Loader />)
 
   );
 };

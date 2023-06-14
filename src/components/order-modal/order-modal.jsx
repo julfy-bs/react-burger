@@ -4,9 +4,10 @@ import styles from './order-modal.module.css';
 import IconDone from '../icon-done/icon-done.jsx';
 
 import { useSelector } from 'react-redux';
+import { getOrder } from '../../services/helpers/getSelector.js';
 
 const OrderModal = () => {
-  const { orderNumber } = useSelector(state => state.order);
+  const { orderNumber } = useSelector(getOrder);
 
   return (
     <div

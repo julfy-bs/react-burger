@@ -1,33 +1,28 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useWebSocket } from '../../../hooks/useWebSocket.js';
+import { useDispatch, useSelector } from 'react-redux';
 import { WSS_FOR_PROFILE_ORDERS } from '../../../utils/config.js';
 import OrderList from '../../../components/order-list/order-list.jsx';
 import Loader from '../../../components/loader/loader.jsx';
+import { wsConnectionClosed, wsConnectionStart } from '../../../services/slices/wsSlice.js';
+import { getUser, getWebsocket } from '../../../services/helpers/getSelector.js';
 
 const ProfileOrders = () => {
-  const { connect, closeWs } = useWebSocket();
-  const orders = useSelector(store => store.websocket.wsMessage?.orders);
-  const accessToken = useSelector(store => store.user.user.token.accessToken);
-  const tokenWithoutBearer = accessToken?.replace('Bearer ', '');
+  const { orders } = useSelector(getWebsocket);
+  const { user } = useSelector(getUser);
+  const tokenWithoutBearer = user.token.accessToken?.replace('Bearer ', '');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (tokenWithoutBearer) {
-      connect(WSS_FOR_PROFILE_ORDERS, tokenWithoutBearer);
-    }
-
-    return () => {
-      closeWs();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenWithoutBearer]);
+    dispatch(wsConnectionStart(`${WSS_FOR_PROFILE_ORDERS}?token=${tokenWithoutBearer}`));
+    return () => dispatch(wsConnectionClosed());
+  }, [dispatch, tokenWithoutBearer]);
 
   return (
     <>
       {
         orders
-          ? (<OrderList orders={[...orders].reverse()}/>)
-          : (<Loader />)
+          ? (<OrderList/>)
+          : (<Loader/>)
       }
     </>
   );

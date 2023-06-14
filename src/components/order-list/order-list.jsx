@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import styles from './order-list.module.css';
 import { useMemo } from 'react';
 import Order from '../order/order.jsx';
-import { orderType } from '../../utils/types.js';
+import { useSelector } from 'react-redux';
+import { getWebsocket } from '../../services/helpers/getSelector.js';
 
-const OrderList = ({ orders }) => {
+const OrderList = () => {
+  const { orders } = useSelector(getWebsocket);
+
   const ordersFeed = useMemo(
     () =>
       orders?.map((item) => (
@@ -31,11 +33,6 @@ const OrderList = ({ orders }) => {
       }
     </ul>
   );
-};
-
-
-OrderList.propTypes = {
-  orders: PropTypes.arrayOf(orderType).isRequired
 };
 
 export default OrderList;
