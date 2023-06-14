@@ -23,7 +23,6 @@ import Loader from '../loader/loader.jsx';
 import ProtectedRoute from '../protected-route/protected-route.jsx';
 import { useCallback, useEffect } from 'react';
 import { setLoading } from '../../services/slices/loadingSlice.js';
-import { useModal } from '../../hooks/useModal.js';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk.js';
 import { PATH } from '../../utils/config.js';
 import { useAuthorization } from '../../hooks/useAuthorization.js';
@@ -31,24 +30,21 @@ import { closeAllModal } from '../../services/slices/modalSlice.js';
 import { fetchGetUser } from '../../services/asyncThunk/getUserThunk.js';
 import OrderDetails from '../order-details/order-details.jsx';
 import FeedPage from '../../pages/feed/feed.jsx';
+import { getIngredients, getLoading, getModal, getOrder, getUser } from '../../services/helpers/getSelector.js';
 
 const App = () => {
-  const {
-    ingredientsFetchRequest,
-    ingredients
-  } = useSelector(store => store.ingredients);
-  const { orderNumber } = useSelector(store => store.order);
-  const { isLogin, isLogout } = useSelector(store => store.user.user);
+  const { modalIngredient, modalOrder, modalOrderSuccess, modalNotification } = useSelector(getModal);
+  const { ingredientsFetchRequest, ingredients } = useSelector(getIngredients);
+  const { loading } = useSelector(getLoading);
+  const { orderNumber } = useSelector(getOrder);
+  const { user } = useSelector(getUser);
   const { isTokenExpired } = useAuthorization();
-  const { isModalOpen } = useModal();
-  const { modalIngredient, modalOrder, modalOrderSuccess, modalNotification } = useSelector(store => store.modal);
-  const { loading } = useSelector(store => store.loading);
   const dispatch = useDispatch();
   const location = useLocation();
   const background = modalIngredient || modalOrder ? location.state.background : null;
   const { previousUrl, tokenData } = useAuthorization();
   const navigate = useNavigate();
-  const { user } = useSelector(store => store.user);
+
 
 
   useEffect(() => {
@@ -59,11 +55,11 @@ const App = () => {
     if (ingredients && ingredients.length === 0) {
       dispatch(fetchIngredients());
     }
-    if ((!isLogout && !isLogin && isTokenExpired && tokenData?.refreshToken)
-      || (isLogin && (!user.name || !user.email))) {
+    if ((!user.isLogout && !user.isLogin && isTokenExpired && tokenData?.refreshToken)
+      || (user.isLogin && (!user.name || !user.email))) {
       dispatch(fetchGetUser());
     }
-  }, [dispatch, isLogin, isTokenExpired, user, ingredients, isLogout, tokenData?.refreshToken]);
+  }, [dispatch, isTokenExpired, user, ingredients, tokenData?.refreshToken]);
 
   const handleModalClose = useCallback(() => {
     dispatch(closeAllModal());
@@ -195,7 +191,7 @@ const App = () => {
 
       <Modal
         handleModalClose={handleModalClose}
-        isModalOpen={isModalOpen}
+        isModalOpen={!!modalIngredient || !!modalOrder || !!modalOrderSuccess}
         title={
           modalIngredient
             ? 'Детали ингредиента'
@@ -208,11 +204,11 @@ const App = () => {
             : ''
         }
       >
-        {modalIngredient && (
+        {background && modalIngredient && (
           <IngredientDetails ingredient={modalIngredient}/>
         )}
 
-        {modalOrder && (
+        {background && modalOrder && (
           <OrderDetails order={modalOrder}/>
         )}
 

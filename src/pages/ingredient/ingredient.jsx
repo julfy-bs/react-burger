@@ -5,11 +5,12 @@ import Loader from '../../components/loader/loader.jsx';
 import { memo, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { getIngredients, getLoading } from '../../services/helpers/getSelector.js';
 
 const IngredientPage = () => {
   const params = useParams();
-  const { loading } = useSelector(store => store.loading);
-  const { ingredients } = useSelector(store => store.ingredients);
+  const { loading } = useSelector(getLoading);
+  const { ingredients } = useSelector(getIngredients);
   const ingredient = useMemo(() => ingredients.find((item) => item._id === params.id), [params.id, ingredients]);
 
   return (

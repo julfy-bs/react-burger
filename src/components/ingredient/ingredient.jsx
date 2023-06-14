@@ -10,9 +10,10 @@ import { memo, useCallback, useMemo } from 'react';
 
 import { ingredientType } from '../../utils/types.js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getCart } from '../../services/helpers/getSelector.js';
 
 const Ingredient = ({ ingredient }) => {
-  const { ingredientsCounter } = useSelector(state => state.cart);
+  const { ingredientsCounter } = useSelector(getCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

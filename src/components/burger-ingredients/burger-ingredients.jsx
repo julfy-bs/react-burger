@@ -11,6 +11,7 @@ import { InView } from 'react-intersection-observer';
 
 import { ingredientTabs } from '../../utils/config.js';
 import { TABS } from '../../utils/constants.js';
+import { getIngredients } from '../../services/helpers/getSelector.js';
 
 const BurgerIngredients = () => {
   const tabsRef = useRef(null);
@@ -31,7 +32,7 @@ const BurgerIngredients = () => {
   }, [scrollToId]);
 
 
-  const { ingredients } = useSelector(store => store.ingredients);
+  const { ingredients } = useSelector(getIngredients);
 
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);

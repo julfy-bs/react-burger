@@ -2,11 +2,10 @@ import clsx from 'clsx';
 import styles from './order-data.module.css';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { getWebsocket } from '../../services/helpers/getSelector.js';
 
 const OrderData = () => {
-  const total = useSelector(store => store.websocket.wsMessage?.total);
-  const totalToday = useSelector(store => store.websocket.wsMessage?.totalToday);
-  const orders = useSelector(store => store.websocket.wsMessage?.orders);
+  const { total, totalToday, orders } = useSelector(getWebsocket);
   const readyOrders = useMemo(() => {
     if (orders) {
       const orderStatusArray = orders?.filter((item) => item.status === 'done');
@@ -86,8 +85,5 @@ const OrderData = () => {
     </div>
   );
 };
-
-
-OrderData.propTypes = {};
 
 export default OrderData;

@@ -7,9 +7,10 @@ import Loader from '../../components/loader/loader.jsx';
 import OrderDetails from '../../components/order-details/order-details.jsx';
 import { fetchGetOrder } from '../../services/asyncThunk/orderThunk.js';
 import NotFound from '../not-found/not-found.jsx';
+import { getOrder } from '../../services/helpers/getSelector.js';
 
 const OrderPage = () => {
-  const { order } = useSelector(store => store.order);
+  const { order } = useSelector(getOrder);
   const dispatch = useDispatch();
   const params = useParams();
 

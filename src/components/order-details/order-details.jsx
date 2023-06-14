@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { orderType } from '../../utils/types.js';
 import { useCallback, useMemo } from 'react';
+import { getIngredients } from '../../services/helpers/getSelector.js';
 
 const OrderDetails = ({ order }) => {
   const date = new Date(order.createdAt);
-  const { ingredients } = useSelector(store => store.ingredients);
+  const { ingredients } = useSelector(getIngredients);
   const ingredientsArray = useMemo(() => order.ingredients.map((item) => ingredients.find(i => i._id === item)), [ingredients, order.ingredients]);
   const sortArray = useMemo(
     () => ingredientsArray.reduce((acc, item) => {
