@@ -17,7 +17,7 @@ export const useAuthorization = () => {
       return true;
     }
   }, [user.token]);
-  const previousUrl = useMemo(() => (location.state && location.state.background) ? location.state.background : null, [location]);
+  const previousUrl = useMemo(() => (location.state && location.state.background) ? location?.state?.background : null, [location]);
 
   return { previousUrl, isTokenExpired };
 };

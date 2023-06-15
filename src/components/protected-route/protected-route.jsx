@@ -7,7 +7,7 @@ import { PATH } from '../../utils/config.js';
 const ProtectedRoute = ({ children, anonymous = false }) => {
   const { user } = useSelector(getUser);
   const location = useLocation();
-  const from = location.state?.from || PATH.HOME;
+  const from = location?.state?.from || PATH.HOME;
 
   if (anonymous && user.isLogin) {
     return <Navigate to={from}/>;
