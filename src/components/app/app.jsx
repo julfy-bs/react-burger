@@ -41,7 +41,7 @@ const App = () => {
   const { isTokenExpired } = useAuthorization();
   const dispatch = useDispatch();
   const location = useLocation();
-  const background = modalIngredient || modalOrder ? location.state.background : null;
+  const background = modalIngredient || modalOrder ? location?.state?.background : null;
   const { previousUrl, tokenData } = useAuthorization();
   const navigate = useNavigate();
 
