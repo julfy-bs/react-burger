@@ -5,14 +5,16 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
 
 import { MODAL_ID } from '../../utils/constants.js';
-import { useModal } from '../../hooks/useModal.js';
-import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { closeAllModal } from '../../services/slices/modalSlice.js';
+import { getModal } from '../../services/helpers/getSelector.js';
 
 const Notification = ({ title, children }) => {
-  const { isNotificationOpen } = useModal();
+  const { modalNotification } = useSelector(getModal)
   const dispatch = useDispatch();
+
+  const isNotificationOpen = useMemo(() => !!modalNotification, [modalNotification])
 
   const handleModalClose = useCallback(() => {
     dispatch(closeAllModal());

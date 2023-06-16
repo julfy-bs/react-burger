@@ -7,12 +7,13 @@ import { fetchRegister } from '../../services/asyncThunk/registerThunk.js';
 import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
+import { getRegister } from '../../services/helpers/getSelector.js';
 
 const RegisterPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-  const { fetch, errorMessage, errorMessageContent } = useSelector(store => store.register);
+  const { fetch, errorMessage, errorMessageContent } = useSelector(getRegister);
 
   useEffect(() => {
     resetForm();

@@ -4,6 +4,7 @@ const initialState = {
   modalIngredient: null,
   modalOrder: null,
   modalNotification: null,
+  modalOrderSuccess: null
 };
 
 const modalSlice = createSlice({
@@ -19,10 +20,14 @@ const modalSlice = createSlice({
     setModalNotification(state, action) {
       state.modalNotification = action.payload;
     },
+    setModalOrderSuccess(state, action) {
+      state.modalOrderSuccess = action.payload;
+    },
     closeAllModal(state) {
       state.modalOrder = null;
       state.modalIngredient = null;
       state.modalNotification = null;
+      state.modalOrderSuccess = null;
     }
   }
 });
@@ -31,6 +36,7 @@ export const {
   setModalIngredient,
   setModalOrder,
   setModalNotification,
+  setModalOrderSuccess,
   closeAllModal,
 } = modalSlice.actions;
 export default modalSlice.reducer;

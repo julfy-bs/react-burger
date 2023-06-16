@@ -10,15 +10,14 @@ import ConstructorIngredient from '../constructor-ingredient/constructor-ingredi
 import uuid from 'react-uuid';
 import { PATH } from '../../utils/config.js';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { closeAllModal } from '../../services/slices/modalSlice.js';
-import { useModal } from '../../hooks/useModal.js';
+import { closeAllModal, setModalNotification } from '../../services/slices/modalSlice.js';
+import { getCart, getOrder, getUser } from '../../services/helpers/getSelector.js';
 
 const BurgerConstructor = () => {
-  const { cart } = useSelector(state => state.cart);
+  const { cart } = useSelector(getCart);
 
-  const { openNotificationModal } = useModal();
-  const { isLogin } = useSelector(store => store.user.user);
-  const { fetch } = useSelector(store => store.order);
+  const { isLogin } = useSelector(getUser);
+  const { fetch } = useSelector(getOrder);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ const BurgerConstructor = () => {
     accept: 'ingredient',
     drop(ingredient) {
       if (cart.bun === null && ingredient.type !== 'bun') {
-        openNotificationModal('Сначала выберите булку!');
+        dispatch(setModalNotification('Сначала выберите булку!'));
         setTimeout(() => dispatch(closeAllModal()), 2000);
       } else if (ingredient.type !== 'bun') {
         dispatch(addIngredient({

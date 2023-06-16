@@ -15,6 +15,17 @@ const ingredientType = PropTypes.shape({
   '__v': PropTypes.number.isRequired
 });
 
+const orderType = PropTypes.shape({
+  'createdAt': PropTypes.string.isRequired,
+  'ingredients': PropTypes.arrayOf(PropTypes.string).isRequired,
+  'name': PropTypes.string.isRequired,
+  'number': PropTypes.number.isRequired,
+  'status': PropTypes.oneOf(['done', 'pending', 'created']).isRequired,
+  'updatedAt': PropTypes.string.isRequired,
+  '_id': PropTypes.string.isRequired,
+});
+
 export {
   ingredientType,
-}
+  orderType
+};

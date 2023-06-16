@@ -14,10 +14,16 @@
   list-style: none;
   margin: 40px 0 0;
   padding: 0;
-  max-height: 756px;
+  max-height: calc(100vh - 88px - 40px - 76px - 40px - 40px);
   overflow-y: auto;
   box-sizing: border-box;
   scroll-behavior: smooth;
+}
+
+@media screen and (max-width: 968px) {
+  .ingredients {
+    max-height: 756px;
+  }
 }
 
 .ingredients::-webkit-scrollbar {
@@ -26,6 +32,7 @@
 
 .ingredients::-webkit-scrollbar-track {
   background: #2F2F37;
+  margin-bottom: 40px;
 }
 
 .ingredients::-webkit-scrollbar-thumb {

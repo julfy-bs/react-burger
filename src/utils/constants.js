@@ -22,6 +22,7 @@ export const NOTIFICATION_ORDER_PENDING = 'Отправляем заказ на 
 export const SERVER_RESPOND_USER_EXISTS = 'User already exists';
 export const SERVER_RESPOND_INCORRECT_TOKEN = 'Incorrect reset token';
 export const SERVER_RESPOND_INCORRECT_VALUES = 'email or password are incorrect';
+export const WS_RESPOND_INCORRECT_TOKEN = 'Invalid or missing token';
 
 
 export const TABS = {

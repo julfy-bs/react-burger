@@ -7,12 +7,13 @@ import { fetchLogin } from '../../services/asyncThunk/loginThunk.js';
 import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
+import { getLogin } from '../../services/helpers/getSelector.js';
 
 const LoginPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
   const dispatch = useDispatch();
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-  const { fetch, errorMessage, errorMessageContent } = useSelector(store => store.login);
+  const { fetch, errorMessage, errorMessageContent } = useSelector(getLogin);
 
   useEffect(() => {
     resetForm();
