@@ -8,6 +8,12 @@
 
 ## История версий
 
+- ***Версия 0.6.0***
+
+  - Внедряет TypeScript в приложение, полностью заменяя JavaScript.
+  - Типизирует код приложения.
+
+
 - ***Версия 0.5.0***
 
     - Добавляет страницы «Лента заказов» и «История заказов».
@@ -59,6 +65,7 @@
 |   8    | 0.3.0  |                      [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit]                       |     [чеклист 8 спринта][project-checklist-2]      | [макет 8 спринта][project-figma-2] |
 |   9    | 0.4.0  |     [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router]     | [первый чеклист 9 спринта][project-checklist-3-1] | [макет 9 спринта][project-figma-3] |
 |   9    | 0.5.0  |     [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router]     | [второй чеклист 9 спринта][project-checklist-3-1] | [макет 9 спринта][project-figma-3] |
+|   10   | 0.6.0  | [TypeScript][tech-ts], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router] |     [чеклист 10 спринта][project-checklist-4]     |                                    |
 
 ## Доступные скрипты
 
