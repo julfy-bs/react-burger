@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useCallback } from 'react';
-import { fetchLogout } from '../services/asyncThunk/logoutThunk.js';
-import { getCookie } from '../services/helpers/getCookie.js';
+import { fetchLogout } from '../services/asyncThunk/logoutThunk';
+import { getCookie } from '../services/helpers/getCookie';
 import { REFRESH_TOKEN } from '../utils/constants.js';
-import { getUser } from '../services/helpers/getSelector.js';
+import { getUser } from '../services/helpers/getSelector';
+import { useAppDispatch, useAppSelector } from './useRedux';
 
 export const useLogout = () => {
-  const dispatch = useDispatch();
-  const { user } = useSelector(getUser);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(getUser);
 
   const refreshToken = getCookie(REFRESH_TOKEN);
   const handleLogout = useCallback(() => {

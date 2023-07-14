@@ -5,7 +5,7 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 import HeaderLink from '../header-link/header-link.jsx';
 import { PATH } from '../../utils/config.js';
 import { NavLink } from 'react-router-dom';
-import { updateUser } from '../../services/slices/userSlice.js';
+import { updateUser } from '../../services/slices/userSlice';
 import { useDispatch } from 'react-redux';
 
 

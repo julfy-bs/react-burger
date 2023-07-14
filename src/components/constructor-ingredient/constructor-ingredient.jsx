@@ -6,7 +6,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 
 import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
-import { removeIngredient } from '../../services/slices/cartSlice.js';
+import { removeIngredient } from '../../services/slices/cartSlice.ts';
 import { memo, useRef } from 'react';
 
 import { ingredientType } from '../../utils/types.js';

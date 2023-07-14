@@ -4,9 +4,9 @@ import { useMemo } from 'react';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderType } from '../../utils/types.js';
-import { setModalOrder } from '../../services/slices/modalSlice.js';
+import { setModalOrder } from '../../services/slices/modalSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getIngredients } from '../../services/helpers/getSelector.js';
+import { getIngredients } from '../../services/helpers/getSelector';
 
 const Order = ({ order }) => {
   const { ingredients } = useSelector(getIngredients);

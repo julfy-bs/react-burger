@@ -3,11 +3,11 @@ import styles from './register.module.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
-import { fetchRegister } from '../../services/asyncThunk/registerThunk.js';
+import { fetchRegister } from '../../services/asyncThunk/registerThunk.ts';
 import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
-import { getRegister } from '../../services/helpers/getSelector.js';
+import { getRegister } from '../../services/helpers/getSelector';
 
 const RegisterPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();

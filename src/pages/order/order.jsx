@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Loader from '../../components/loader/loader.jsx';
 import OrderDetails from '../../components/order-details/order-details.jsx';
-import { fetchGetOrder } from '../../services/asyncThunk/orderThunk.js';
+import { fetchGetOrder } from '../../services/asyncThunk/orderThunk';
 import NotFound from '../not-found/not-found.jsx';
-import { getOrder } from '../../services/helpers/getSelector.js';
+import { getOrder } from '../../services/helpers/getSelector';
 
 const OrderPage = () => {
   const { order } = useSelector(getOrder);

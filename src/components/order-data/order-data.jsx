@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import styles from './order-data.module.css';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getWebsocket } from '../../services/helpers/getSelector.js';
+import { getWebsocket } from '../../services/helpers/getSelector';
 
 const OrderData = () => {
   const { total, totalToday, orders } = useSelector(getWebsocket);

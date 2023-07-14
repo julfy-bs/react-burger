@@ -4,13 +4,13 @@ import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setModalIngredient } from '../../services/slices/modalSlice.js';
+import { setModalIngredient } from '../../services/slices/modalSlice';
 import { useDrag } from 'react-dnd';
 import { memo, useCallback, useMemo } from 'react';
 
 import { ingredientType } from '../../utils/types.js';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getCart } from '../../services/helpers/getSelector.js';
+import { getCart } from '../../services/helpers/getSelector';
 
 const Ingredient = ({ ingredient }) => {
   const { ingredientsCounter } = useSelector(getCart);

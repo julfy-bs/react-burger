@@ -6,8 +6,8 @@ import { WSS_FOR_ALL_ORDERS } from '../../utils/config.js';
 import Loader from '../../components/loader/loader.jsx';
 import OrderList from '../../components/order-list/order-list.jsx';
 import OrderData from '../../components/order-data/order-data.jsx';
-import { wsConnectionClosed, wsConnectionStart } from '../../services/slices/wsSlice.js';
-import { getWebsocket } from '../../services/helpers/getSelector.js';
+import { wsConnectionClosed, wsConnectionStart } from '../../services/slices/wsSlice';
+import { getWebsocket } from '../../services/helpers/getSelector';
 
 const FeedPage = () => {
   const dispatch = useDispatch();

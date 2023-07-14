@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getUser } from '../../services/helpers/getSelector.js';
+import { getUser } from '../../services/helpers/getSelector';
 import { PATH } from '../../utils/config.js';
 
 const ProtectedRoute = ({ children, anonymous = false }) => {

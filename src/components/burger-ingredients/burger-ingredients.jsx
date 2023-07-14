@@ -11,7 +11,7 @@ import { InView } from 'react-intersection-observer';
 
 import { ingredientTabs } from '../../utils/config.js';
 import { TABS } from '../../utils/constants.js';
-import { getIngredients } from '../../services/helpers/getSelector.js';
+import { getIngredients } from '../../services/helpers/getSelector';
 
 const BurgerIngredients = () => {
   const tabsRef = useRef(null);

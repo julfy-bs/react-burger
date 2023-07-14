@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getCookie } from '../services/helpers/getCookie.js';
+import { getCookie } from '../services/helpers/getCookie';
 import { EXPIRES_AT } from '../utils/constants.js';
-import { getUser } from '../services/helpers/getSelector.js';
+import { getUser } from '../services/helpers/getSelector';
 
 export const useAuthorization = () => {
   const location = useLocation();

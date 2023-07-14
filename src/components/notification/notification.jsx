@@ -7,8 +7,8 @@ import { createPortal } from 'react-dom';
 import { MODAL_ID } from '../../utils/constants.js';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeAllModal } from '../../services/slices/modalSlice.js';
-import { getModal } from '../../services/helpers/getSelector.js';
+import { closeAllModal } from '../../services/slices/modalSlice';
+import { getModal } from '../../services/helpers/getSelector';
 
 const Notification = ({ title, children }) => {
   const { modalNotification } = useSelector(getModal)

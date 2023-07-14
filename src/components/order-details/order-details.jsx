@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { orderType } from '../../utils/types.js';
 import { useCallback, useMemo } from 'react';
-import { getIngredients } from '../../services/helpers/getSelector.js';
+import { getIngredients } from '../../services/helpers/getSelector';
 
 const OrderDetails = ({ order }) => {
   const date = new Date(order.createdAt);

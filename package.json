@@ -9,7 +9,8 @@
     "email": "julfy-bs@yandex.ru"
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^5.0.0",
+    "typescript-plugin-css-modules": "^5.0.1"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",

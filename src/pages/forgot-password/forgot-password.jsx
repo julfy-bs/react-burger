@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
 import { useEffect } from 'react';
 import { PATH } from '../../utils/config.js';
-import { fetchForgotPassword } from '../../services/asyncThunk/forgotPasswordThunk.js';
+import { fetchForgotPassword } from '../../services/asyncThunk/forgotPasswordThunk';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { getPassword } from '../../services/helpers/getSelector.js';
+import { getPassword } from '../../services/helpers/getSelector';
 
 const ForgotPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { WSS_FOR_PROFILE_ORDERS } from '../../../utils/config.js';
 import OrderList from '../../../components/order-list/order-list.jsx';
 import Loader from '../../../components/loader/loader.jsx';
-import { wsConnectionClosed, wsConnectionStart } from '../../../services/slices/wsSlice.js';
-import { getUser, getWebsocket } from '../../../services/helpers/getSelector.js';
+import { wsConnectionClosed, wsConnectionStart } from '../../../services/slices/wsSlice';
+import { getUser, getWebsocket } from '../../../services/helpers/getSelector';
 
 const ProfileOrders = () => {
   const { orders } = useSelector(getWebsocket);

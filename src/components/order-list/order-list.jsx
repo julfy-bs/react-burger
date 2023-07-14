@@ -3,7 +3,7 @@ import styles from './order-list.module.css';
 import { useMemo } from 'react';
 import Order from '../order/order.jsx';
 import { useSelector } from 'react-redux';
-import { getWebsocket } from '../../services/helpers/getSelector.js';
+import { getWebsocket } from '../../services/helpers/getSelector';
 
 const OrderList = () => {
   const { orders } = useSelector(getWebsocket);

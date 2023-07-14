@@ -3,11 +3,11 @@ import styles from './login.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
-import { fetchLogin } from '../../services/asyncThunk/loginThunk.js';
+import { fetchLogin } from '../../services/asyncThunk/loginThunk';
 import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/config.js';
-import { getLogin } from '../../services/helpers/getSelector.js';
+import { getLogin } from '../../services/helpers/getSelector';
 
 const LoginPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();

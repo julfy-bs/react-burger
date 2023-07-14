@@ -5,8 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../../hooks/useForm.js';
 import Loader from '../../../components/loader/loader.jsx';
-import { fetchUpdateUser } from '../../../services/asyncThunk/updateUserThunk.js';
-import { getUser } from '../../../services/helpers/getSelector.js';
+import { fetchUpdateUser } from '../../../services/asyncThunk/updateUserThunk';
+import { getUser } from '../../../services/helpers/getSelector';
 
 const ProfileForm = () => {
   const { user, patchUserRequest } = useSelector(getUser);

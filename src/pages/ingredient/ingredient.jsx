@@ -5,7 +5,7 @@ import Loader from '../../components/loader/loader.jsx';
 import { memo, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getIngredients, getLoading } from '../../services/helpers/getSelector.js';
+import { getIngredients, getLoading } from '../../services/helpers/getSelector';
 
 const IngredientPage = () => {
   const params = useParams();

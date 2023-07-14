@@ -5,7 +5,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Loader from '../../components/loader/loader.jsx';
 import { useSelector } from 'react-redux';
 import { PATH } from '../../utils/config.js';
-import { getUser } from '../../services/helpers/getSelector.js';
+import { getUser } from '../../services/helpers/getSelector';
 
 const ProfileLayout = () => {
   const { user } = useSelector(getUser);

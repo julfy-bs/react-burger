@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { getModal } from '../../services/helpers/getSelector.js';
+import { getModal } from '../../services/helpers/getSelector';
 
 const ModalOverlay = ({ handleModalClose }) => {
   const { modalIngredient, modalOrder, modalOrderSuccess } = useSelector(getModal)

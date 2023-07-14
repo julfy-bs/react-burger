@@ -1,18 +1,18 @@
 import clsx from 'clsx';
 import styles from './reset-password.module.css';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm.js';
 import { PATH } from '../../utils/config.js';
-import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk.js';
+import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { getPassword } from '../../services/helpers/getSelector.js';
+import { getPassword } from '../../services/helpers/getSelector';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 
 const ResetPasswordPage = () => {
   const { values, handleChange, errors, isValid, resetForm } = useForm();
-  const dispatch = useDispatch();
-  const { isEmailSubmitted, isPasswordChanged, resetPasswordRequest } = useSelector(getPassword);
+  const dispatch = useAppDispatch();
+  const { isEmailSubmitted, isPasswordChanged, resetPasswordRequest } = useAppSelector(getPassword);
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const ResetPasswordPage = () => {
     e.preventDefault();
     dispatch(fetchResetPassword({
       password: values.password,
-      token: values.token
+      token: values.token.trim()
     }));
   };
 
