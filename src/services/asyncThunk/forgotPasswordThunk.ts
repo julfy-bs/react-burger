@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { forgotPassword } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout.js';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
 import { setMessage } from '../slices/passwordSlice';
 import { AppDispatch, RootState } from '../index';
 import { ForgotPasswordInput } from '../../types/ForgotPasswordInput';

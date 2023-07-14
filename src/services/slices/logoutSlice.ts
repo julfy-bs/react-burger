@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ERROR_DEFAULT,
   NOTIFICATION_LOGOUT_SUCCESS,
-} from '../../utils/constants.js';
+} from '../../utils/constants';
 import { fetchLogout } from '../asyncThunk/logoutThunk';
 import { State } from '../../types/State';
 

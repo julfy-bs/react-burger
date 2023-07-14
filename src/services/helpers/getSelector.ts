@@ -11,7 +11,7 @@ import { State } from '../../types/State';
 
 export const getIngredients = (store: RootState): IngredientsState => store.ingredients
 export const getUser = (store: RootState): UserState => store.user
-export const getOrder = (store: RootState): OrderState => store.order
+export const getOrder = (store: RootState): OrderState & State => store.order
 export const getModal = (store: RootState): ModalState => store.modal
 export const getLoading = (store: RootState): LoadingState => store.loading
 export const getCart = (store: RootState): CartState => store.cart

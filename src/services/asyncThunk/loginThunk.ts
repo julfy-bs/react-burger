@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { loginUser } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout.js';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
 import { updateUserData } from '../helpers/updateUserData';
 import { setMessage, setErrorMessage } from '../slices/loginSlice';
 import { AppDispatch, RootState } from '../index';

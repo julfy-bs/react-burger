@@ -5,13 +5,15 @@ import { useCallback, useMemo } from 'react';
 import { addIngredient, moveIngredients } from '../../services/slices/cartSlice';
 import { createOrder } from '../../services/asyncThunk/orderThunk';
 import { useDrop } from 'react-dnd';
-import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient.jsx';
+import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
 import uuid from 'react-uuid';
-import { PATH } from '../../utils/config.js';
+import { PATH } from '../../utils/config';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { closeAllModal, setModalNotification } from '../../services/slices/modalSlice';
 import { getCart, getOrder, getUser } from '../../services/helpers/getSelector';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { Ingredient } from '../../types/Ingredient';
+import { ensureResult } from '../../services/helpers/ensureResult';
 
 const BurgerConstructor = () => {
   const { cart } = useAppSelector(getCart);
@@ -20,12 +22,12 @@ const BurgerConstructor = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const isButtonDisabled = useMemo(() => !!(cart.bun === null
-    || cart.ingredients.length === 0 || fetch), [cart.bun, cart.ingredients.length, fetch]);
+  const isButtonDisabled = useMemo(() => cart.bun === null
+    || cart.ingredients.length === 0 || fetch, [cart.bun, cart.ingredients.length, fetch]);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop(ingredient) {
+    drop(ingredient: Ingredient) {
       if (cart.bun === null && ingredient.type !== 'bun') {
         dispatch(setModalNotification('Сначала выберите булку!'));
         setTimeout(() => dispatch(closeAllModal()), 2000);
@@ -51,7 +53,10 @@ const BurgerConstructor = () => {
 
   const handleBurgerConstructorButton = useCallback(
     () => (user.isLogin)
-      ? dispatch(createOrder(cart))
+      ? cart.bun !== null && dispatch(createOrder({
+      bun: cart.bun,
+      ingredients: cart.ingredients
+    }))
       : redirectToLoginPage(), [cart, dispatch, redirectToLoginPage, user.isLogin]);
 
 
@@ -66,8 +71,8 @@ const BurgerConstructor = () => {
   }, [cart.bun, cart.ingredients]);
 
   const findIngredient = useCallback(
-    (id) => {
-      const ingredient = cart.ingredients.find(item => item._id === id);
+    (id: string) => {
+      const ingredient = ensureResult(cart.ingredients.find(item => item._id === id));
       return {
         ingredient,
         index: cart.ingredients.indexOf(ingredient),
@@ -77,7 +82,7 @@ const BurgerConstructor = () => {
   );
 
   const moveIngredient = useCallback(
-    (id, atIndex) => {
+    (id: string, atIndex: number) => {
       const { ingredient, index } = findIngredient(id);
       dispatch(moveIngredients({ index, atIndex, ingredient }));
     },
@@ -86,6 +91,7 @@ const BurgerConstructor = () => {
 
   const [{ isHover: isIngredientHover }, refDrop] = useDrop({
     accept: 'ingredientSort',
+    collect: (monitor) => ({ isHover: monitor.isOver() }),
   });
 
   const ingredientElements = cart.ingredients.map(
@@ -95,7 +101,6 @@ const BurgerConstructor = () => {
         index={index}
         ingredient={ingredient}
         moveIngredient={moveIngredient}
-        findIngredient={findIngredient}
       />
     )
   );

@@ -1,5 +1,5 @@
 import { fetchGetUser } from '../asyncThunk/getUserThunk';
-import { WS_RESPOND_INCORRECT_TOKEN } from '../../utils/constants.js';
+import { WS_RESPOND_INCORRECT_TOKEN } from '../../utils/constants';
 import { Middleware, MiddlewareAPI } from 'redux';
 import { AppDispatch, RootState } from '../index';
 import { PayloadAction } from '@reduxjs/toolkit';

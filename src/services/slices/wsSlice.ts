@@ -13,7 +13,7 @@ const wsSlice = createSlice({
   name: 'wsSlice',
   initialState,
   reducers: {
-    wsConnectionStart() {
+    wsConnectionStart(_state, _action: PayloadAction<string>) {
       return undefined;
     },
     wsConnectionSuccess(state) {
@@ -24,6 +24,7 @@ const wsSlice = createSlice({
     },
     wsConnectionClosed(state) {
       state.wsConnected = false;
+      state.orders = null;
     },
     wsGetAllOrders(
       state,

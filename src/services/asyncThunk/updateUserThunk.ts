@@ -20,9 +20,7 @@ export const fetchUpdateUser = createAsyncThunk<
          thunkAPI) => {
     try {
       const { name, email, password } = userData;
-      const res = await patchUser({ name, email, password });
-      console.log(res);
-      return res
+      return await patchUser({ name, email, password })
     } catch (e) {
       const { dispatch, rejectWithValue } = thunkAPI;
       const hasErrorData = (e as unknown as UserError);

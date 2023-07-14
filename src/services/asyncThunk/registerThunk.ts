@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { registerUser } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout.js';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
 import { updateUserData } from '../helpers/updateUserData';
 import { setMessage, setErrorMessage } from '../slices/registerSlice';
 import { LoginPromise } from '../../types/LoginPromise';

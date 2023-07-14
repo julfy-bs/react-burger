@@ -4,7 +4,7 @@ import {
   NOTIFICATION_EMAIL_SUBMITTED, NOTIFICATION_INCORRECT_TOKEN,
   NOTIFICATION_PASSWORD_RESET,
   SERVER_RESPOND_INCORRECT_TOKEN
-} from '../../utils/constants.js';
+} from '../../utils/constants';
 import { fetchResetPassword } from '../asyncThunk/resetPasswordThunk';
 import { fetchForgotPassword } from '../asyncThunk/forgotPasswordThunk';
 import { State } from '../../types/State';

@@ -3,7 +3,7 @@ import {
   ERROR_DEFAULT, ERROR_LOGIN,
   NOTIFICATION_LOGIN_SUCCESS,
   SERVER_RESPOND_INCORRECT_VALUES
-} from '../../utils/constants.js';
+} from '../../utils/constants';
 import { fetchLogin } from '../asyncThunk/loginThunk';
 import { State } from '../../types/State';
 

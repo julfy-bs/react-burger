@@ -1,5 +1,5 @@
 import styles from './app.module.css';
-import Header from '../header/header.jsx';
+import Header from '../header/header';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import {
   ConstructorPage,
@@ -12,23 +12,23 @@ import {
   ProfileFormPage,
   ProfileOrdersPage,
   IngredientPage, OrderPage
-} from '../../pages/index.js';
+} from '../../pages';
 import clsx from 'clsx';
-import Modal from '../modal/modal.jsx';
-import Notification from '../notification/notification.jsx';
-import IngredientDetails from '../ingredient-details/ingredient-details.jsx';
-import OrderModal from '../order-modal/order-modal.jsx';
-import Loader from '../loader/loader.jsx';
-import ProtectedRoute from '../protected-route/protected-route.jsx';
+import Modal from '../modal/modal';
+import Notification from '../notification/notification';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderModal from '../order-modal/order-modal';
+import Loader from '../loader/loader';
+import ProtectedRoute from '../protected-route/protected-route';
 import { useCallback, useEffect } from 'react';
 import { setLoading } from '../../services/slices/loadingSlice';
 import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk';
-import { PATH } from '../../utils/config.js';
-import { useAuthorization } from '../../hooks/useAuthorization.js';
+import { PATH } from '../../utils/config';
+import { useAuthorization } from '../../hooks/useAuthorization';
 import { closeAllModal } from '../../services/slices/modalSlice';
 import { fetchGetUser } from '../../services/asyncThunk/getUserThunk';
-import OrderDetails from '../order-details/order-details.jsx';
-import FeedPage from '../../pages/feed/feed.jsx';
+import OrderDetails from '../order-details/order-details';
+import FeedPage from '../../pages/feed/feed';
 import { getIngredients, getLoading, getModal, getOrder, getUser } from '../../services/helpers/getSelector';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 
@@ -91,7 +91,6 @@ const App = () => {
                   element={
                     <ProtectedRoute
                       anonymous={true}
-                      redirectTo={PATH.HOME}
                     >
                       <LoginPage/>
                     </ProtectedRoute>
@@ -102,7 +101,6 @@ const App = () => {
                   element={
                     <ProtectedRoute
                       anonymous={true}
-                      redirectTo={PATH.HOME}
                     >
                       <RegisterPage/>
                     </ProtectedRoute>
@@ -113,7 +111,6 @@ const App = () => {
                   element={
                     <ProtectedRoute
                       anonymous={true}
-                      redirectTo={PATH.HOME}
                     >
                       <ForgotPasswordPage/>
                     </ProtectedRoute>
@@ -124,7 +121,6 @@ const App = () => {
                   element={
                     <ProtectedRoute
                       anonymous={true}
-                      redirectTo={PATH.HOME}
                     >
                       <ResetPasswordPage/>
                     </ProtectedRoute>
@@ -135,7 +131,6 @@ const App = () => {
                   element={
                     <ProtectedRoute
                       anonymous={false}
-                      redirectTo={PATH.LOGIN}
                     >
                       <ProfileLayout/>
                     </ProtectedRoute>
@@ -160,9 +155,7 @@ const App = () => {
                 <Route
                   path={PATH.ORDER}
                   element={
-                    <ProtectedRoute
-                      redirectTo={PATH.LOGIN}
-                    >
+                    <ProtectedRoute>
                       <OrderPage/>
                     </ProtectedRoute>
                   }
@@ -182,8 +175,7 @@ const App = () => {
 
       {
         modalNotification && (
-          <Notification title={modalNotification}>
-          </Notification>
+          <Notification handleModalClose={handleModalClose} title={modalNotification} />
         )
       }
 

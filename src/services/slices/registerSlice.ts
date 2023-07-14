@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ERROR_DEFAULT, ERROR_USER_EXISTS,
   NOTIFICATION_USER_CREATED, SERVER_RESPOND_USER_EXISTS
-} from '../../utils/constants.js';
+} from '../../utils/constants';
 import { fetchRegister } from '../asyncThunk/registerThunk';
 import { State } from '../../types/State';
 

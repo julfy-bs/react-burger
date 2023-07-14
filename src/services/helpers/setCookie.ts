@@ -6,7 +6,6 @@ type CookieData = {
   name: string;
   value: string | number;
   props: Props;
-
 }
 
 export const setCookie = (cookieData: CookieData) => {
@@ -25,7 +24,7 @@ export const setCookie = (cookieData: CookieData) => {
   for (const propName in props) {
     updatedCookie += '; ' + propName;
     const propValue = props[propName as keyof Props];
-    if (!propValue) {
+    if (!!propValue) {
       updatedCookie += '=' + propValue;
     }
   }

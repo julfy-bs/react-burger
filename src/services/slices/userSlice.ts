@@ -5,7 +5,7 @@ import {
   ERROR_DEFAULT, ERROR_USER_EXISTS, EXPIRES_AT, NOTIFICATION_LOGIN_SUCCESS,
   NOTIFICATION_USER_UPDATE_ERROR,
   NOTIFICATION_USER_UPDATE_SUCCESS, REFRESH_TOKEN
-} from '../../utils/constants.js';
+} from '../../utils/constants';
 import { fetchUpdateUser } from '../asyncThunk/updateUserThunk';
 import { fetchGetUser } from '../asyncThunk/getUserThunk';
 import { State } from '../../types/State';
@@ -18,8 +18,8 @@ export type UserState = {
     isLogin: boolean;
     isLogout: boolean;
     token: Token;
-    email: string | null;
-    name: string | null;
+    email: string;
+    name: string;
   }
 }
 
@@ -48,8 +48,8 @@ const initialState: UserState = {
       refreshToken: getCookie(REFRESH_TOKEN) || null,
       expiresAt: getCookie(EXPIRES_AT) || null
     },
-    email: null,
-    name: null
+    email: '',
+    name: ''
   }
 };
 
@@ -63,8 +63,8 @@ const userSlice = createSlice({
         isLogin?: boolean;
         isLogout?: boolean;
         token?: Token;
-        email?: string | null;
-        name?: string | null;
+        email?: string;
+        name?: string;
       }>
     ) {
       state.user = {
@@ -109,7 +109,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchGetUser.rejected, (state, action) => {
         // todo: найти причину почему action.payload может быть undefined
-        if (action.payload && 'message' in action.payload) {
+        if (action.payload) {
           const { message } = action.payload;
           state.getUserRequest = {
             ...state.getUserRequest,

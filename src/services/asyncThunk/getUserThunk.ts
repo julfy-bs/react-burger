@@ -14,10 +14,12 @@ export const fetchGetUser = createAsyncThunk<
   }
 >(
   'profile/fetchGetUser',
-  async (_, { rejectWithValue }) =>
-    getUser()
-      .catch((e: unknown) => {
-        const hasErrorData = (e as UserError);
-        return rejectWithValue(hasErrorData);
-      })
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getUser();
+    } catch (e: unknown) {
+      const hasErrorData = (e as UserError);
+      return rejectWithValue(hasErrorData);
+    }
+  }
 );

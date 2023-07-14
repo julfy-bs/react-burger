@@ -1,6 +1,6 @@
 import { checkResponse } from './checkResponse';
 import { checkSuccess } from './checkSuccess';
-import { SERVER_CONFIG } from '../../utils/config.js';
+import { SERVER_CONFIG } from '../../utils/config';
 import { getCookie } from './getCookie';
 import {
   ACCESS_TOKEN,
@@ -8,7 +8,7 @@ import {
   EXPIRES_AT,
   REFRESH_TOKEN,
   REFRESH_TOKEN_EXPIRES
-} from '../../utils/constants.js';
+} from '../../utils/constants';
 import { setCookie } from './setCookie';
 
 
@@ -28,7 +28,7 @@ export const authorizationRequest = async (endpoint: string, options?: RequestIn
   const tokenUrl = `auth/token`;
   const access = getCookie(ACCESS_TOKEN);
   const token = getCookie(REFRESH_TOKEN);
-
+  // todo: переписать на try catch
   if (access) {
     return request(endpoint, options, access);
   }

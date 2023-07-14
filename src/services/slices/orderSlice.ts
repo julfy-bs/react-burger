@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createOrder } from '../asyncThunk/orderThunk';
-import { ERROR_DEFAULT, NOTIFICATION_ORDER_PENDING } from '../../utils/constants.js';
+import { ERROR_DEFAULT, NOTIFICATION_ORDER_PENDING } from '../../utils/constants';
 import { Order } from '../../types/Order';
 import { State } from '../../types/State';
 
