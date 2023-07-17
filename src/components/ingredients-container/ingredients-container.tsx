@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { forwardRef, ReactNode, Ref } from 'react';
 import styles from './ingredients-container.module.css';
 import clsx from 'clsx';
 
@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
 }
 
-const IngredientsContainer = ({ title, type, children }: Props) => {
+const IngredientsContainer = forwardRef(({ title, type, children }: Props, ref: Ref<HTMLUListElement>) => {
   return (
     <>
       <h2
@@ -17,11 +17,11 @@ const IngredientsContainer = ({ title, type, children }: Props) => {
       >
         {title}
       </h2>
-      <ul className={clsx(styles.ingredients__list)}>
+      <ul className={clsx(styles.ingredients__list)} ref={ref}>
         {children}
       </ul>
     </>
   );
-};
+});
 
 export default IngredientsContainer;

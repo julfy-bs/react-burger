@@ -5,8 +5,8 @@ import Tabs from '../tabs/tabs';
 import IngredientsContainer from '../ingredients-container/ingredients-container';
 import Ingredient from '../ingredient/ingredient';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { InView } from 'react-intersection-observer';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 import { ingredientTabs } from '../../utils/config';
 import { TABS } from '../../utils/constants';
@@ -15,23 +15,48 @@ import { TabShape } from '../../types/TabShape';
 import { useAppSelector } from '../../hooks/useRedux';
 
 const BurgerIngredients = () => {
-  const tabsRef = useRef<Map<string, number> | null>(null);
   const [tabs] = useState<TabShape[]>(ingredientTabs);
   const [currentTab, setCurrentTab] = useState(TABS.BUN);
+  const [isScrollable, setIsScrollable] = useState(true);
 
-  const getRefs = () => (!tabsRef.current) ? tabsRef.current = new Map() : tabsRef.current;
+  const [bunsRef, inViewBuns] = useInView({
+    threshold: 0
+  });
 
-  const scrollToId = useCallback((itemKey: number) => {
-    const refs = getRefs();
-    const node = refs.get(itemKey);
-    node.scrollIntoView();
+  const [mainsRef, inViewMain] = useInView({
+    threshold: 0
+  });
+
+  const [saucesRef, inViewSauces] = useInView({
+    threshold: 0
+  });
+
+  useEffect(() => {
+    if (isScrollable) {
+      if (inViewBuns) {
+        setCurrentTab(TABS.BUN);
+      } else if (inViewSauces) {
+        setCurrentTab(TABS.SAUCE);
+      } else if (inViewMain) {
+        setCurrentTab(TABS.MAIN);
+      }
+    }
+  }, [inViewBuns, inViewMain, inViewSauces, isScrollable]);
+
+  const scrollToId = useCallback((tab: string) => {
+    const element = document.getElementById(tab);
+    if (element) {
+      element.scrollIntoView();
+      setCurrentTab(tab);
+    }
   }, []);
 
-  const handleTabClick = useCallback((value: string, index: number) => {
+  const handleTabClick = useCallback((value: string) => {
     setCurrentTab(value);
-    scrollToId(index);
+    setIsScrollable(false);
+    scrollToId(value);
+    setTimeout(() => setIsScrollable(true), 3000);
   }, [scrollToId]);
-
 
   const { ingredients } = useAppSelector(getIngredients);
 
@@ -42,35 +67,6 @@ const BurgerIngredients = () => {
   const bunElements = useMemo(() => buns.map((item) => <Ingredient key={item._id} ingredient={item}/>), [buns]);
   const sauceElements = useMemo(() => sauces.map((item) => <Ingredient key={item._id} ingredient={item}/>), [sauces]);
   const mainElements = useMemo(() => main.map((item) => <Ingredient key={item._id} ingredient={item}/>), [main]);
-
-  const elementView = useMemo(() => tabs.map((tab, index) => (
-    <InView
-      as="li"
-      key={index}
-      className={clsx(styles.ingredients__column)}
-      data-type={tab.type}
-      onChange={(inView: boolean, entry: IntersectionObserverEntry) => {
-        const refs = getRefs();
-        refs.set(index, entry.target);
-        const target = entry.target as HTMLElement;
-        const datasetType = target.dataset.type;
-        if (inView && datasetType) {
-          setCurrentTab(datasetType);
-        }
-      }}
-      threshold={0.5}
-    >
-      <IngredientsContainer type={tab.type} title={tab.name}>
-        {
-          tab.type === 'bun'
-            ? bunElements
-            : tab.type === 'sauce'
-              ? sauceElements
-              : mainElements
-        }
-      </IngredientsContainer>
-    </InView>
-  )), [bunElements, mainElements, sauceElements, tabs]);
 
   return (
     <section className={clsx(styles.section, 'mt-10')}>
@@ -87,7 +83,21 @@ const BurgerIngredients = () => {
       <ul
         className={clsx(styles.ingredients)}
       >
-        {elementView}
+        <li>
+          <IngredientsContainer type={TABS.BUN} title={'Булки'} ref={bunsRef}>
+            {bunElements}
+          </IngredientsContainer>
+        </li>
+        <li>
+          <IngredientsContainer type={TABS.SAUCE} title={'Соусы'} ref={saucesRef}>
+            {sauceElements}
+          </IngredientsContainer>
+        </li>
+        <li>
+          <IngredientsContainer type={TABS.MAIN} title={'Начинка'} ref={mainsRef}>
+            {mainElements}
+          </IngredientsContainer>
+        </li>
       </ul>
     </section>
   );

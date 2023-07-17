@@ -6,7 +6,7 @@ import { TabShape } from '../../types/TabShape';
 type Props = {
   tabs: TabShape[];
   currentTab: string;
-  changeTab: (currentTab: string, index: number) => void;
+  changeTab: (currentTab: string) => void;
 }
 
 const Tabs = ({ tabs, currentTab, changeTab }: Props) => {
@@ -15,14 +15,14 @@ const Tabs = ({ tabs, currentTab, changeTab }: Props) => {
       className={clsx(styles.tabs_list)}
     >
       {
-        tabs.map((tab, index) => (
+        tabs.map((tab) => (
           <li
             key={tab.type}
           >
             <Tab
               value={tab.type}
               active={currentTab === tab.type}
-              onClick={(currentTab) => changeTab(currentTab, index)}
+              onClick={(currentTab: string) => changeTab(currentTab)}
             >
               {tab.name}
             </Tab>
