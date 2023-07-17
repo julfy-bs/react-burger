@@ -43,6 +43,35 @@ const BurgerIngredients = () => {
   const sauceElements = useMemo(() => sauces.map((item) => <Ingredient key={item._id} ingredient={item}/>), [sauces]);
   const mainElements = useMemo(() => main.map((item) => <Ingredient key={item._id} ingredient={item}/>), [main]);
 
+  const elementView = useMemo(() => tabs.map((tab, index) => (
+    <InView
+      as="li"
+      key={index}
+      className={clsx(styles.ingredients__column)}
+      data-type={tab.type}
+      onChange={(inView: boolean, entry: IntersectionObserverEntry) => {
+        const refs = getRefs();
+        refs.set(index, entry.target);
+        const target = entry.target as HTMLElement;
+        const datasetType = target.dataset.type;
+        if (inView && datasetType) {
+          setCurrentTab(datasetType);
+        }
+      }}
+      threshold={0.5}
+    >
+      <IngredientsContainer type={tab.type} title={tab.name}>
+        {
+          tab.type === 'bun'
+            ? bunElements
+            : tab.type === 'sauce'
+              ? sauceElements
+              : mainElements
+        }
+      </IngredientsContainer>
+    </InView>
+  )), [bunElements, mainElements, sauceElements, tabs]);
+
   return (
     <section className={clsx(styles.section, 'mt-10')}>
       <h1
@@ -58,36 +87,7 @@ const BurgerIngredients = () => {
       <ul
         className={clsx(styles.ingredients)}
       >
-        {
-          tabs.map((tab, index) => (
-            <InView
-              as="li"
-              key={index}
-              className={clsx(styles.ingredients__column)}
-              data-type={tab.type}
-              onChange={(inView: boolean, entry: IntersectionObserverEntry) => {
-                const refs = getRefs();
-                refs.set(index, entry.target);
-                const target = entry.target as HTMLElement
-                const datasetType = target.dataset.type
-                if (inView && datasetType) {
-                  setCurrentTab(datasetType);
-                }
-              }}
-              threshold={0.5}
-            >
-              <IngredientsContainer type={tab.type} title={tab.name}>
-                {
-                  tab.type === 'bun'
-                    ? bunElements
-                    : tab.type === 'sauce'
-                      ? sauceElements
-                      : mainElements
-                }
-              </IngredientsContainer>
-            </InView>
-          ))
-        }
+        {elementView}
       </ul>
     </section>
   );

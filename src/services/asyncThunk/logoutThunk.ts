@@ -1,11 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { logoutUser } from '../api/profileApi';
-import { updateUserData } from '../helpers/updateUserData';
 import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
 import { setMessage } from '../slices/logoutSlice';
 import { AppDispatch, RootState } from '../index';
 import { LogoutPromise } from '../../types/LogoutPromise';
 import { LogoutInput } from '../../types/LogoutInput';
+import { resetAllCookie } from '../helpers/resetAllCookie';
+import { updateUser } from '../slices/userSlice';
 
 type LogoutError = {
   success: boolean;
@@ -25,14 +26,21 @@ export const fetchLogout = createAsyncThunk<
   async ({ token },
          thunkAPI) => {
     try {
-      const { dispatch } = thunkAPI
+      const { dispatch, getState } = thunkAPI;
       const res = await logoutUser({ token });
-      updateUserData({ dispatch });
-      const { logout } = thunkAPI.getState();
-      showNotificationWithTimeout(logout.messageContent, thunkAPI.dispatch, setMessage);
+      dispatch(updateUser({
+        isLogin: false,
+        isLogout: true,
+        token: { accessToken: null, refreshToken: null, expiresAt: null },
+        name: '',
+        email: ''
+      }));
+      resetAllCookie();
+      const { logout } = getState();
+      showNotificationWithTimeout(logout.messageContent, dispatch, setMessage);
       return res;
     } catch (e: unknown) {
-      const { rejectWithValue } = thunkAPI
+      const { rejectWithValue } = thunkAPI;
       const hasErrorData = (e as LogoutError);
       return rejectWithValue(hasErrorData);
     }

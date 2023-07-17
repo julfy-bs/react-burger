@@ -108,8 +108,7 @@ const userSlice = createSlice({
         };
       })
       .addCase(fetchGetUser.rejected, (state, action) => {
-        // todo: найти причину почему action.payload может быть undefined
-        if (action.payload) {
+        if (action.payload && 'message' in action.payload) {
           const { message } = action.payload;
           state.getUserRequest = {
             ...state.getUserRequest,
@@ -150,8 +149,7 @@ const userSlice = createSlice({
         };
       })
       .addCase(fetchUpdateUser.rejected, (state, action) => {
-        // todo: найти причину почему action.payload может быть undefined
-        if (action.payload && 'data' in action.payload) {
+        if (action.payload && 'message' in action.payload) {
           const { message } = action.payload;
           state.patchUserRequest = {
             ...state.patchUserRequest,

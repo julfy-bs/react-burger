@@ -39,9 +39,7 @@ const logoutSlice = createSlice({
         state.fetch = false;
       })
       .addCase(fetchLogout.rejected, (state, action) => {
-        // todo: найти причину почему action.payload может быть undefined
         if (action.payload && 'message' in action.payload) {
-          console.log(action);
           const { message } = action.payload;
           state.errorMessageContent = message || ERROR_DEFAULT;
           state.fetch = false;

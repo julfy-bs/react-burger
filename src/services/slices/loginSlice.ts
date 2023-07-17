@@ -49,7 +49,6 @@ const loginSlice = createSlice({
         })
       .addCase(fetchLogin.rejected,
         (state, action) => {
-          // todo: найти причину почему action.payload может быть undefined
           if (action.payload && "data" in action.payload) {
             const { data } = action.payload;
             const { message } = data;

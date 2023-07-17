@@ -175,7 +175,7 @@ const App = () => {
 
       {
         modalNotification && (
-          <Notification handleModalClose={handleModalClose} title={modalNotification} />
+          <Notification handleModalClose={handleModalClose} title={modalNotification}/>
         )
       }
 

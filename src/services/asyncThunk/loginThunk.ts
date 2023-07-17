@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { loginUser } from '../api/profileApi';
 import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
-import { updateUserData } from '../helpers/updateUserData';
 import { setMessage, setErrorMessage } from '../slices/loginSlice';
 import { AppDispatch, RootState } from '../index';
 import { LoginInput } from '../../types/LoginInput';
 import { LoginPromise } from '../../types/LoginPromise';
+import { changeUserLoginInfo } from '../helpers/changeUserLoginInfo';
 
 type KnownErrorData = {
   success: boolean;
@@ -37,12 +37,7 @@ export const fetchLogin = createAsyncThunk<
       const { email, password } = userData;
       const res = await loginUser({ email, password });
       const { user, accessToken, refreshToken } = res;
-      updateUserData({
-        user,
-        accessToken,
-        refreshToken,
-        dispatch: dispatch
-      });
+      changeUserLoginInfo(user, accessToken, refreshToken, dispatch);
       const { login } = getState();
       showNotificationWithTimeout(login.messageContent, dispatch, setMessage);
       return res;

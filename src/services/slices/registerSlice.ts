@@ -45,7 +45,6 @@ const registerSlice = createSlice({
         state.fetch = false;
       })
       .addCase(fetchRegister.rejected, (state, action) => {
-        // todo: найти причину почему action.payload может быть undefined
         if (action.payload && 'data' in action.payload) {
           const { data } = action.payload;
           const { message } = data;

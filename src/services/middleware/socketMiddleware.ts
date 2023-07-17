@@ -15,6 +15,7 @@ export const socketMiddleware =
         const { dispatch } = store;
         const { type, payload } = action;
         const { wsInit, onOpen, onClose, onError, onMessage } = wsActions;
+
         if (type === wsInit) {
           socket = new WebSocket(payload);
         }
