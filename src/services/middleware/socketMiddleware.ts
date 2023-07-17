@@ -20,7 +20,7 @@ export const socketMiddleware =
           socket = new WebSocket(payload);
         }
 
-        if (type === wsInit && socket?.readyState === 1) {
+        if ((type === wsInit || type === onClose) && socket?.readyState === 1) {
           socket.close();
         }
 
