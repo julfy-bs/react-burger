@@ -152,7 +152,4 @@ const ProfileForm = () => {
   );
 };
 
-
-ProfileForm.propTypes = {};
-
 export default ProfileForm;

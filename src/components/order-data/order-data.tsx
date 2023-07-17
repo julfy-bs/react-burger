@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import styles from './order-data.module.css';
 import { memo, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { getWebsocket } from '../../services/helpers/getSelector';
+import { useAppSelector } from '../../hooks/useRedux';
 
 const OrderData = () => {
-  const { total, totalToday, orders } = useSelector(getWebsocket);
+  const { total, totalToday, orders } = useAppSelector(getWebsocket);
   const readyOrders = useMemo(() => {
     if (orders) {
       const orderStatusArray = orders?.filter((item) => item.status === 'done');

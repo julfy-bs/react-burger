@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import styles from './order-details.module.css';
-import { useSelector } from 'react-redux';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useMemo } from 'react';
 import { getIngredients } from '../../services/helpers/getSelector';
 import { Order } from '../../types/Order';
 import { ensureResult } from '../../services/helpers/ensureResult';
 import { Ingredient } from '../../types/Ingredient';
+import { useAppSelector } from '../../hooks/useRedux';
 
 type Props = {
   order: Order
@@ -14,7 +14,7 @@ type Props = {
 
 const OrderDetails = ({ order }: Props) => {
   const date = new Date(order.createdAt);
-  const { ingredients } = useSelector(getIngredients);
+  const { ingredients } = useAppSelector(getIngredients);
   const ingredientsArray = useMemo(() => order.ingredients.map((item) => ensureResult(ingredients.find(i => i._id === item))), [ingredients, order.ingredients]);
   const sortArray = useMemo(
     () => ingredientsArray.reduce((acc: Ingredient[], item) => {

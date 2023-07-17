@@ -2,22 +2,22 @@ import clsx from 'clsx';
 import styles from './order.module.css';
 import { useMemo } from 'react';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
 import { setModalOrder } from '../../services/slices/modalSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getIngredients } from '../../services/helpers/getSelector';
 import { Order as OrderType } from '../../types/Order';
 import { Ingredient } from '../../types/Ingredient';
 import { ensureResult } from '../../services/helpers/ensureResult';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 
 type Props = {
   order: OrderType;
 }
 
 const Order = ({ order }: Props) => {
-  const { ingredients } = useSelector(getIngredients);
+  const { ingredients } = useAppSelector(getIngredients);
   const date = new Date(order.createdAt);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const orderIngredients = order.ingredients.map((orderIngredientId: string) => ensureResult(ingredients.find(ingredient => ingredient._id === orderIngredientId)));

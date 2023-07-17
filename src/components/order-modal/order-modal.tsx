@@ -3,11 +3,11 @@ import styles from './order-modal.module.css';
 
 import IconDone from '../icon-done/icon-done';
 
-import { useSelector } from 'react-redux';
 import { getOrder } from '../../services/helpers/getSelector';
+import { useAppSelector } from '../../hooks/useRedux';
 
 const OrderModal = () => {
-  const { orderNumber } = useSelector(getOrder);
+  const { orderNumber } = useAppSelector(getOrder);
 
   return (
     <div

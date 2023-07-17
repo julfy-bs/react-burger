@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { getUser } from '../../services/helpers/getSelector';
 import { PATH } from '../../utils/config';
 import { JSX, ReactNode } from 'react';
+import { useAppSelector } from '../../hooks/useRedux';
 
 type Props = {
   children?: ReactNode;
@@ -10,7 +10,7 @@ type Props = {
 }
 
 const ProtectedRoute = ({ children, anonymous = false }: Props): JSX.Element => {
-  const { user } = useSelector(getUser);
+  const { user } = useAppSelector(getUser);
   const location = useLocation();
   const from = location?.state?.from || PATH.HOME;
 

@@ -2,16 +2,15 @@ import styles from './modal-overlay.module.css';
 import clsx from 'clsx';
 
 import { useCallback, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { getModal } from '../../services/helpers/getSelector';
+import { useAppSelector } from '../../hooks/useRedux';
 
 type Props = {
   handleModalClose: () => void
 }
 
 const ModalOverlay = ({ handleModalClose }: Props) => {
-  const { modalIngredient, modalOrder, modalOrderSuccess } = useSelector(getModal)
+  const { modalIngredient, modalOrder, modalOrderSuccess } = useAppSelector(getModal)
   const handleEscape = useCallback((e: KeyboardEvent) => (e.key === 'Escape') && handleModalClose(), [handleModalClose])
 
   const isModalOpen = useMemo(() => !!modalIngredient || !!modalOrder || !!modalOrderSuccess, [modalIngredient, modalOrder, modalOrderSuccess])
@@ -35,10 +34,6 @@ const ModalOverlay = ({ handleModalClose }: Props) => {
     >
     </div>
   );
-};
-
-ModalOverlay.propTypes = {
-  handleModalClose: PropTypes.func.isRequired
 };
 
 export default ModalOverlay;

@@ -6,13 +6,13 @@ import IngredientsContainer from '../ingredients-container/ingredients-container
 import Ingredient from '../ingredient/ingredient';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { InView } from 'react-intersection-observer';
 
 import { ingredientTabs } from '../../utils/config';
 import { TABS } from '../../utils/constants';
 import { getIngredients } from '../../services/helpers/getSelector';
 import { TabShape } from '../../types/TabShape';
+import { useAppSelector } from '../../hooks/useRedux';
 
 const BurgerIngredients = () => {
   const tabsRef = useRef<Map<string, number> | null>(null);
@@ -33,7 +33,7 @@ const BurgerIngredients = () => {
   }, [scrollToId]);
 
 
-  const { ingredients } = useSelector(getIngredients);
+  const { ingredients } = useAppSelector(getIngredients);
 
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);

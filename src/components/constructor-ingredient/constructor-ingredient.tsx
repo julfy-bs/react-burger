@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import styles from './constructor-ingredient.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag, useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
 import { removeIngredient } from '../../services/slices/cartSlice';
 import { memo, useRef } from 'react';
 import { Ingredient } from '../../types/Ingredient';
+import { useAppDispatch } from '../../hooks/useRedux';
 
 type Props = {
   ingredient: Ingredient;
@@ -14,7 +14,7 @@ type Props = {
 }
 
 const IngredientElement = ({ ingredient, index, moveIngredient }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const ref = useRef<HTMLLIElement | null>(null);
   const [{ isDragging }, drag] = useDrag(
     () => ({
