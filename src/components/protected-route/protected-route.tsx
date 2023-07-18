@@ -9,21 +9,24 @@ type Props = {
   anonymous?: boolean;
 }
 
-const ProtectedRoute = ({ children, anonymous = false }: Props): JSX.Element => {
+const ProtectedRoute = ({
+  children,
+  anonymous = false,
+}: Props): JSX.Element => {
   const { user } = useAppSelector(getUser);
   const location = useLocation();
   const from = location?.state?.from || PATH.HOME;
 
   if (anonymous && user.isLogin) {
-    return <Navigate to={from}/>;
+    return <Navigate to={from} replace={true} />;
   }
 
   if (!anonymous && !user.isLogin && user.isLogout) {
-    return <Navigate to={PATH.HOME}/>;
+    return <Navigate to={PATH.HOME} />;
   }
 
   if (!anonymous && !user.isLogin) {
-    return <Navigate to={PATH.LOGIN} state={{ from: location }}/>;
+    return <Navigate to={PATH.LOGIN} state={{ from: location }} replace={true} />;
   }
 
   return (
