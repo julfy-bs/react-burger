@@ -1,7 +1,7 @@
 {
   "name": "stellar-burgers",
   "description": "\"Stellar Burgers\" is an educational website project for a burger restaurant.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "homepage": "./",
   "author": {
@@ -9,7 +9,8 @@
     "email": "julfy-bs@yandex.ru"
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^5.0.0",
+    "typescript-plugin-css-modules": "^5.0.1"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",

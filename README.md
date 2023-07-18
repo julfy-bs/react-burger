@@ -8,6 +8,12 @@
 
 ## История версий
 
+- ***Версия 0.6.0***
+
+  - Внедряет TypeScript в приложение, полностью заменяя JavaScript.
+  - Типизирует код приложения.
+
+
 - ***Версия 0.5.0***
 
     - Добавляет страницы «Лента заказов» и «История заказов».
@@ -19,7 +25,7 @@
     - Добавляет страницы «Авторизация» и «Регистрация».
     - Добавляет страницы «Восстановление пароля» и «Сброс пароля».
     - Добавляет страницу «Профиль пользователя».
-    - Добавляет страницу «Детальный просмотр ингридиента».
+    - Добавляет страницу «Детальный просмотр ингредиента».
     - Добавляет функционал авторизации и регистрации.
     - Добавляет функционал получения и обновления токена.
     - Добавляет функционал получения и обновления информации о пользователе для отображения на странице профиля.
@@ -52,13 +58,14 @@
     - Добавляет классовые компоненты AppHeader, BurgerIngredients, BurgerConstructor.
     - Добавляет проверку типов данных компонентов с помощью PropTypes.
 
-| Спринт | Версия |                                                               Технологии                                                                |                     Чеклисты                      |               Макеты               |
-|:------:|:------:|:---------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------:|:----------------------------------:|
-|   7    | 0.1.0  |                                [HTML5][tech-html], [CSS3][tech-css], [JS][tech-js], [React][tech-react]                                 |     [чеклист 7 спринта][project-checklist-1]      | [макет 7 спринта][project-figma-1] |
-|   7    | 0.2.0  |                                [HTML5][tech-html], [CSS3][tech-css], [JS][tech-js], [React][tech-react]                                 |     [чеклист 7 спринта][project-checklist-1]      | [макет 7 спринта][project-figma-1] |
-|   8    | 0.3.0  |                      [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit]                       |     [чеклист 8 спринта][project-checklist-2]      | [макет 8 спринта][project-figma-2] |
-|   9    | 0.4.0  |     [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router]     | [первый чеклист 9 спринта][project-checklist-3-1] | [макет 9 спринта][project-figma-3] |
-|   9    | 0.5.0  |     [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router]     | [второй чеклист 9 спринта][project-checklist-3-1] | [макет 9 спринта][project-figma-3] |
+| Спринт | Версия |                                                               Технологии                                                                |                     Чек-листы                      |               Макеты               |
+|:------:|:------:|:---------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------:|:----------------------------------:|
+|   7    | 0.1.0  |                                [HTML5][tech-html], [CSS3][tech-css], [JS][tech-js], [React][tech-react]                                 |     [чек-лист 7 спринта][project-checklist-1]      | [макет 7 спринта][project-figma-1] |
+|   7    | 0.2.0  |                                [HTML5][tech-html], [CSS3][tech-css], [JS][tech-js], [React][tech-react]                                 |     [чек-лист 7 спринта][project-checklist-1]      | [макет 7 спринта][project-figma-1] |
+|   8    | 0.3.0  |                      [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit]                       |     [чек-лист 8 спринта][project-checklist-2]      | [макет 8 спринта][project-figma-2] |
+|   9    | 0.4.0  |     [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router]     | [первый чек-лист 9 спринта][project-checklist-3-1] | [макет 9 спринта][project-figma-3] |
+|   9    | 0.5.0  |     [JS][tech-js], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router]     | [второй чек-лист 9 спринта][project-checklist-3-1] | [макет 9 спринта][project-figma-3] |
+|   10   | 0.6.0  | [TypeScript][tech-ts], [React][tech-react], [Redux][tech-redux], [Redux-toolkit][tech-redux-toolkit], [React router][tech-react-router] |     [чек-лист 10 спринта][project-checklist-4]     |                                    |
 
 ## Доступные скрипты
 
@@ -117,7 +124,7 @@
 
 [project-figma-3]: https://www.figma.com/file/ocw9a6hNGeAejl4F3G9fp8/React-_-%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%BD%D1%8B%D0%B5-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8-(3-%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B0)_external_link?type=design&node-id=6291-2799&mode=design
 
-[project-ui-library]: https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/readme
+[project-ui-library]: https://yandex-practicum.github.io/react-developer-burger-ui-components/
 
 [//]: # 'Переменные используемых технологий'
 
