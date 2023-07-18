@@ -11,7 +11,7 @@ import {
   ProfileLayout,
   ProfileFormPage,
   ProfileOrdersPage,
-  IngredientPage, OrderPage
+  IngredientPage, OrderPage,
 } from '../../pages';
 import clsx from 'clsx';
 import Modal from '../modal/modal';
@@ -29,18 +29,34 @@ import { closeAllModal } from '../../services/slices/modalSlice';
 import { fetchGetUser } from '../../services/asyncThunk/getUserThunk';
 import OrderDetails from '../order-details/order-details';
 import FeedPage from '../../pages/feed/feed';
-import { getIngredients, getLoading, getModal, getOrder, getUser } from '../../services/helpers/getSelector';
+import {
+  getIngredients,
+  getLoading,
+  getModal,
+  getOrder,
+  getUser,
+} from '../../services/helpers/getSelector';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 
 const App = () => {
-  const { modalIngredient, modalOrder, modalOrderSuccess, modalNotification } = useAppSelector(getModal);
-  const { ingredientsFetchRequest, ingredients } = useAppSelector(getIngredients);
+  const {
+    modalIngredient,
+    modalOrder,
+    modalOrderSuccess,
+    modalNotification,
+  } = useAppSelector(getModal);
+  const {
+    ingredientsFetchRequest,
+    ingredients,
+  } = useAppSelector(getIngredients);
   const { loading } = useAppSelector(getLoading);
   const { orderNumber } = useAppSelector(getOrder);
   const { user } = useAppSelector(getUser);
   const { isTokenExpired } = useAuthorization();
   const location = useLocation();
-  const background = modalIngredient || modalOrder ? location?.state?.background : null;
+  const background = modalIngredient || modalOrder
+    ? location?.state?.background
+    : null;
   const { previousUrl } = useAuthorization();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -64,18 +80,17 @@ const App = () => {
     (modalIngredient || modalOrder) &&
     navigate(previousUrl, {
       replace: true,
-      state: { background: null }
+      state: { background: null },
     });
   }, [dispatch, modalIngredient, modalOrder, navigate, previousUrl]);
 
-
   return (
     <>
-      <Header/>
+      <Header />
       <main className={clsx(styles.main)}>
         {
           loading
-            ? (<Loader/>)
+            ? (<Loader />)
             : (
               <Routes location={background || location}>
                 <Route
@@ -83,7 +98,7 @@ const App = () => {
                   element={
                     ingredients.length > 0
                     && !ingredientsFetchRequest
-                    && <ConstructorPage/>
+                    && <ConstructorPage />
                   }
                 />
                 <Route
@@ -92,7 +107,7 @@ const App = () => {
                     <ProtectedRoute
                       anonymous={true}
                     >
-                      <LoginPage/>
+                      <LoginPage />
                     </ProtectedRoute>
                   }
                 />
@@ -102,7 +117,7 @@ const App = () => {
                     <ProtectedRoute
                       anonymous={true}
                     >
-                      <RegisterPage/>
+                      <RegisterPage />
                     </ProtectedRoute>
                   }
                 />
@@ -112,7 +127,7 @@ const App = () => {
                     <ProtectedRoute
                       anonymous={true}
                     >
-                      <ForgotPasswordPage/>
+                      <ForgotPasswordPage />
                     </ProtectedRoute>
                   }
                 />
@@ -122,7 +137,7 @@ const App = () => {
                     <ProtectedRoute
                       anonymous={true}
                     >
-                      <ResetPasswordPage/>
+                      <ResetPasswordPage />
                     </ProtectedRoute>
                   }
                 />
@@ -132,41 +147,41 @@ const App = () => {
                     <ProtectedRoute
                       anonymous={false}
                     >
-                      <ProfileLayout/>
+                      <ProfileLayout />
                     </ProtectedRoute>
                   }>
                   <Route
                     index
-                    element={<ProfileFormPage/>}
+                    element={<ProfileFormPage />}
                   />
                   <Route
                     path={PATH.ORDERS}
-                    element={<ProfileOrdersPage/>}
+                    element={<ProfileOrdersPage />}
                   />
                 </Route>
                 <Route
                   path={PATH.FEED}
-                  element={<FeedPage/>}
+                  element={<FeedPage />}
                 />
                 <Route
                   path={PATH.FEED_ORDER}
-                  element={<OrderPage/>}
+                  element={<OrderPage />}
                 />
                 <Route
                   path={PATH.ORDER}
                   element={
                     <ProtectedRoute>
-                      <OrderPage/>
+                      <OrderPage />
                     </ProtectedRoute>
                   }
                 />
                 <Route
                   path={PATH.INGREDIENT}
-                  element={<IngredientPage/>}
+                  element={<IngredientPage />}
                 />
                 <Route
                   path="*"
-                  element={<NotFoundPage/>}
+                  element={<NotFoundPage />}
                 />
               </Routes>)
         }
@@ -175,7 +190,7 @@ const App = () => {
 
       {
         modalNotification && (
-          <Notification handleModalClose={handleModalClose} title={modalNotification}/>
+          <Notification handleModalClose={handleModalClose} title={modalNotification} />
         )
       }
 
@@ -195,15 +210,15 @@ const App = () => {
         }
       >
         {background && modalIngredient && (
-          <IngredientDetails ingredient={modalIngredient}/>
+          <IngredientDetails ingredient={modalIngredient} />
         )}
 
         {background && modalOrder && (
-          <OrderDetails order={modalOrder}/>
+          <OrderDetails order={modalOrder} />
         )}
 
         {orderNumber && modalOrderSuccess && (
-          <OrderModal/>
+          <OrderModal />
         )}
       </Modal>
     </>

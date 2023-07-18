@@ -3,7 +3,7 @@
   "description": "\"Stellar Burgers\" is an educational website project for a burger restaurant.",
   "version": "0.6.0",
   "private": true,
-  "homepage": "./",
+  "homepage": "https://julfy-bs.github.io/stellar-burgers",
   "author": {
     "name": "Bogdan Sutuzhko",
     "email": "julfy-bs@yandex.ru"
