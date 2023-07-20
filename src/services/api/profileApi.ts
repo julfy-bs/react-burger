@@ -1,49 +1,49 @@
-import { authorizationRequest, request } from '../helpers/request';
-import { LoginPromise } from '../../types/LoginPromise';
-import { LogoutPromise } from '../../types/LogoutPromise';
-import { LogoutInput } from '../../types/LogoutInput';
-import { ForgotPasswordPromise } from '../../types/ForgotPasswordPromise';
 import { ForgotPasswordInput } from '../../types/ForgotPasswordInput';
+import { ForgotPasswordPromise } from '../../types/ForgotPasswordPromise';
+import { LoginInput } from '../../types/LoginInput';
+import { LoginPromise } from '../../types/LoginPromise';
+import { LogoutInput } from '../../types/LogoutInput';
+import { LogoutPromise } from '../../types/LogoutPromise';
 import { ResetPasswordInput } from '../../types/ResetPasswordInput';
 import { ResetPasswordPromise } from '../../types/ResetPasswordPromise';
 import { User } from '../../types/User';
-import { LoginInput } from '../../types/LoginInput';
 import { UserPromise } from '../../types/UserPromise';
 import { fetchUpdateUserInput } from '../../types/fetchUpdateUserInput';
+import { authorizationRequest, request } from '../helpers/request';
 
-export const registerUser = ({ email, password, name }: User): Promise<LoginPromise> =>
+export const registerUser = ({ email, name, password }: User) =>
   request('auth/register', {
-    method: 'POST',
-    body: JSON.stringify({ email, password, name })
-  });
+    body: JSON.stringify({ email, name, password }),
+    method: 'POST'
+  }) as Promise<LoginPromise>;
 
-export const loginUser = ({ email, password }: LoginInput): Promise<LoginPromise> =>
+export const loginUser = ({ email, password }: LoginInput) =>
   request('auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password })
-  });
+    body: JSON.stringify({ email, password }),
+    method: 'POST'
+  }) as Promise<LoginPromise>;
 
-export const logoutUser = ({ token }: LogoutInput): Promise<LogoutPromise> =>
+export const logoutUser = ({ token }: LogoutInput) =>
   request('auth/logout', {
-    method: 'POST',
-    body: JSON.stringify({ token })
-  });
+    body: JSON.stringify({ token }),
+    method: 'POST'
+  }) as Promise<LogoutPromise>;
 
-export const forgotPassword = ({ email }: ForgotPasswordInput): Promise<ForgotPasswordPromise> =>
+export const forgotPassword = ({ email }: ForgotPasswordInput) =>
   request('password-reset', {
-    method: 'POST',
-    body: JSON.stringify({ email })
-  });
+    body: JSON.stringify({ email }),
+    method: 'POST'
+  }) as Promise<ForgotPasswordPromise>;
 
-export const resetPassword = ({ password, token }: ResetPasswordInput): Promise<ResetPasswordPromise> =>
+export const resetPassword = ({ password, token }: ResetPasswordInput) =>
   request('password-reset/reset', {
-    method: 'POST',
-    body: JSON.stringify({ password, token })
-  });
+    body: JSON.stringify({ password, token }),
+    method: 'POST'
+  }) as Promise<ResetPasswordPromise>;
 
-export const getUser = (): Promise<UserPromise> => authorizationRequest('auth/user');
+export const getUser = () => authorizationRequest('auth/user') as Promise<UserPromise>;
 
-export const patchUser = (userData: fetchUpdateUserInput): Promise<UserPromise> => authorizationRequest('auth/user', {
-  method: 'PATCH',
+export const patchUser = (userData: fetchUpdateUserInput) => authorizationRequest('auth/user', {
   body: JSON.stringify(userData),
-});
+  method: 'PATCH',
+}) as Promise<UserPromise>;

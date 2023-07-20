@@ -1,10 +1,9 @@
 import clsx from 'clsx';
-import styles from './order-modal.module.css';
 
-import IconDone from '../icon-done/icon-done';
-
-import { getOrder } from '../../services/helpers/getSelector';
 import { useAppSelector } from '../../hooks/useRedux';
+import { getOrder } from '../../services/helpers/getSelector';
+import IconDone from '../icon-done/icon-done';
+import styles from './order-modal.module.css';
 
 const OrderModal = () => {
   const { orderNumber } = useAppSelector(getOrder);

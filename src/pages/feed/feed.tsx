@@ -1,13 +1,14 @@
 import clsx from 'clsx';
-import styles from './feed.module.css';
 import { useEffect } from 'react';
-import { WSS_FOR_ALL_ORDERS } from '../../utils/config';
+
 import Loader from '../../components/loader/loader';
-import OrderList from '../../components/order-list/order-list';
 import OrderData from '../../components/order-data/order-data';
-import { wsConnectionClosed, wsConnectionStart } from '../../services/slices/wsSlice';
-import { getWebsocket } from '../../services/helpers/getSelector';
+import OrderList from '../../components/order-list/order-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { getWebsocket } from '../../services/helpers/getSelector';
+import { wsConnectionClosed, wsConnectionStart } from '../../services/slices/wsSlice';
+import { WSS_FOR_ALL_ORDERS } from '../../utils/config';
+import styles from './feed.module.css';
 
 const FeedPage = () => {
   const dispatch = useAppDispatch();

@@ -1,14 +1,12 @@
 import { CustomError } from '../../types/CustomError';
 
-export const checkResponse = (res: Response) => {
-  return res.ok
+export const checkResponse = (res: Response) => res.ok
     ? res.json()
     : res.json().then((error: Error & CustomError) => Promise.reject({
+      data: error,
+      ok: res.ok,
       status: res.status,
       statusText: res.statusText,
-      url: res.url,
-      ok: res.ok,
-      data: error,
-      success: false
+      success: false,
+      url: res.url
     }));
-};

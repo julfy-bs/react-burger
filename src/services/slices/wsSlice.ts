@@ -1,30 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { Order } from '../../types/Order';
 import { WebsocketState } from '../../types/WebsocketState';
 
 const initialState: WebsocketState = {
-  wsConnected: false,
   orders: null,
   total: 0,
-  totalToday: 0
+  totalToday: 0,
+  wsConnected: false
 };
 
 const wsSlice = createSlice({
-  name: 'wsSlice',
   initialState,
+  name: 'wsSlice',
   reducers: {
+    wsConnectionClosed(state) {
+      state.wsConnected = false;
+      state.orders = null;
+    },
+    wsConnectionFailed(state) {
+      state.wsConnected = false;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     wsConnectionStart(_state, _action: PayloadAction<string>) {
       return undefined;
     },
     wsConnectionSuccess(state) {
       state.wsConnected = true;
-    },
-    wsConnectionFailed(state) {
-      state.wsConnected = false;
-    },
-    wsConnectionClosed(state) {
-      state.wsConnected = false;
-      state.orders = null;
     },
     wsGetAllOrders(
       state,
@@ -43,18 +45,18 @@ const wsSlice = createSlice({
 });
 
 export const {
-  wsConnectionStart,
-  wsConnectionSuccess,
   wsConnectionClosed,
   wsConnectionFailed,
+  wsConnectionStart,
+  wsConnectionSuccess,
   wsGetAllOrders
 } = wsSlice.actions;
 
 export const wsActions = {
-  wsInit: wsConnectionStart.type,
-  onOpen: wsConnectionSuccess.type,
   onClose: wsConnectionClosed.type,
   onError: wsConnectionFailed.type,
   onMessage: wsGetAllOrders.type,
+  onOpen: wsConnectionSuccess.type,
+  wsInit: wsConnectionStart.type,
 };
 export default wsSlice.reducer;

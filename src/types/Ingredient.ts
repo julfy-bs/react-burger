@@ -1,16 +1,16 @@
 export type Ingredient = {
+  __v: number | string;
   _id: string;
-  name: string;
-  type: 'main' | 'bun' | 'sauce';
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  __v: string | number;
   _uid?: string;
+  calories: number;
+  carbohydrates: number;
+  fat: number;
+  image: string;
+  image_large: string;
+  image_mobile: string;
+  name: string;
+  price: number;
+  proteins: number;
   quantity?: number;
+  type: 'bun' | 'main' | 'sauce';
 }

@@ -1,37 +1,22 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { State } from '../../types/State';
 import {
   ERROR_DEFAULT, ERROR_USER_EXISTS,
   NOTIFICATION_USER_CREATED, SERVER_RESPOND_USER_EXISTS
 } from '../../utils/constants';
 import { fetchRegister } from '../asyncThunk/registerThunk';
-import { State } from '../../types/State';
 
 const initialState: State = {
-  fetch: false,
   error: false,
-  message: false,
-  messageContent: NOTIFICATION_USER_CREATED,
   errorMessage: false,
-  errorMessageContent: ERROR_DEFAULT
+  errorMessageContent: ERROR_DEFAULT,
+  fetch: false,
+  message: false,
+  messageContent: NOTIFICATION_USER_CREATED
 };
 
 const registerSlice = createSlice({
-  name: 'register',
-  initialState,
-  reducers: {
-    setMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.message = action.payload;
-    },
-    setErrorMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.errorMessage = action.payload;
-    }
-  },
   extraReducers: (builder) => {
     builder
       // Register
@@ -58,8 +43,24 @@ const registerSlice = createSlice({
           console.error('action.payload is undefined');
         }
       });
+  },
+  initialState,
+  name: 'register',
+  reducers: {
+    setErrorMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.errorMessage = action.payload;
+    },
+    setMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.message = action.payload;
+    }
   }
 });
 
-export const { setMessage, setErrorMessage } = registerSlice.actions;
+export const { setErrorMessage, setMessage } = registerSlice.actions;
 export default registerSlice.reducer;

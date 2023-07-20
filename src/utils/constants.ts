@@ -4,8 +4,8 @@ export const EXPIRES_AT = 'expiresAt';
 export const ACCESS_TOKEN_EXPIRES = 1200;
 export const REFRESH_TOKEN_EXPIRES = 2000;
 export const TOKEN_EXPIRES_NOW = 1;
-// eslint-disable-next-line no-control-regex
-export const PATTERN_EMAIL = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/;
+// eslint-disable-next-line no-control-regex,regexp/no-dupe-characters-character-class
+export const PATTERN_EMAIL = /(?:[a-z\d!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z\d!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\v\f\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\v\f\x0e-\x7f])*")@(?:(?:[a-z\d](?:[a-z\d-]*[a-z\d])?\.)+[a-z\d](?:[a-z\d-]*[a-z\d])?|\[(?:(?:25[0-5]|2[0-4]\d|[01]?\d{1,2})\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d{1,2}|[a-z\d-]*[a-z\d]:(?:[\x01-\x08\v\f\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\v\f\x0e-\x7f])+)\])/;
 export const MODAL_ID = '#modal';
 export const ERROR_LOGIN = 'Неверное имя пользователя или пароль.';
 export const ERROR_USER_EXISTS = 'Пользователь с таким Email уже существует.';
@@ -27,6 +27,6 @@ export const WS_RESPOND_INCORRECT_TOKEN = 'Invalid or missing token';
 
 export const TABS = {
   BUN: 'bun',
-  SAUCE: 'sauce',
-  MAIN: 'main'
+  MAIN: 'main',
+  SAUCE: 'sauce'
 }

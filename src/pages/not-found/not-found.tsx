@@ -1,8 +1,9 @@
-import clsx from 'clsx';
-import styles from './not-found.module.css';
-import { Link } from 'react-router-dom';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
+
 import { PATH } from '../../utils/config';
+import styles from './not-found.module.css';
 
 const NotFoundPage = () => {
   return (
@@ -16,7 +17,7 @@ const NotFoundPage = () => {
         </p>
       </article>
       <Link to={PATH.HOME}>
-        <Button htmlType="button" type="primary" size="medium">
+        <Button htmlType="button" size="medium" type="primary">
           Вернуться на главную страницу
         </Button>
       </Link>

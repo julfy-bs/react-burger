@@ -1,19 +1,20 @@
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
-import styles from './burger-constructor.module.css';
-import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useMemo } from 'react';
-import { addIngredient, moveIngredients } from '../../services/slices/cartSlice';
-import { createOrder } from '../../services/asyncThunk/orderThunk';
-import { useDrop } from 'react-dnd';
-import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
-import uuid from 'react-uuid';
-import { PATH } from '../../utils/config';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { closeAllModal, setModalNotification } from '../../services/slices/modalSlice';
-import { getCart, getOrder, getUser } from '../../services/helpers/getSelector';
+import uuid from 'react-uuid';
+
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { Ingredient } from '../../types/Ingredient';
+import { createOrder } from '../../services/asyncThunk/orderThunk';
 import { ensureResult } from '../../services/helpers/ensureResult';
+import { getCart, getOrder, getUser } from '../../services/helpers/getSelector';
+import { addIngredient, moveIngredients } from '../../services/slices/cartSlice';
+import { closeAllModal, setModalNotification } from '../../services/slices/modalSlice';
+import { Ingredient } from '../../types/Ingredient';
+import { PATH } from '../../utils/config';
+import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
+import styles from './burger-constructor.module.css';
 
 const BurgerConstructor = () => {
   const { cart } = useAppSelector(getCart);
@@ -27,6 +28,9 @@ const BurgerConstructor = () => {
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
+    collect: (monitor: DropTargetMonitor) => ({
+      isHover: monitor.isOver(),
+    }),
     drop(ingredient: Ingredient) {
       if (cart.bun === null && ingredient.type !== 'bun') {
         dispatch(setModalNotification('Сначала выберите булку!'));
@@ -41,10 +45,7 @@ const BurgerConstructor = () => {
       } else {
         dispatch(addIngredient({ ingredient: ingredient }));
       }
-    },
-    collect: monitor => ({
-      isHover: monitor.isOver(),
-    })
+    }
   });
 
   const redirectToLoginPage = useCallback(() => {
@@ -74,8 +75,8 @@ const BurgerConstructor = () => {
     (id: string) => {
       const ingredient = ensureResult(cart.ingredients.find(item => item._id === id));
       return {
-        ingredient,
         index: cart.ingredients.indexOf(ingredient),
+        ingredient,
       };
     },
     [cart],
@@ -83,8 +84,8 @@ const BurgerConstructor = () => {
 
   const moveIngredient = useCallback(
     (id: string, atIndex: number) => {
-      const { ingredient, index } = findIngredient(id);
-      dispatch(moveIngredients({ index, atIndex, ingredient }));
+      const { index, ingredient } = findIngredient(id);
+      dispatch(moveIngredients({ atIndex, index, ingredient }));
     },
     [dispatch, findIngredient],
   );
@@ -97,9 +98,9 @@ const BurgerConstructor = () => {
   const ingredientElements = cart.ingredients.map(
     (ingredient, index) => (
       <ConstructorIngredient
-        key={ingredient._uid}
         index={index}
         ingredient={ingredient}
+        key={ingredient._uid}
         moveIngredient={moveIngredient}
       />
     )
@@ -131,11 +132,11 @@ const BurgerConstructor = () => {
                 >
                   <ConstructorElement
                     extraClass={clsx(styles.cart__bun)}
-                    type={'top'}
                     isLocked={true}
-                    text={`${cart.bun.name} (верх)`}
                     price={cart.bun.price}
+                    text={`${cart.bun.name} (верх)`}
                     thumbnail={cart.bun.image}
+                    type={'top'}
                   />
                 </li>
                 <li>
@@ -151,11 +152,11 @@ const BurgerConstructor = () => {
                 >
                   <ConstructorElement
                     extraClass={clsx(styles.cart__bun)}
-                    type={'bottom'}
                     isLocked={true}
-                    text={`${cart.bun.name} (низ)`}
                     price={cart.bun.price}
+                    text={`${cart.bun.name} (низ)`}
                     thumbnail={cart.bun.image}
+                    type={'bottom'}
                   />
                 </li>
               </ul>
@@ -171,12 +172,12 @@ const BurgerConstructor = () => {
             </span>
           </div>
           <Button
+            disabled={isButtonDisabled}
             extraClass={clsx(styles.button)}
             htmlType="button"
-            type="primary"
-            size="large"
             onClick={handleBurgerConstructorButton}
-            disabled={isButtonDisabled}
+            size="large"
+            type="primary"
           >
             {
               fetch

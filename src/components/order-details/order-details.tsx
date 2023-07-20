@@ -1,12 +1,13 @@
-import clsx from 'clsx';
-import styles from './order-details.module.css';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
 import { useCallback, useMemo } from 'react';
-import { getIngredients } from '../../services/helpers/getSelector';
-import { Order } from '../../types/Order';
-import { ensureResult } from '../../services/helpers/ensureResult';
-import { Ingredient } from '../../types/Ingredient';
+
 import { useAppSelector } from '../../hooks/useRedux';
+import { ensureResult } from '../../services/helpers/ensureResult';
+import { getIngredients } from '../../services/helpers/getSelector';
+import { Ingredient } from '../../types/Ingredient';
+import { Order } from '../../types/Order';
+import styles from './order-details.module.css';
 
 type Props = {
   order: Order
@@ -24,6 +25,7 @@ const OrderDetails = ({ order }: Props) => {
             ? { ...value, quantity: value.quantity + 1 }
             : value);
       }
+
       return [...acc, { ...item, quantity: 1 }];
     }, []),
     [ingredientsArray]);
@@ -34,9 +36,9 @@ const OrderDetails = ({ order }: Props) => {
       <li key={index}>
         <div className={clsx(styles.ingredients_item)}>
           <img
+            alt={`Ингредиент ${item.name}`}
             className={`${styles.ingredients_image} `}
             src={item.image}
-            alt={`Ингредиент ${item.name}`}
           />
 
           <h5 className={`text text_type_main-default ${styles.ingredients_title}`}>{item.name}</h5>
@@ -84,8 +86,8 @@ const OrderDetails = ({ order }: Props) => {
 
       <div className={clsx(styles.footer)}>
         <FormattedDate
-          date={date}
           className={clsx('text', 'text_type_main-default', 'text_color_inactive')}
+          date={date}
         />
         <span className={clsx(styles.price)}>
           <span className={clsx('text', 'text_type_digits-default')}>

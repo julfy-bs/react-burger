@@ -1,24 +1,25 @@
+import { JSX, ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+
+import { useAppSelector } from '../../hooks/useRedux';
 import { getUser } from '../../services/helpers/getSelector';
 import { PATH } from '../../utils/config';
-import { JSX, ReactNode } from 'react';
-import { useAppSelector } from '../../hooks/useRedux';
 
 type Props = {
-  children?: ReactNode;
   anonymous?: boolean;
+  children?: ReactNode;
 }
 
 const ProtectedRoute = ({
-  children,
   anonymous = false,
+  children,
 }: Props): JSX.Element => {
   const { user } = useAppSelector(getUser);
   const location = useLocation();
   const from = location?.state?.from || PATH.HOME;
 
   if (anonymous && user.isLogin) {
-    return <Navigate to={from} replace={true} />;
+    return <Navigate replace={true} to={from} />;
   }
 
   if (!anonymous && !user.isLogin && user.isLogout) {
@@ -26,7 +27,7 @@ const ProtectedRoute = ({
   }
 
   if (!anonymous && !user.isLogin) {
-    return <Navigate to={PATH.LOGIN} state={{ from: location }} replace={true} />;
+    return <Navigate replace={true} state={{ from: location }} to={PATH.LOGIN} />;
   }
 
   return (

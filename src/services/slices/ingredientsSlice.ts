@@ -1,23 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchIngredients } from '../asyncThunk/ingredientsThunk';
+
 import { Ingredient } from '../../types/Ingredient';
+import { fetchIngredients } from '../asyncThunk/ingredientsThunk';
 
 export type IngredientsState = {
   ingredients: Ingredient[],
-  ingredientsFetchRequest: boolean;
   ingredientsFetchFailed: boolean;
+  ingredientsFetchRequest: boolean;
 }
 
 const initialState: IngredientsState = {
   ingredients: [],
-  ingredientsFetchRequest: false,
   ingredientsFetchFailed: false,
+  ingredientsFetchRequest: false,
 };
 
 const ingredientsSlice = createSlice({
-  name: 'ingredients',
-  initialState,
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -37,7 +35,10 @@ const ingredientsSlice = createSlice({
         state.ingredientsFetchRequest = false;
         state.ingredientsFetchFailed = true;
       });
-  }
+  },
+  initialState,
+  name: 'ingredients',
+  reducers: {}
 });
 
 export default ingredientsSlice.reducer;

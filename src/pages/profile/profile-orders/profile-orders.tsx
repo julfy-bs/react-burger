@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { WSS_FOR_PROFILE_ORDERS } from '../../../utils/config';
-import OrderList from '../../../components/order-list/order-list';
+
 import Loader from '../../../components/loader/loader';
-import { wsConnectionClosed, wsConnectionStart } from '../../../services/slices/wsSlice';
-import { getUser, getWebsocket } from '../../../services/helpers/getSelector';
+import OrderList from '../../../components/order-list/order-list';
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
+import { getUser, getWebsocket } from '../../../services/helpers/getSelector';
+import { wsConnectionClosed, wsConnectionStart } from '../../../services/slices/wsSlice';
+import { WSS_FOR_PROFILE_ORDERS } from '../../../utils/config';
 
 const ProfileOrders = () => {
   const { orders } = useAppSelector(getWebsocket);

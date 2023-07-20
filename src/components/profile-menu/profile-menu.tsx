@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import styles from './profile-menu.module.css';
 import { NavLink } from 'react-router-dom';
-import { PATH } from '../../utils/config';
+
 import { useLogout } from '../../hooks/useLogout';
+import { PATH } from '../../utils/config';
+import styles from './profile-menu.module.css';
 
 const ProfileMenu = () => {
   const { handleLogout } = useLogout();
@@ -12,28 +13,28 @@ const ProfileMenu = () => {
       <ul className={clsx('page__list', styles.list)}>
         <li className={clsx(styles.item)}>
           <NavLink
-            end
-            to={PATH.PROFILE}
             className={({ isActive }) =>
               clsx(isActive ? styles.link_active : styles.link, 'page__link', 'text', 'text_type_main-medium')}
+            end
+            to={PATH.PROFILE}
           >
             Профиль
           </NavLink>
         </li>
         <li className={clsx(styles.item)}>
           <NavLink
-            end
-            to={PATH.ORDERS}
             className={({ isActive }) =>
               clsx(isActive ? styles.link_active : styles.link, 'page__link', 'text', 'text_type_main-medium')}
+            end
+            to={PATH.ORDERS}
           >
             История заказов
           </NavLink>
         </li>
         <li className={clsx(styles.item)}>
           <button
-            onClick={handleLogout}
             className={clsx(styles.link, styles.button, 'page__link', 'text', 'text_type_main-medium')}
+            onClick={handleLogout}
           >
             Выход
           </button>

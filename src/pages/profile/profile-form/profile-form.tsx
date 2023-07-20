@@ -1,23 +1,24 @@
-import clsx from 'clsx';
-import styles from './profile-form.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useForm } from '../../../hooks/useForm';
+
 import Loader from '../../../components/loader/loader';
+import { useForm } from '../../../hooks/useForm';
+import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 import { fetchUpdateUser } from '../../../services/asyncThunk/updateUserThunk';
 import { getUser } from '../../../services/helpers/getSelector';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
+import styles from './profile-form.module.css';
 
 const ProfileForm = () => {
-  const { user, patchUserRequest } = useAppSelector(getUser);
-  const { values, handleChange, errors, isValid, resetForm } = useForm();
+  const { patchUserRequest, user } = useAppSelector(getUser);
+  const { errors, handleChange, isValid, resetForm, values } = useForm();
   const dispatch = useAppDispatch();
-  const [isEdit, setIsEdit] = useState({ name: false, email: false, password: false });
+  const [isEdit, setIsEdit] = useState({ email: false, name: false, password: false });
   const inputNameRef = useRef<HTMLInputElement | null>(null);
   const inputEmailRef = useRef<HTMLInputElement | null>(null);
   const inputPasswordRef = useRef<HTMLInputElement | null>(null);
   const sameValues = (user !== null && (user.name !== values.name || user.email !== values.email || values.password));
-  const { name, email, password } = values;
+  const { email, name, password } = values;
 
   const isButtonActive = useMemo(
     () => (
@@ -25,7 +26,7 @@ const ProfileForm = () => {
     ), [isValid, sameValues]);
 
   useEffect(() => {
-    user && resetForm({ name: user.name, email: user.email, password: '' });
+    user && resetForm({ email: user.email, name: user.name, password: '' });
   }, [resetForm, user]);
 
   const onIconNameClick = () => {
@@ -44,17 +45,17 @@ const ProfileForm = () => {
   };
 
   const handleBlur = () => {
-    setIsEdit({ name: false, email: false, password: false });
+    setIsEdit({ email: false, name: false, password: false });
   };
 
   const handleResetValue = useCallback(() => {
-    user && resetForm({ name: user.name, email: user.email, password: '' });
+    user && resetForm({ email: user.email, name: user.name, password: '' });
   }, [resetForm, user]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password && password.length > 8) {
-      dispatch(fetchUpdateUser({ password, email: email ?? user.email, name: name ?? user.name }));
+      dispatch(fetchUpdateUser({ email: email ?? user.email, name: name ?? user.name, password }));
     } else {
       dispatch(fetchUpdateUser({ email: email ?? user.email, name: name ?? user.name }));
     }
@@ -65,70 +66,70 @@ const ProfileForm = () => {
       ? (
         <form className={clsx(styles.form)} onSubmit={handleSubmit}>
           <Input
-            type={'text'}
-            value={values.name || ''}
-            onChange={(e) => handleChange(e)}
-            placeholder={'Имя'}
-            icon={'EditIcon'}
-            name={'name'}
+            disabled={!isEdit.name}
             error={!!errors.name}
             errorText={errors.name}
-            size={'default'}
-            onIconClick={onIconNameClick}
-            disabled={!isEdit.name}
-            ref={inputNameRef}
-            onBlur={() => handleBlur()}
-            minLength={2}
+            icon={'EditIcon'}
             maxLength={20}
+            minLength={2}
+            name={'name'}
+            onBlur={() => handleBlur()}
+            onChange={(e) => handleChange(e)}
+            onIconClick={onIconNameClick}
+            placeholder={'Имя'}
+            ref={inputNameRef}
+            size={'default'}
+            type={'text'}
+            value={values.name || ''}
           />
           <Input
-            type={'email'}
-            value={values.email || ''}
+            disabled={!isEdit.email}
+            error={!!errors.email}
+            errorText={errors.email}
+            icon={'EditIcon'}
+            name={'email'}
+            onBlur={() => handleBlur()}
             onChange={(e) => handleChange(e)}
             onIconClick={onIconEmailClick}
             placeholder={'Логин'}
-            icon={'EditIcon'}
-            name={'email'}
-            error={!!errors.email}
-            errorText={errors.email}
-            size={'default'}
-            disabled={!isEdit.email}
             ref={inputEmailRef}
-            onBlur={() => handleBlur()}
+            size={'default'}
+            type={'email'}
+            value={values.email || ''}
           />
           <Input
-            type={isEdit.password ? 'text' : 'password'}
-            value={values.password || ''}
-            onIconClick={onIconPasswordClick}
-            onChange={(e) => handleChange(e)}
-            placeholder={'Пароль'}
-            icon={'EditIcon'}
-            name={'password'}
+            disabled={!isEdit.password}
             error={!!errors.password}
             errorText={errors.password}
-            size={'default'}
-            ref={inputPasswordRef}
-            disabled={!isEdit.password}
-            minLength={8}
+            icon={'EditIcon'}
             maxLength={20}
+            minLength={8}
+            name={'password'}
             onBlur={() => handleBlur()}
+            onChange={(e) => handleChange(e)}
+            onIconClick={onIconPasswordClick}
+            placeholder={'Пароль'}
+            ref={inputPasswordRef}
+            size={'default'}
+            type={isEdit.password ? 'text' : 'password'}
+            value={values.password || ''}
           />
           {sameValues && <div className={clsx(styles.button_container)}>
             <Button
-              htmlType="button"
-              type="secondary"
-              size="medium"
               extraClass={styles.button_secondary}
+              htmlType="button"
               onClick={() => handleResetValue()}
+              size="medium"
+              type="secondary"
             >
               Отмена
             </Button>
             <Button
-              htmlType="submit"
-              type="primary"
-              size="medium"
-              extraClass={styles.button}
               disabled={!isButtonActive || patchUserRequest.fetch || !values.email || (!!values.name && values.name.length < 2)}
+              extraClass={styles.button}
+              htmlType="submit"
+              size="medium"
+              type="primary"
             >
               {patchUserRequest.fetch ? 'Сохранение...' : 'Сохранить'}
             </Button>

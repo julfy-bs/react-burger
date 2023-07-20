@@ -1,19 +1,20 @@
-import clsx from 'clsx';
-import styles from './notification.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { createPortal } from 'react-dom';
-import { MODAL_ID } from '../../utils/constants';
+import clsx from 'clsx';
 import { ReactNode, useMemo } from 'react';
-import { getModal } from '../../services/helpers/getSelector';
+import { createPortal } from 'react-dom';
+
 import { useAppSelector } from '../../hooks/useRedux';
+import { getModal } from '../../services/helpers/getSelector';
+import { MODAL_ID } from '../../utils/constants';
+import styles from './notification.module.css';
 
 type Props = {
   children?: ReactNode;
-  title: string;
   handleModalClose: () => void;
+  title: string;
 }
 
-const Notification = ({ title, handleModalClose, children }: Props) => {
+const Notification = ({ children, handleModalClose, title }: Props) => {
   const { modalNotification } = useAppSelector(getModal)
   const isNotificationOpen = useMemo(() => !!modalNotification, [modalNotification])
 
@@ -24,10 +25,10 @@ const Notification = ({ title, handleModalClose, children }: Props) => {
         styles.notification,
         { [styles.notification_opened]: isNotificationOpen }
       )}
-      onClick={(e) => e.stopPropagation()}
-      role="dialog"
       aria-labelledby={title ? 'modal-title' : 'aria-title'}
       aria-modal={isNotificationOpen ? 'true' : 'false'}
+      onClick={(e) => e.stopPropagation()}
+      role="dialog"
     >
       <div className={clsx(styles.notification__header)}>
         <h3
@@ -37,10 +38,10 @@ const Notification = ({ title, handleModalClose, children }: Props) => {
           {title}
         </h3>
         <button
-          className={clsx(styles.notification__close)}
           aria-label="Закрыть модальное окно"
-          type="button"
+          className={clsx(styles.notification__close)}
           onClick={() => handleModalClose()}
+          type="button"
         >
           <CloseIcon type="primary"/>
         </button>

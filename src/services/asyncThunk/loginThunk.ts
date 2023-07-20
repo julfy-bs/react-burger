@@ -1,15 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
-import { setMessage, setErrorMessage } from '../slices/loginSlice';
-import { AppDispatch, RootState } from '../index';
+
 import { LoginInput } from '../../types/LoginInput';
 import { LoginPromise } from '../../types/LoginPromise';
+import { loginUser } from '../api/profileApi';
 import { changeUserLoginInfo } from '../helpers/changeUserLoginInfo';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
+import { AppDispatch, RootState } from '../index';
+import { setErrorMessage, setMessage } from '../slices/loginSlice';
 
 type KnownErrorData = {
-  success: boolean;
   message: string;
+  success: boolean;
 };
 
 type LoginError = {
@@ -25,9 +26,9 @@ export const fetchLogin = createAsyncThunk<
   LoginPromise,
   LoginInput,
   {
+    dispatch: AppDispatch
     rejectValue: LoginError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'profile/fetchLogin',
@@ -36,14 +37,14 @@ export const fetchLogin = createAsyncThunk<
       const { dispatch, getState } = thunkAPI;
       const { email, password } = userData;
       const res = await loginUser({ email, password });
-      const { user, accessToken, refreshToken } = res;
+      const { accessToken, refreshToken, user } = res;
       changeUserLoginInfo(user, accessToken, refreshToken, dispatch);
       const { login } = getState();
       showNotificationWithTimeout(login.messageContent, dispatch, setMessage);
       return res;
     } catch (e) {
       const { dispatch, rejectWithValue } = thunkAPI;
-      const hasErrorData = (e as unknown as LoginError);
+      const hasErrorData = (e  as LoginError);
       dispatch(setErrorMessage(true));
       setTimeout(() => {
         dispatch(setErrorMessage(false));

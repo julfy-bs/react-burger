@@ -1,23 +1,24 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { forgotPassword } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
-import { setMessage } from '../slices/passwordSlice';
-import { AppDispatch, RootState } from '../index';
+
 import { ForgotPasswordInput } from '../../types/ForgotPasswordInput';
 import { ForgotPasswordPromise } from '../../types/ForgotPasswordPromise';
+import { forgotPassword } from '../api/profileApi';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
+import { AppDispatch, RootState } from '../index';
+import { setMessage } from '../slices/passwordSlice';
 
 type ForgotPasswordError = {
-  message: string;
   [key: string]: unknown;
+  message: string;
 }
 
 export const fetchForgotPassword = createAsyncThunk<
   ForgotPasswordPromise,
   ForgotPasswordInput,
   {
+    dispatch: AppDispatch
     rejectValue: ForgotPasswordError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'profile/fetchForgotPassword',
@@ -32,7 +33,7 @@ export const fetchForgotPassword = createAsyncThunk<
       return res;
     } catch (e) {
       const { rejectWithValue } = thunkAPI;
-      const hasErrorData = (e as unknown as ForgotPasswordError);
+      const hasErrorData = (e  as ForgotPasswordError);
       return rejectWithValue(hasErrorData);
     }
   }

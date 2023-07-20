@@ -1,12 +1,12 @@
+import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import clsx from 'clsx';
-import styles from './header.module.css';
-
-import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import HeaderLink from '../header-link/header-link';
-import { PATH } from '../../utils/config';
 import { NavLink } from 'react-router-dom';
-import { updateUser } from '../../services/slices/userSlice';
+
 import { useAppDispatch } from '../../hooks/useRedux';
+import { updateUser } from '../../services/slices/userSlice';
+import { PATH } from '../../utils/config';
+import HeaderLink from '../header-link/header-link';
+import styles from './header.module.css';
 
 
 const Header = () => {
@@ -26,23 +26,23 @@ const Header = () => {
         <nav>
           <ul className={clsx(styles.navigation)}>
             <li>
-              <HeaderLink text={'Конструктор'} route={PATH.HOME}>
+              <HeaderLink route={PATH.HOME} text={'Конструктор'}>
                 <BurgerIcon type="primary"/>
               </HeaderLink>
             </li>
             <li>
-              <HeaderLink text={'Лента заказов'} route={PATH.FEED}>
+              <HeaderLink route={PATH.FEED} text={'Лента заказов'}>
                 <ListIcon type="secondary"/>
               </HeaderLink>
             </li>
           </ul>
         </nav>
 
-        <NavLink to={PATH.HOME} className={clsx(styles.logo)}>
+        <NavLink className={clsx(styles.logo)} to={PATH.HOME}>
           <Logo></Logo>
         </NavLink>
         <div className={clsx(styles.profile)}>
-          <HeaderLink text={'Личный кабинет'} route={PATH.PROFILE} onClick={() => handleOpenProfile()}>
+          <HeaderLink onClick={() => handleOpenProfile()} route={PATH.PROFILE} text={'Личный кабинет'}>
             <ProfileIcon type="secondary"/>
           </HeaderLink>
         </div>

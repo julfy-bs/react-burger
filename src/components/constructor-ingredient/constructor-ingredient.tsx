@@ -1,28 +1,29 @@
-import clsx from 'clsx';
-import styles from './constructor-ingredient.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDrag, useDrop } from 'react-dnd';
-import { removeIngredient } from '../../services/slices/cartSlice';
+import clsx from 'clsx';
 import { memo, useRef } from 'react';
-import { Ingredient } from '../../types/Ingredient';
+import { useDrag, useDrop } from 'react-dnd';
+
 import { useAppDispatch } from '../../hooks/useRedux';
+import { removeIngredient } from '../../services/slices/cartSlice';
+import { Ingredient } from '../../types/Ingredient';
+import styles from './constructor-ingredient.module.css';
 
 type Props = {
-  ingredient: Ingredient;
   index: number;
+  ingredient: Ingredient;
   moveIngredient: (id: string, index: number) => void;
 }
 
-const IngredientElement = ({ ingredient, index, moveIngredient }: Props) => {
+const IngredientElement = ({ index, ingredient, moveIngredient }: Props) => {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLLIElement | null>(null);
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: 'ingredientSort',
-      item: { id: ingredient._id, index },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
-      })
+      }),
+      item: { id: ingredient._id, index },
+      type: 'ingredientSort'
     }),
     [index, moveIngredient],
   );
@@ -36,7 +37,7 @@ const IngredientElement = ({ ingredient, index, moveIngredient }: Props) => {
     [moveIngredient],
   );
 
-  const handleDeleteIngredient = () => dispatch(removeIngredient({ index: index, _id: ingredient._id }));
+  const handleDeleteIngredient = () => dispatch(removeIngredient({ _id: ingredient._id, index: index }));
 
   drag(drop(ref));
 
@@ -47,10 +48,10 @@ const IngredientElement = ({ ingredient, index, moveIngredient }: Props) => {
     >
       <DragIcon type="primary"/>
       <ConstructorElement
-        text={ingredient.name}
-        price={ingredient.price}
-        thumbnail={ingredient.image}
         handleClose={handleDeleteIngredient}
+        price={ingredient.price}
+        text={ingredient.name}
+        thumbnail={ingredient.image}
       />
     </li>
   );

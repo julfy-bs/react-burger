@@ -1,7 +1,7 @@
 import { CustomError } from '../../types/CustomError';
 
 export const checkSuccess = (res: { success: boolean } & Promise<unknown> | CustomError) =>
-  (res && res.success)
+  res.success
     ? res
     : Promise
       .reject(res)

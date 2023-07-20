@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
+import { socketMiddleware } from './middleware/socketMiddleware';
 import cartSlice from './slices/cartSlice';
 import ingredientsSlice from './slices/ingredientsSlice';
 import loadingSlice from './slices/loadingSlice';
@@ -10,9 +11,7 @@ import orderSlice from './slices/orderSlice';
 import passwordSlice from './slices/passwordSlice';
 import registerSlice from './slices/registerSlice';
 import userSlice from './slices/userSlice';
-import wsSlice from './slices/wsSlice';
-import { wsActions } from './slices/wsSlice';
-import { socketMiddleware } from './middleware/socketMiddleware';
+import wsSlice, { wsActions } from './slices/wsSlice';
 
 const rootReducer = combineReducers({
   cart: cartSlice,
@@ -29,9 +28,9 @@ const rootReducer = combineReducers({
 });
 
 export const store = configureStore({
-  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(socketMiddleware(wsActions))
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(socketMiddleware(wsActions)),
+  reducer: rootReducer
 });
 
 export type RootState = ReturnType<typeof store.getState>;
