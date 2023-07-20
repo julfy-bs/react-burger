@@ -1,18 +1,16 @@
 import clsx from 'clsx';
-import styles from './burger-ingredients.module.css';
-
-import Tabs from '../tabs/tabs';
-import IngredientsContainer from '../ingredients-container/ingredients-container';
-import Ingredient from '../ingredient/ingredient';
-
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { ingredientTabs } from '../../utils/config';
-import { TABS } from '../../utils/constants';
+import { useAppSelector } from '../../hooks/useRedux';
 import { getIngredients } from '../../services/helpers/getSelector';
 import { TabShape } from '../../types/TabShape';
-import { useAppSelector } from '../../hooks/useRedux';
+import { ingredientTabs } from '../../utils/config';
+import { TABS } from '../../utils/constants';
+import Ingredient from '../ingredient/ingredient';
+import IngredientsContainer from '../ingredients-container/ingredients-container';
+import Tabs from '../tabs/tabs';
+import styles from './burger-ingredients.module.css';
 
 const BurgerIngredients = () => {
   const [tabs] = useState<TabShape[]>(ingredientTabs);
@@ -55,7 +53,7 @@ const BurgerIngredients = () => {
     setCurrentTab(value);
     setIsScrollable(false);
     scrollToId(value);
-    setTimeout(() => setIsScrollable(true), 3000);
+    return () => setIsScrollable(true);
   }, [scrollToId]);
 
   const { ingredients } = useAppSelector(getIngredients);
@@ -64,9 +62,9 @@ const BurgerIngredients = () => {
   const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);
   const main = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
 
-  const bunElements = useMemo(() => buns.map((item) => <Ingredient key={item._id} ingredient={item}/>), [buns]);
-  const sauceElements = useMemo(() => sauces.map((item) => <Ingredient key={item._id} ingredient={item}/>), [sauces]);
-  const mainElements = useMemo(() => main.map((item) => <Ingredient key={item._id} ingredient={item}/>), [main]);
+  const bunElements = useMemo(() => buns.map((item) => <Ingredient ingredient={item} key={item._id}/>), [buns]);
+  const sauceElements = useMemo(() => sauces.map((item) => <Ingredient ingredient={item} key={item._id}/>), [sauces]);
+  const mainElements = useMemo(() => main.map((item) => <Ingredient ingredient={item} key={item._id}/>), [main]);
 
   return (
     <section className={clsx(styles.section, 'mt-10')}>
@@ -76,25 +74,25 @@ const BurgerIngredients = () => {
         Соберите бургер
       </h1>
       <Tabs
-        tabs={tabs}
-        currentTab={currentTab}
         changeTab={handleTabClick}
+        currentTab={currentTab}
+        tabs={tabs}
       />
       <ul
         className={clsx(styles.ingredients)}
       >
         <li>
-          <IngredientsContainer type={TABS.BUN} title={'Булки'} ref={bunsRef}>
+          <IngredientsContainer ref={bunsRef} title={'Булки'} type={TABS.BUN}>
             {bunElements}
           </IngredientsContainer>
         </li>
         <li>
-          <IngredientsContainer type={TABS.SAUCE} title={'Соусы'} ref={saucesRef}>
+          <IngredientsContainer ref={saucesRef} title={'Соусы'} type={TABS.SAUCE}>
             {sauceElements}
           </IngredientsContainer>
         </li>
         <li>
-          <IngredientsContainer type={TABS.MAIN} title={'Начинка'} ref={mainsRef}>
+          <IngredientsContainer ref={mainsRef} title={'Начинка'} type={TABS.MAIN}>
             {mainElements}
           </IngredientsContainer>
         </li>

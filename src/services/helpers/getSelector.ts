@@ -1,13 +1,13 @@
-import { RootState } from '../index';
-import { IngredientsState } from '../slices/ingredientsSlice';
-import { UserState } from '../slices/userSlice';
-import { OrderState } from '../slices/orderSlice';
-import { ModalState } from '../slices/modalSlice';
-import { LoadingState } from '../slices/loadingSlice';
-import { CartState } from '../slices/cartSlice';
-import { WebsocketState } from '../../types/WebsocketState';
-import { PasswordState } from '../slices/passwordSlice';
 import { State } from '../../types/State';
+import { WebsocketState } from '../../types/WebsocketState';
+import { RootState } from '../index';
+import { CartState } from '../slices/cartSlice';
+import { IngredientsState } from '../slices/ingredientsSlice';
+import { LoadingState } from '../slices/loadingSlice';
+import { ModalState } from '../slices/modalSlice';
+import { OrderState } from '../slices/orderSlice';
+import { PasswordState } from '../slices/passwordSlice';
+import { UserState } from '../slices/userSlice';
 
 export const getIngredients = (store: RootState): IngredientsState => store.ingredients
 export const getUser = (store: RootState): UserState => store.user

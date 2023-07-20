@@ -5,7 +5,9 @@
   gap: 24px;
   overflow-y: auto;
   box-sizing: border-box;
-  padding-right: 8px;
+  padding: 0 8px 24px 0;
+  margin: 0;
+  list-style: none;
 }
 
 .orders::-webkit-scrollbar {
@@ -14,6 +16,7 @@
 
 .orders::-webkit-scrollbar-track {
   background: #2f2f37;
+  margin-bottom: 64px;
 }
 
 .orders::-webkit-scrollbar-thumb {

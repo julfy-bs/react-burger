@@ -1,6 +1,7 @@
-import { closeAllModal, setModalNotification } from '../slices/modalSlice';
-import { AppDispatch } from '../index';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+
+import { AppDispatch } from '../index';
+import { closeAllModal, setModalNotification } from '../slices/modalSlice';
 
 export const showNotificationWithTimeout = (
   content: string,

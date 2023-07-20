@@ -1,87 +1,60 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getCookie } from '../helpers/getCookie';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { State } from '../../types/State';
+import { Token } from '../../types/Token';
 import {
   ACCESS_TOKEN,
   ERROR_DEFAULT, ERROR_USER_EXISTS, EXPIRES_AT, NOTIFICATION_LOGIN_SUCCESS,
   NOTIFICATION_USER_UPDATE_ERROR,
   NOTIFICATION_USER_UPDATE_SUCCESS, REFRESH_TOKEN
 } from '../../utils/constants';
-import { fetchUpdateUser } from '../asyncThunk/updateUserThunk';
 import { fetchGetUser } from '../asyncThunk/getUserThunk';
-import { State } from '../../types/State';
-import { Token } from '../../types/Token';
+import { fetchUpdateUser } from '../asyncThunk/updateUserThunk';
+import { getCookie } from '../helpers/getCookie';
 
 export type UserState = {
   getUserRequest: State;
   patchUserRequest: State;
   user: {
+    email: string;
     isLogin: boolean;
     isLogout: boolean;
-    token: Token;
-    email: string;
     name: string;
+    token: Token;
   }
 }
 
 const initialState: UserState = {
   getUserRequest: {
-    fetch: false,
     error: false,
-    message: false,
-    messageContent: NOTIFICATION_LOGIN_SUCCESS,
     errorMessage: false,
-    errorMessageContent: ERROR_DEFAULT
+    errorMessageContent: ERROR_DEFAULT,
+    fetch: false,
+    message: false,
+    messageContent: NOTIFICATION_LOGIN_SUCCESS
   },
   patchUserRequest: {
-    fetch: false,
     error: false,
-    message: false,
-    messageContent: NOTIFICATION_USER_UPDATE_SUCCESS,
     errorMessage: false,
-    errorMessageContent: NOTIFICATION_USER_UPDATE_ERROR
+    errorMessageContent: NOTIFICATION_USER_UPDATE_ERROR,
+    fetch: false,
+    message: false,
+    messageContent: NOTIFICATION_USER_UPDATE_SUCCESS
   },
   user: {
+    email: '',
     isLogin: !!getCookie(ACCESS_TOKEN) || false,
     isLogout: false,
+    name: '',
     token: {
-      accessToken: getCookie(ACCESS_TOKEN) || null,
-      refreshToken: getCookie(REFRESH_TOKEN) || null,
-      expiresAt: getCookie(EXPIRES_AT) || null
-    },
-    email: '',
-    name: ''
+      accessToken: getCookie(ACCESS_TOKEN) ?? null,
+      expiresAt: getCookie(EXPIRES_AT) ?? null,
+      refreshToken: getCookie(REFRESH_TOKEN) ?? null
+    }
   }
 };
 
 const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    updateUser(
-      state,
-      action: PayloadAction<{
-        isLogin?: boolean;
-        isLogout?: boolean;
-        token?: Token;
-        email?: string;
-        name?: string;
-      }>
-    ) {
-      state.user = {
-        ...state.user,
-        ...action.payload
-      };
-    },
-    setError(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.patchUserRequest = {
-        ...state.patchUserRequest,
-        errorMessage: action.payload
-      };
-    }
-  },
   extraReducers: (builder) => {
     builder
       // Get user
@@ -102,8 +75,8 @@ const userSlice = createSlice({
 
         state.user = {
           ...state.user,
-          isLogin: true,
           email,
+          isLogin: true,
           name
         };
       })
@@ -112,9 +85,9 @@ const userSlice = createSlice({
           const { message } = action.payload;
           state.getUserRequest = {
             ...state.getUserRequest,
-            fetch: false,
             error: true,
-            errorMessageContent: message || ERROR_DEFAULT
+            errorMessageContent: message || ERROR_DEFAULT,
+            fetch: false
           };
           state.user = {
             ...state.user,
@@ -143,8 +116,8 @@ const userSlice = createSlice({
 
         state.user = {
           ...state.user,
-          isLogin: true,
           email,
+          isLogin: true,
           name
         };
       })
@@ -153,9 +126,9 @@ const userSlice = createSlice({
           const { message } = action.payload;
           state.patchUserRequest = {
             ...state.patchUserRequest,
-            fetch: false,
             error: true,
-            errorMessage: true
+            errorMessage: true,
+            fetch: false
           };
           (message && message === 'User with such email already exists')
             ? state.patchUserRequest.errorMessageContent = ERROR_USER_EXISTS
@@ -165,7 +138,35 @@ const userSlice = createSlice({
         }
       });
   },
+  initialState,
+  name: 'user',
+  reducers: {
+    setError(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.patchUserRequest = {
+        ...state.patchUserRequest,
+        errorMessage: action.payload
+      };
+    },
+    updateUser(
+      state,
+      action: PayloadAction<{
+        email?: string;
+        isLogin?: boolean;
+        isLogout?: boolean;
+        name?: string;
+        token?: Token;
+      }>
+    ) {
+      state.user = {
+        ...state.user,
+        ...action.payload
+      };
+    }
+  },
 });
 
-export const { updateUser, setError } = userSlice.actions;
+export const { setError, updateUser } = userSlice.actions;
 export default userSlice.reducer;

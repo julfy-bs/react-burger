@@ -5,7 +5,7 @@ export const SERVER_CONFIG = {
   },
 };
 
-//WebSocket
+// WebSocket
 export const WSS_FOR_ALL_ORDERS = 'wss://norma.nomoreparties.space/orders/all';
 export const WSS_FOR_PROFILE_ORDERS = 'wss://norma.nomoreparties.space/orders';
 
@@ -25,16 +25,16 @@ export const ingredientTabs = [
 ];
 
 export const PATH = {
-  HOME: '/',
-  LOGIN: '/login',
-  LOGOUT: '/auth/logout',
-  REGISTER: '/register',
-  FORGOT_PASSWORD: '/forgot-password',
-  RESET_PASSWORD: '/reset-password',
-  PROFILE: '/profile',
-  ORDERS: '/profile/orders',
-  ORDER: '/profile/orders/:id',
   FEED: '/feed',
   FEED_ORDER: '/feed/:id',
-  INGREDIENT: '/ingredients/:id'
+  FORGOT_PASSWORD: '/forgot-password',
+  HOME: '/',
+  INGREDIENT: '/ingredients/:id',
+  LOGIN: '/login',
+  LOGOUT: '/auth/logout',
+  ORDER: '/profile/orders/:id',
+  ORDERS: '/profile/orders',
+  PROFILE: '/profile',
+  REGISTER: '/register',
+  RESET_PASSWORD: '/reset-password'
 };

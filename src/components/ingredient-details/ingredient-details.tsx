@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import styles from './ingredient-details.module.css';
+
 import { Ingredient } from '../../types/Ingredient';
+import styles from './ingredient-details.module.css';
 
 type Props = {
   ingredient: Ingredient;
@@ -10,16 +11,16 @@ const IngredientDetails = ({ ingredient }: Props) => {
     <div className={clsx(styles.ingredientDetail)}>
       <picture className={clsx(styles.ingredientDetail__picture)}>
         <source
-          srcSet={ingredient.image_mobile}
           media="(max-width: 480px)"
+          srcSet={ingredient.image_mobile}
         />
         <source
-          srcSet={ingredient.image_large}
           media="(min-width: 1400px)"
+          srcSet={ingredient.image_large}
         />
         <img
-          className={clsx(styles.ingredientDetail__image)}
           alt={ingredient.name}
+          className={clsx(styles.ingredientDetail__image)}
           src={ingredient.image}
         />
       </picture>

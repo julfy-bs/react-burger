@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getOrder, postOrder } from '../api/orderApi';
-import { closeAllModal, setModalNotification, setModalOrderSuccess } from '../slices/modalSlice';
-import { cleanCart } from '../slices/cartSlice';
-import { setErrorMessage, setMessage, setOrder } from '../slices/orderSlice';
-import { AppDispatch, RootState } from '../index';
-import { OrderPromise } from '../../types/OrderPromise';
+
 import { Cart } from '../../types/Cart';
 import { GetOrdersPromise } from '../../types/GetOrdersPromise';
+import { OrderPromise } from '../../types/OrderPromise';
+import { getOrder, postOrder } from '../api/orderApi';
+import { AppDispatch, RootState } from '../index';
+import { cleanCart } from '../slices/cartSlice';
+import { closeAllModal, setModalNotification, setModalOrderSuccess } from '../slices/modalSlice';
+import { setErrorMessage, setMessage, setOrder } from '../slices/orderSlice';
 
 
 type OrderError = {
@@ -17,9 +18,9 @@ export const createOrder = createAsyncThunk<
   OrderPromise,
   Cart,
   {
+    dispatch: AppDispatch
     rejectValue: OrderError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'order/createOrder',
@@ -43,7 +44,7 @@ export const createOrder = createAsyncThunk<
       return res;
     } catch (e) {
       const { dispatch, getState, rejectWithValue } = thunkAPI;
-      const hasErrorData = (e as unknown as OrderError);
+      const hasErrorData = (e  as OrderError);
       dispatch(setErrorMessage(true));
       const { order } = getState();
       dispatch(setModalNotification(order.errorMessageContent));
@@ -61,9 +62,9 @@ export const fetchGetOrder = createAsyncThunk<
   GetOrdersPromise,
   number,
   {
+    dispatch: AppDispatch
     rejectValue: OrderError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'order/getOrder',
@@ -77,7 +78,7 @@ export const fetchGetOrder = createAsyncThunk<
       return res;
     } catch (e) {
       const { rejectWithValue } = thunkAPI;
-      const hasErrorData = (e as unknown as OrderError);
+      const hasErrorData = (e  as OrderError);
       return rejectWithValue(hasErrorData);
     }
   },

@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
+
 import { fetchLogout } from '../services/asyncThunk/logoutThunk';
 import { getCookie } from '../services/helpers/getCookie';
-import { REFRESH_TOKEN } from '../utils/constants';
 import { getUser } from '../services/helpers/getSelector';
+import { REFRESH_TOKEN } from '../utils/constants';
 import { useAppDispatch, useAppSelector } from './useRedux';
 
 export const useLogout = () => {

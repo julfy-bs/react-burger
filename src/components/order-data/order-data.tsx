@@ -1,16 +1,18 @@
 import clsx from 'clsx';
-import styles from './order-data.module.css';
 import { memo, useMemo } from 'react';
-import { getWebsocket } from '../../services/helpers/getSelector';
+
 import { useAppSelector } from '../../hooks/useRedux';
+import { getWebsocket } from '../../services/helpers/getSelector';
+import styles from './order-data.module.css';
 
 const OrderData = () => {
-  const { total, totalToday, orders } = useAppSelector(getWebsocket);
+  const { orders, total, totalToday } = useAppSelector(getWebsocket);
   const readyOrders = useMemo(() => {
     if (orders) {
       const orderStatusArray = orders?.filter((item) => item.status === 'done');
       return orderStatusArray?.slice(0, 15).map((item) => <li key={item._id}>{item.number}</li>);
     }
+
     return null;
   }, [orders]);
 
@@ -19,6 +21,7 @@ const OrderData = () => {
       const orderStatusArray = orders?.filter((item) => item.status === 'pending');
       return orderStatusArray?.slice(0, 15).map((item) => <li key={item._id}>{item.number}</li>);
     }
+
     return null;
   }, [orders]);
 

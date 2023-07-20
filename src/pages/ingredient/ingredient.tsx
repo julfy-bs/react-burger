@@ -1,12 +1,13 @@
 import clsx from 'clsx';
-import styles from './ingredient.module.css';
-import IngredientDetails from '../../components/ingredient-details/ingredient-details';
-import Loader from '../../components/loader/loader';
 import { memo, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { getIngredients } from '../../services/helpers/getSelector';
-import { ensureResult } from '../../services/helpers/ensureResult';
+
+import IngredientDetails from '../../components/ingredient-details/ingredient-details';
+import Loader from '../../components/loader/loader';
 import { useAppSelector } from '../../hooks/useRedux';
+import { ensureResult } from '../../services/helpers/ensureResult';
+import { getIngredients } from '../../services/helpers/getSelector';
+import styles from './ingredient.module.css';
 
 const IngredientPage = () => {
   const params = useParams();

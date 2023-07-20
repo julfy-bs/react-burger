@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import { getCookie } from '../services/helpers/getCookie';
 import { EXPIRES_AT } from '../utils/constants';
 
-export const useAuthorization = () => {
+const useAuthorization = () => {
   const location = useLocation();
 
   const isTokenExpired = useMemo(() => {
@@ -12,11 +13,18 @@ export const useAuthorization = () => {
       ? Date.now() >= +expiresAt
       : true;
   }, []);
-  const previousUrl = useMemo(() =>
-      (location.state && location.state.background)
-        ? location?.state?.background
-        : null,
-    [location]);
+  const previousUrl = useMemo(() => {
+      const state = location.state as { background: string } | null;
+      if (state?.background) {
+        return state.background;
+      }
+    },
+    [location.state]);
 
-  return { previousUrl, isTokenExpired };
+  return {
+    isTokenExpired,
+    previousUrl,
+  };
 };
+
+export default useAuthorization;

@@ -1,15 +1,16 @@
-import clsx from 'clsx';
-import styles from './tabs.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
+
 import { TabShape } from '../../types/TabShape';
+import styles from './tabs.module.css';
 
 type Props = {
-  tabs: TabShape[];
-  currentTab: string;
   changeTab: (currentTab: string) => void;
+  currentTab: string;
+  tabs: TabShape[];
 }
 
-const Tabs = ({ tabs, currentTab, changeTab }: Props) => {
+const Tabs = ({ changeTab, currentTab, tabs }: Props) => {
   return (
     <ul
       className={clsx(styles.tabs_list)}
@@ -20,9 +21,9 @@ const Tabs = ({ tabs, currentTab, changeTab }: Props) => {
             key={tab.type}
           >
             <Tab
-              value={tab.type}
               active={currentTab === tab.type}
               onClick={(currentTab: string) => changeTab(currentTab)}
+              value={tab.type}
             >
               {tab.name}
             </Tab>

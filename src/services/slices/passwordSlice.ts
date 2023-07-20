@@ -1,73 +1,44 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { State } from '../../types/State';
 import {
   ERROR_DEFAULT,
   NOTIFICATION_EMAIL_SUBMITTED, NOTIFICATION_INCORRECT_TOKEN,
   NOTIFICATION_PASSWORD_RESET,
   SERVER_RESPOND_INCORRECT_TOKEN
 } from '../../utils/constants';
-import { fetchResetPassword } from '../asyncThunk/resetPasswordThunk';
 import { fetchForgotPassword } from '../asyncThunk/forgotPasswordThunk';
-import { State } from '../../types/State';
+import { fetchResetPassword } from '../asyncThunk/resetPasswordThunk';
 
 export type PasswordState = {
+  forgotPasswordRequest: State;
   isEmailSubmitted: boolean;
   isPasswordChanged: boolean;
-  forgotPasswordRequest: State;
   resetPasswordRequest: State;
 }
 
 const initialState: PasswordState = {
-  isEmailSubmitted: false,
-  isPasswordChanged: false,
   forgotPasswordRequest: {
-    fetch: false,
     error: false,
+    errorMessage: false,
+    errorMessageContent: ERROR_DEFAULT,
+    fetch: false,
     message: false,
     messageContent: NOTIFICATION_EMAIL_SUBMITTED,
+  },
+  isEmailSubmitted: false,
+  isPasswordChanged: false,
+  resetPasswordRequest: {
+    error: false,
     errorMessage: false,
     errorMessageContent: ERROR_DEFAULT,
-  },
-  resetPasswordRequest: {
     fetch: false,
-    error: false,
     message: false,
     messageContent: NOTIFICATION_PASSWORD_RESET,
-    errorMessage: false,
-    errorMessageContent: ERROR_DEFAULT,
   },
 };
 
 const passwordSlice = createSlice({
-  name: 'password',
-  initialState,
-  reducers: {
-    setIsEmailSubmitted(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.isEmailSubmitted = action.payload;
-    },
-    setIsPasswordChanged(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.isPasswordChanged = action.payload;
-    },
-    setMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.forgotPasswordRequest.message = action.payload;
-      state.resetPasswordRequest.message = action.payload;
-    },
-    setErrorMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.forgotPasswordRequest.errorMessage = action.payload;
-      state.resetPasswordRequest.errorMessage = action.payload;
-    }
-  },
   extraReducers: (builder) => {
     builder
       // Password forgot
@@ -90,10 +61,10 @@ const passwordSlice = createSlice({
         state.isEmailSubmitted = false;
         state.forgotPasswordRequest = {
           ...state.forgotPasswordRequest,
-          fetch: false,
           error: true,
           errorMessage: true,
-          errorMessageContent: action.payload?.message || ERROR_DEFAULT,
+          errorMessageContent: action.payload?.message ?? ERROR_DEFAULT,
+          fetch: false,
         };
       })
       // Password reset
@@ -122,19 +93,49 @@ const passwordSlice = createSlice({
             const { message } = data;
             state.resetPasswordRequest = {
               ...state.resetPasswordRequest,
-              fetch: false,
               error: true,
               errorMessage: true,
               errorMessageContent: (message && message === SERVER_RESPOND_INCORRECT_TOKEN)
                 ? state.resetPasswordRequest.errorMessageContent = NOTIFICATION_INCORRECT_TOKEN
                 : state.resetPasswordRequest.errorMessageContent = message || ERROR_DEFAULT,
+              fetch: false,
             };
           } else {
             console.error('action.payload is undefined');
           }
         });
+  },
+  initialState,
+  name: 'password',
+  reducers: {
+    setErrorMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.forgotPasswordRequest.errorMessage = action.payload;
+      state.resetPasswordRequest.errorMessage = action.payload;
+    },
+    setIsEmailSubmitted(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.isEmailSubmitted = action.payload;
+    },
+    setIsPasswordChanged(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.isPasswordChanged = action.payload;
+    },
+    setMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.forgotPasswordRequest.message = action.payload;
+      state.resetPasswordRequest.message = action.payload;
+    }
   }
 });
 
-export const { setMessage, setErrorMessage } = passwordSlice.actions;
+export const { setErrorMessage, setMessage } = passwordSlice.actions;
 export default passwordSlice.reducer;

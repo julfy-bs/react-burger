@@ -1,11 +1,12 @@
 import clsx from 'clsx';
-import styles from './profile.module.css';
-import ProfileMenu from '../../components/profile-menu/profile-menu';
 import { Outlet, useLocation } from 'react-router-dom';
+
 import Loader from '../../components/loader/loader';
-import { PATH } from '../../utils/config';
-import { getUser } from '../../services/helpers/getSelector';
+import ProfileMenu from '../../components/profile-menu/profile-menu';
 import { useAppSelector } from '../../hooks/useRedux';
+import { getUser } from '../../services/helpers/getSelector';
+import { PATH } from '../../utils/config';
+import styles from './profile.module.css';
 
 const ProfileLayout = () => {
   const { user } = useAppSelector(getUser);

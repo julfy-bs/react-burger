@@ -1,15 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { registerUser } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
-import { changeUserLoginInfo } from '../helpers/changeUserLoginInfo';
-import { setMessage, setErrorMessage } from '../slices/registerSlice';
+
 import { LoginPromise } from '../../types/LoginPromise';
-import { AppDispatch, RootState } from '../index';
 import { User } from '../../types/User';
+import { registerUser } from '../api/profileApi';
+import { changeUserLoginInfo } from '../helpers/changeUserLoginInfo';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
+import { AppDispatch, RootState } from '../index';
+import { setErrorMessage, setMessage } from '../slices/registerSlice';
 
 type KnownErrorData = {
-  success: boolean;
   message: string;
+  success: boolean;
 };
 
 type RegisterError = {
@@ -25,9 +26,9 @@ export const fetchRegister = createAsyncThunk<
     LoginPromise,
     User,
     {
+      dispatch: AppDispatch
       rejectValue: RegisterError,
       state: RootState,
-      dispatch: AppDispatch
     }
   >(
     'profile/fetchRegister',
@@ -35,16 +36,16 @@ export const fetchRegister = createAsyncThunk<
            thunkAPI) => {
       try {
         const { dispatch, getState } = thunkAPI;
-        const { name, email, password } = userData;
-        const res = await registerUser({ name, email, password });
-        const { user, accessToken, refreshToken } = res;
+        const { email, name, password } = userData;
+        const res = await registerUser({ email, name, password });
+        const { accessToken, refreshToken, user } = res;
         changeUserLoginInfo(user, accessToken, refreshToken, dispatch);
         const { register } = getState();
         showNotificationWithTimeout(register.messageContent, dispatch, setMessage);
         return res;
       } catch (e) {
         const { dispatch, rejectWithValue } = thunkAPI;
-        const hasErrorData = (e as unknown as RegisterError);
+        const hasErrorData = (e  as RegisterError);
         dispatch(setErrorMessage(true));
         setTimeout(() => {
           dispatch(setErrorMessage(false));

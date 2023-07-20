@@ -1,13 +1,14 @@
-import clsx from 'clsx';
-import styles from './ingredient.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { setModalIngredient } from '../../services/slices/modalSlice';
-import { useDrag } from 'react-dnd';
+import clsx from 'clsx';
 import { memo, useCallback, useMemo } from 'react';
+import { useDrag } from 'react-dnd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getCart } from '../../services/helpers/getSelector';
-import { Ingredient as IngredientType } from '../../types/Ingredient';
+
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { getCart } from '../../services/helpers/getSelector';
+import { setModalIngredient } from '../../services/slices/modalSlice';
+import { Ingredient as IngredientType } from '../../types/Ingredient';
+import styles from './ingredient.module.css';
 
 type Props = {
   ingredient: IngredientType;
@@ -20,8 +21,8 @@ const Ingredient = ({ ingredient }: Props) => {
 
   const location = useLocation();
   const [, dragRef] = useDrag({
-    type: 'ingredient',
     item: ingredient,
+    type: 'ingredient',
   });
 
   const handleIngredientClick = useCallback(() => {
@@ -34,32 +35,32 @@ const Ingredient = ({ ingredient }: Props) => {
   return (
     <>
       <li
-        ref={dragRef}
         className={
           clsx(
             styles.ingredients__item,
           )
         }
         onClick={handleIngredientClick}
+        ref={dragRef}
 
       >
         {!!ingredientCounter && <Counter
           count={+ingredientCounter}
-          size="default"
           extraClass="m-1"
+          size="default"
         />}
         <picture>
           <source
-            srcSet={ingredient.image_mobile}
             media="(max-width: 480px)"
+            srcSet={ingredient.image_mobile}
           />
           <source
-            srcSet={ingredient.image_large}
             media="(min-width: 1400px)"
+            srcSet={ingredient.image_large}
           />
           <img
-            className={clsx(styles.ingredients__image)}
             alt={ingredient.name}
+            className={clsx(styles.ingredients__image)}
             src={ingredient.image}
           />
         </picture>

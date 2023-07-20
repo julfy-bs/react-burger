@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type LoadingState = {
   loading: boolean;
@@ -9,8 +9,8 @@ const initialState: LoadingState = {
 };
 
 const loadingSlice = createSlice({
-  name: 'loading',
   initialState,
+  name: 'loading',
   reducers: {
     setLoading(
       state,

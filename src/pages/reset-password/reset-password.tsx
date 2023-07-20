@@ -1,16 +1,17 @@
-import clsx from 'clsx';
-import styles from './reset-password.module.css';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
-import { useForm } from '../../hooks/useForm';
-import { PATH } from '../../utils/config';
-import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { getPassword } from '../../services/helpers/getSelector';
+
+import { useForm } from '../../hooks/useForm';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { fetchResetPassword } from '../../services/asyncThunk/resetPasswordThunk';
+import { getPassword } from '../../services/helpers/getSelector';
+import { PATH } from '../../utils/config';
+import styles from './reset-password.module.css';
 
 const ResetPasswordPage = () => {
-  const { values, handleChange, errors, isValid, resetForm } = useForm();
+  const { errors, handleChange, isValid, resetForm, values } = useForm();
   const dispatch = useAppDispatch();
   const { isEmailSubmitted, isPasswordChanged, resetPasswordRequest } = useAppSelector(getPassword);
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
@@ -24,6 +25,7 @@ const ResetPasswordPage = () => {
       const { pathname } = location;
       navigate((PATH.FORGOT_PASSWORD), { state: { background: pathname } });
     }
+
     if (isPasswordChanged) {
       const { pathname } = location;
       navigate(((PATH.LOGIN)), { state: { background: pathname } });
@@ -49,37 +51,37 @@ const ResetPasswordPage = () => {
       <form className={clsx(styles.login_form)} onSubmit={handleSubmit}>
         <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
         <Input
-          type={isVisiblePassword ? 'text' : 'password'}
-          placeholder={'Введите новый пароль'}
-          onChange={handleChange}
-          icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
-          value={values.password || ''}
-          name={'password'}
           error={!!errors.password}
-          onIconClick={onIconClick}
           errorText={errors.password}
-          size={'default'}
-          minLength={8}
-          maxLength={20}
-          required
           extraClass={clsx(styles.input_error)}
+          icon={isVisiblePassword ? 'HideIcon' : 'ShowIcon'}
+          maxLength={20}
+          minLength={8}
+          name={'password'}
+          onChange={handleChange}
+          onIconClick={onIconClick}
+          placeholder={'Введите новый пароль'}
+          required
+          size={'default'}
+          type={isVisiblePassword ? 'text' : 'password'}
+          value={values.password || ''}
         />
         <Input
-          type={'text'}
-          value={values.token || ''}
-          onChange={handleChange}
-          placeholder={'Введите код из письма'}
-          name={'token'}
-          size={'default'}
           error={!!errors.token}
           errorText={errors.token}
           extraClass={clsx(styles.input_error)}
+          name={'token'}
+          onChange={handleChange}
+          placeholder={'Введите код из письма'}
+          size={'default'}
+          type={'text'}
+          value={values.token || ''}
         />
         <Button
-          htmlType="submit"
-          type="primary"
-          size="medium"
           disabled={!isValid || resetPasswordRequest.fetch}
+          htmlType="submit"
+          size="medium"
+          type="primary"
         >
           Сохранить
         </Button>

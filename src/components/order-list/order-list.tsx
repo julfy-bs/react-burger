@@ -1,9 +1,10 @@
 import clsx from 'clsx';
-import styles from './order-list.module.css';
 import { useMemo } from 'react';
-import Order from '../order/order';
-import { getWebsocket } from '../../services/helpers/getSelector';
+
 import { useAppSelector } from '../../hooks/useRedux';
+import { getWebsocket } from '../../services/helpers/getSelector';
+import Order from '../order/order';
+import styles from './order-list.module.css';
 
 const OrderList = () => {
   const { orders } = useAppSelector(getWebsocket);
@@ -19,7 +20,7 @@ const OrderList = () => {
   );
 
   return (
-    <ul className={clsx(styles.orders, 'page__list')}>
+    <ul className={clsx(styles.orders)}>
       {
         ordersFeed && ordersFeed.length === 0
           ? (

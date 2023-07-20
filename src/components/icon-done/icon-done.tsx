@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+
 import styles from './icon-done.module.css';
 
 const IconDone = () => {

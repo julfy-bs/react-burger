@@ -1,14 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { resetPassword } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
-import { setMessage, setErrorMessage } from '../slices/passwordSlice';
-import { AppDispatch, RootState } from '../index';
+
 import { ResetPasswordInput } from '../../types/ResetPasswordInput';
 import { ResetPasswordPromise } from '../../types/ResetPasswordPromise';
+import { resetPassword } from '../api/profileApi';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
+import { AppDispatch, RootState } from '../index';
+import { setErrorMessage, setMessage } from '../slices/passwordSlice';
 
 type KnownErrorData = {
-  success: boolean;
   message: string;
+  success: boolean;
 };
 
 type ResetPasswordError = {
@@ -24,9 +25,9 @@ export const fetchResetPassword = createAsyncThunk<
   ResetPasswordPromise,
   ResetPasswordInput,
   {
+    dispatch: AppDispatch
     rejectValue: ResetPasswordError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'profile/fetchResetPassword',
@@ -44,7 +45,7 @@ export const fetchResetPassword = createAsyncThunk<
       return res;
     } catch (e) {
       const { dispatch, rejectWithValue } = thunkAPI;
-      const hasErrorData = (e as unknown as ResetPasswordError);
+      const hasErrorData = (e  as ResetPasswordError);
       dispatch(setErrorMessage(true));
       setTimeout(() => {
         dispatch(setErrorMessage(false));

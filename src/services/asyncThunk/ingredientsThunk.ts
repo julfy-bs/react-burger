@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getIngredients } from '../api/ingredientsApi';
+
 import { IngredientsPromise } from '../../types/IngredientsPromise';
+import { getIngredients } from '../api/ingredientsApi';
 
 type IngredientsError = {
   data: unknown,
@@ -13,6 +14,7 @@ type IngredientsError = {
 
 export const fetchIngredients = createAsyncThunk<
   IngredientsPromise,
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   void,
   {
     rejectValue: IngredientsError

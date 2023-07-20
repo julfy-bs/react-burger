@@ -1,9 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { Ingredient } from '../../types/Ingredient';
 
-type IngredientsCounter = {
-  [key: string]: number;
-}
+type IngredientsCounter = Record<string, number>
 
 export type CartState = {
   cart: {
@@ -22,8 +21,8 @@ const initialState: CartState = {
 };
 
 const cartSlice = createSlice({
-  name: 'cart',
   initialState,
+  name: 'cart',
   reducers: {
     addIngredient(
       state,
@@ -45,36 +44,36 @@ const cartSlice = createSlice({
         ? state.cart.bun = action.payload.ingredient
         : state.cart.ingredients.push(action.payload.ingredient);
     },
-    removeIngredient(
-      state,
-      action: PayloadAction<{ index: number, _id: string }>
-    ) {
-      const ingredientId = action.payload._id;
-      const counter = state.ingredientsCounter[ingredientId];
-      state.ingredientsCounter[action.payload._id] = counter - 1;
-      state.cart.ingredients.splice(action.payload.index, 1);
-    },
-    moveIngredients(
-      state,
-      action: PayloadAction<{ index: number, atIndex: number, ingredient: Ingredient }>
-    ) {
-      state.cart.ingredients.splice(action.payload.index, 1);
-      state.cart.ingredients.splice(action.payload.atIndex, 0, action.payload.ingredient);
-    },
     cleanCart(state) {
       state.cart = {
         bun: null,
         ingredients: []
       };
       state.ingredientsCounter = {};
+    },
+    moveIngredients(
+      state,
+      action: PayloadAction<{ atIndex: number, index: number, ingredient: Ingredient }>
+    ) {
+      state.cart.ingredients.splice(action.payload.index, 1);
+      state.cart.ingredients.splice(action.payload.atIndex, 0, action.payload.ingredient);
+    },
+    removeIngredient(
+      state,
+      action: PayloadAction<{ _id: string, index: number }>
+    ) {
+      const ingredientId = action.payload._id;
+      const counter = state.ingredientsCounter[ingredientId];
+      state.ingredientsCounter[action.payload._id] = counter - 1;
+      state.cart.ingredients.splice(action.payload.index, 1);
     }
   }
 });
 
 export const {
   addIngredient,
-  removeIngredient,
   cleanCart,
-  moveIngredients
+  moveIngredients,
+  removeIngredient
 } = cartSlice.actions;
 export default cartSlice.reducer;

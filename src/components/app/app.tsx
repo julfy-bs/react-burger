@@ -1,34 +1,24 @@
-import styles from './app.module.css';
-import Header from '../header/header';
+import clsx from 'clsx';
+import { useCallback, useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+
+import useAuthorization from '../../hooks/useAuthorization';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import {
   ConstructorPage,
-  LoginPage,
-  RegisterPage,
   ForgotPasswordPage,
-  ResetPasswordPage,
+  IngredientPage,
+  LoginPage,
   NotFoundPage,
-  ProfileLayout,
+  OrderPage,
   ProfileFormPage,
+  ProfileLayout,
   ProfileOrdersPage,
-  IngredientPage, OrderPage,
+  RegisterPage, ResetPasswordPage,
 } from '../../pages';
-import clsx from 'clsx';
-import Modal from '../modal/modal';
-import Notification from '../notification/notification';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import OrderModal from '../order-modal/order-modal';
-import Loader from '../loader/loader';
-import ProtectedRoute from '../protected-route/protected-route';
-import { useCallback, useEffect } from 'react';
-import { setLoading } from '../../services/slices/loadingSlice';
-import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk';
-import { PATH } from '../../utils/config';
-import { useAuthorization } from '../../hooks/useAuthorization';
-import { closeAllModal } from '../../services/slices/modalSlice';
-import { fetchGetUser } from '../../services/asyncThunk/getUserThunk';
-import OrderDetails from '../order-details/order-details';
 import FeedPage from '../../pages/feed/feed';
+import { fetchGetUser } from '../../services/asyncThunk/getUserThunk';
+import { fetchIngredients } from '../../services/asyncThunk/ingredientsThunk';
 import {
   getIngredients,
   getLoading,
@@ -36,18 +26,29 @@ import {
   getOrder,
   getUser,
 } from '../../services/helpers/getSelector';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { setLoading } from '../../services/slices/loadingSlice';
+import { closeAllModal } from '../../services/slices/modalSlice';
+import { PATH } from '../../utils/config';
+import Header from '../header/header';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Loader from '../loader/loader';
+import Modal from '../modal/modal';
+import Notification from '../notification/notification';
+import OrderDetails from '../order-details/order-details';
+import OrderModal from '../order-modal/order-modal';
+import ProtectedRoute from '../protected-route/protected-route';
+import styles from './app.module.css';
 
 const App = () => {
   const {
     modalIngredient,
+    modalNotification,
     modalOrder,
     modalOrderSuccess,
-    modalNotification,
   } = useAppSelector(getModal);
   const {
-    ingredientsFetchRequest,
     ingredients,
+    ingredientsFetchRequest,
   } = useAppSelector(getIngredients);
   const { loading } = useAppSelector(getLoading);
   const { orderNumber } = useAppSelector(getOrder);
@@ -69,6 +70,7 @@ const App = () => {
     if (ingredients && ingredients.length === 0) {
       dispatch(fetchIngredients());
     }
+
     if ((!user.isLogout && !user.isLogin && isTokenExpired && user?.token?.refreshToken)
       || (user.isLogin && (!user.name || !user.email))) {
       dispatch(fetchGetUser());
@@ -77,7 +79,7 @@ const App = () => {
 
   const handleModalClose = useCallback(() => {
     dispatch(closeAllModal());
-    (modalIngredient || modalOrder) &&
+    ((modalIngredient || modalOrder) && previousUrl) &&
     navigate(previousUrl, {
       replace: true,
       state: { background: null },
@@ -94,15 +96,14 @@ const App = () => {
             : (
               <Routes location={background || location}>
                 <Route
-                  path={PATH.HOME}
                   element={
                     ingredients.length > 0
                     && !ingredientsFetchRequest
                     && <ConstructorPage />
                   }
+                  path={PATH.HOME}
                 />
                 <Route
-                  path={PATH.LOGIN}
                   element={
                     <ProtectedRoute
                       anonymous={true}
@@ -110,9 +111,9 @@ const App = () => {
                       <LoginPage />
                     </ProtectedRoute>
                   }
+                  path={PATH.LOGIN}
                 />
                 <Route
-                  path={PATH.REGISTER}
                   element={
                     <ProtectedRoute
                       anonymous={true}
@@ -120,9 +121,9 @@ const App = () => {
                       <RegisterPage />
                     </ProtectedRoute>
                   }
+                  path={PATH.REGISTER}
                 />
                 <Route
-                  path={PATH.FORGOT_PASSWORD}
                   element={
                     <ProtectedRoute
                       anonymous={true}
@@ -130,9 +131,9 @@ const App = () => {
                       <ForgotPasswordPage />
                     </ProtectedRoute>
                   }
+                  path={PATH.FORGOT_PASSWORD}
                 />
                 <Route
-                  path={PATH.RESET_PASSWORD}
                   element={
                     <ProtectedRoute
                       anonymous={true}
@@ -140,48 +141,49 @@ const App = () => {
                       <ResetPasswordPage />
                     </ProtectedRoute>
                   }
+                  path={PATH.RESET_PASSWORD}
                 />
                 <Route
-                  path={PATH.PROFILE}
                   element={
                     <ProtectedRoute
                       anonymous={false}
                     >
                       <ProfileLayout />
                     </ProtectedRoute>
-                  }>
+                  }
+                  path={PATH.PROFILE}>
                   <Route
-                    index
                     element={<ProfileFormPage />}
+                    index
                   />
                   <Route
-                    path={PATH.ORDERS}
                     element={<ProfileOrdersPage />}
+                    path={PATH.ORDERS}
                   />
                 </Route>
                 <Route
-                  path={PATH.FEED}
                   element={<FeedPage />}
+                  path={PATH.FEED}
                 />
                 <Route
-                  path={PATH.FEED_ORDER}
                   element={<OrderPage />}
+                  path={PATH.FEED_ORDER}
                 />
                 <Route
-                  path={PATH.ORDER}
                   element={
                     <ProtectedRoute>
                       <OrderPage />
                     </ProtectedRoute>
                   }
+                  path={PATH.ORDER}
                 />
                 <Route
-                  path={PATH.INGREDIENT}
                   element={<IngredientPage />}
+                  path={PATH.INGREDIENT}
                 />
                 <Route
-                  path="*"
                   element={<NotFoundPage />}
+                  path="*"
                 />
               </Routes>)
         }
@@ -195,19 +197,19 @@ const App = () => {
       }
 
       <Modal
-        handleModalClose={handleModalClose}
-        isModalOpen={!!modalIngredient || !!modalOrder || !!modalOrderSuccess}
-        title={
-          modalIngredient
-            ? 'Детали ингредиента'
-            : ''
-        }
-
         ariaTitle={
           modalOrder
             ? 'Идентификатор заказа'
             : ''
         }
+        title={
+          modalIngredient
+            ? 'Детали ингредиента'
+            : ''
+        }
+        handleModalClose={handleModalClose}
+
+        isModalOpen={!!modalIngredient || !!modalOrder || !!modalOrderSuccess}
       >
         {background && modalIngredient && (
           <IngredientDetails ingredient={modalIngredient} />

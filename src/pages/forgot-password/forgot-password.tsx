@@ -1,18 +1,19 @@
-import clsx from 'clsx';
-import styles from './forgot-password.module.css';
-import { useForm } from '../../hooks/useForm';
-import { FormEvent, useEffect } from 'react';
-import { PATH } from '../../utils/config';
-import { fetchForgotPassword } from '../../services/asyncThunk/forgotPasswordThunk';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
+import { FormEvent, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { getPassword } from '../../services/helpers/getSelector';
+
+import { useForm } from '../../hooks/useForm';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { fetchForgotPassword } from '../../services/asyncThunk/forgotPasswordThunk';
+import { getPassword } from '../../services/helpers/getSelector';
+import { PATH } from '../../utils/config';
+import styles from './forgot-password.module.css';
 
 const ForgotPasswordPage = () => {
-  const { values, handleChange, errors, isValid, resetForm } = useForm();
+  const { errors, handleChange, isValid, resetForm, values } = useForm();
   const dispatch = useAppDispatch();
-  const { isEmailSubmitted, forgotPasswordRequest } = useAppSelector(getPassword);
+  const { forgotPasswordRequest, isEmailSubmitted } = useAppSelector(getPassword);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,22 +36,22 @@ const ForgotPasswordPage = () => {
       <form className={clsx(styles.login_form)} onSubmit={handleSubmit}>
         <h1 className={clsx('text', 'text_type_main-medium')}>Восстановление пароля</h1>
         <Input
-          placeholder={'E-mail'}
-          value={values.email || ''}
-          name={'email'}
-          onChange={handleChange}
-          type={'email'}
           error={!!errors.email}
           errorText={errors.email}
-          size={'default'}
-          required
           extraClass={clsx(styles.input_error)}
+          name={'email'}
+          onChange={handleChange}
+          placeholder={'E-mail'}
+          required
+          size={'default'}
+          type={'email'}
+          value={values.email || ''}
         />
         <Button
-          htmlType="submit"
-          type="primary"
-          size="medium"
           disabled={!isValid || forgotPasswordRequest.fetch}
+          htmlType="submit"
+          size="medium"
+          type="primary"
         >
           Восстановить
         </Button>

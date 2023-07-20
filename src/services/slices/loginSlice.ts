@@ -1,38 +1,23 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { State } from '../../types/State';
 import {
   ERROR_DEFAULT, ERROR_LOGIN,
   NOTIFICATION_LOGIN_SUCCESS,
   SERVER_RESPOND_INCORRECT_VALUES
 } from '../../utils/constants';
 import { fetchLogin } from '../asyncThunk/loginThunk';
-import { State } from '../../types/State';
 
 const initialState: State = {
-  fetch: false,
   error: false,
-  message: false,
-  messageContent: NOTIFICATION_LOGIN_SUCCESS,
   errorMessage: false,
-  errorMessageContent: ERROR_DEFAULT
+  errorMessageContent: ERROR_DEFAULT,
+  fetch: false,
+  message: false,
+  messageContent: NOTIFICATION_LOGIN_SUCCESS
 };
 
 const loginSlice = createSlice({
-  name: 'login',
-  initialState,
-  reducers: {
-    setMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.message = action.payload;
-    },
-    setErrorMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.errorMessage = action.payload;
-    }
-  },
   extraReducers: (builder) => {
     builder
       // Login
@@ -63,8 +48,24 @@ const loginSlice = createSlice({
           }
         });
 
+  },
+  initialState,
+  name: 'login',
+  reducers: {
+    setErrorMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.errorMessage = action.payload;
+    },
+    setMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.message = action.payload;
+    }
   }
 });
 
-export const { setMessage, setErrorMessage } = loginSlice.actions;
+export const { setErrorMessage, setMessage } = loginSlice.actions;
 export default loginSlice.reducer;

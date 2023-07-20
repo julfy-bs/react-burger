@@ -1,14 +1,15 @@
-import clsx from 'clsx';
-import styles from './order.module.css';
-import { useMemo } from 'react';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { setModalOrder } from '../../services/slices/modalSlice';
+import clsx from 'clsx';
+import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getIngredients } from '../../services/helpers/getSelector';
-import { Order as OrderType } from '../../types/Order';
-import { Ingredient } from '../../types/Ingredient';
-import { ensureResult } from '../../services/helpers/ensureResult';
+
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { ensureResult } from '../../services/helpers/ensureResult';
+import { getIngredients } from '../../services/helpers/getSelector';
+import { setModalOrder } from '../../services/slices/modalSlice';
+import { Ingredient } from '../../types/Ingredient';
+import { Order as OrderType } from '../../types/Order';
+import styles from './order.module.css';
 
 type Props = {
   order: OrderType;
@@ -46,8 +47,8 @@ const Order = ({ order }: Props) => {
                   styles.image,
                   { [styles.image_last]: index === 5 && remainingIngredients !== 0 }
                 )}
-                src={ingredientsItem.image}
                 alt={`Ингредиент ${ingredientsItem.name}`}
+                src={ingredientsItem.image}
               />
               {
                 (index === 5 && remainingIngredients !== 0) && (
@@ -85,8 +86,8 @@ const Order = ({ order }: Props) => {
           #{order.number}
         </span>
         <FormattedDate
-          date={date}
-          className={clsx('text', 'text_type_main-default', 'text_color_inactive')}/>
+          className={clsx('text', 'text_type_main-default', 'text_color_inactive')}
+          date={date}/>
       </div>
       <div className={clsx(styles.heading)}>
         <h3 className={clsx('text', 'text_type_main-medium')}>

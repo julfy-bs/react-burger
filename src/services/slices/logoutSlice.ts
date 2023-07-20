@@ -1,31 +1,22 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { State } from '../../types/State';
 import {
   ERROR_DEFAULT,
   NOTIFICATION_LOGOUT_SUCCESS,
 } from '../../utils/constants';
 import { fetchLogout } from '../asyncThunk/logoutThunk';
-import { State } from '../../types/State';
 
 const initialState: State = {
-  fetch: false,
   error: false,
-  message: false,
-  messageContent: NOTIFICATION_LOGOUT_SUCCESS,
   errorMessage: false,
-  errorMessageContent: ERROR_DEFAULT
+  errorMessageContent: ERROR_DEFAULT,
+  fetch: false,
+  message: false,
+  messageContent: NOTIFICATION_LOGOUT_SUCCESS
 };
 
 const logoutSlice = createSlice({
-  name: 'logout',
-  initialState,
-  reducers: {
-    setMessage(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      state.message = action.payload;
-    },
-  },
   extraReducers: (builder) => {
     builder
       // Logout
@@ -48,6 +39,16 @@ const logoutSlice = createSlice({
           console.error('action.payload is undefined');
         }
       });
+  },
+  initialState,
+  name: 'logout',
+  reducers: {
+    setMessage(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      state.message = action.payload;
+    },
   }
 });
 

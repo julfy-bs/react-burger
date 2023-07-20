@@ -1,10 +1,11 @@
 import { ChangeEvent, useCallback, useState } from 'react';
+
 import { PATTERN_EMAIL } from '../utils/constants';
 
 type Values = {
+  email?: string;
   name?: string;
   password?: string;
-  email?: string;
   token?: string;
 };
 
@@ -18,9 +19,9 @@ export const useForm = () => {
   const checkIsEmailValid = useCallback((value: string) => PATTERN_EMAIL.test(value), []);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const target = e.target;
-    const name = target.name;
-    const value = target.value;
+    const {target} = e;
+    const {name} = target;
+    const {value} = target;
     const form = target.closest('form');
     setValues({ ...values, [name]: value });
     if (name === 'email') {
@@ -30,6 +31,7 @@ export const useForm = () => {
     } else {
       setErrors({ ...errors, [name]: target.validationMessage });
     }
+
     form && setIsValid(form.checkValidity());
   }, [errors, checkIsEmailValid, values]);
 
@@ -42,5 +44,5 @@ export const useForm = () => {
     [setValues, setErrors, setIsValid],
   );
 
-  return { values, handleChange, errors, isValid, resetForm, setValues };
+  return { errors, handleChange, isValid, resetForm, setValues, values };
 };

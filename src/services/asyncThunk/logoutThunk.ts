@@ -1,25 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { logoutUser } from '../api/profileApi';
-import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
-import { setMessage } from '../slices/logoutSlice';
-import { AppDispatch, RootState } from '../index';
-import { LogoutPromise } from '../../types/LogoutPromise';
+
 import { LogoutInput } from '../../types/LogoutInput';
+import { LogoutPromise } from '../../types/LogoutPromise';
+import { logoutUser } from '../api/profileApi';
 import { resetAllCookie } from '../helpers/resetAllCookie';
+import { showNotificationWithTimeout } from '../helpers/showNotificationWithTimeout';
+import { AppDispatch, RootState } from '../index';
+import { setMessage } from '../slices/logoutSlice';
 import { updateUser } from '../slices/userSlice';
 
 type LogoutError = {
-  success: boolean;
   message: string;
+  success: boolean;
 }
 
 export const fetchLogout = createAsyncThunk<
   LogoutPromise,
   LogoutInput,
   {
+    dispatch: AppDispatch
     rejectValue: LogoutError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'profile/fetchLogout',
@@ -29,11 +30,11 @@ export const fetchLogout = createAsyncThunk<
       const { dispatch, getState } = thunkAPI;
       const res = await logoutUser({ token });
       dispatch(updateUser({
+        email: '',
         isLogin: false,
         isLogout: true,
-        token: { accessToken: null, refreshToken: null, expiresAt: null },
         name: '',
-        email: ''
+        token: { accessToken: null, expiresAt: null, refreshToken: null }
       }));
       resetAllCookie();
       const { logout } = getState();

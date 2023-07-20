@@ -1,9 +1,9 @@
-import styles from './modal-overlay.module.css';
 import clsx from 'clsx';
-
 import { useCallback, useEffect, useMemo } from 'react';
-import { getModal } from '../../services/helpers/getSelector';
+
 import { useAppSelector } from '../../hooks/useRedux';
+import { getModal } from '../../services/helpers/getSelector';
+import styles from './modal-overlay.module.css';
 
 type Props = {
   handleModalClose: () => void
@@ -23,7 +23,6 @@ const ModalOverlay = ({ handleModalClose }: Props) => {
 
   return (
     <div
-      tabIndex={1}
       className={
         clsx(
           styles.modal__overlay,
@@ -31,6 +30,7 @@ const ModalOverlay = ({ handleModalClose }: Props) => {
         )
       }
       onClick={handleModalClose}
+      tabIndex={1}
     >
     </div>
   );

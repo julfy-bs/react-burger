@@ -1,23 +1,21 @@
-import clsx from 'clsx';
-import styles from './modal.module.css';
-
-import ModalOverlay from '../modal-overlay/modal-overlay';
-
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import clsx from 'clsx';
+import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 import { MODAL_ID } from '../../utils/constants';
-import { ReactNode } from 'react';
+import ModalOverlay from '../modal-overlay/modal-overlay';
+import styles from './modal.module.css';
 
 type Props = {
-  title: string;
   ariaTitle: string;
   children?: ReactNode;
   handleModalClose: () => void;
   isModalOpen: boolean;
+  title: string;
 }
 
-const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }: Props) => {
+const Modal = ({ ariaTitle, children, handleModalClose, isModalOpen, title }: Props) => {
 
   return createPortal(
     <>
@@ -29,10 +27,10 @@ const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }: Pr
               styles.modal,
               { [styles.modal_opened]: isModalOpen },
             )}
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
             aria-labelledby={title ? 'modal-title' : 'aria-title'}
             aria-modal={isModalOpen ? 'true' : 'false'}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
           >
             <div className={clsx(styles.modal__header)}>
               {
@@ -54,10 +52,10 @@ const Modal = ({ title, ariaTitle, children, handleModalClose, isModalOpen }: Pr
                 </h3>
               }
               <button
-                className={clsx(styles.modal__close)}
                 aria-label="Закрыть модальное окно"
-                type="button"
+                className={clsx(styles.modal__close)}
                 onClick={handleModalClose}
+                type="button"
               >
                 <CloseIcon type="primary"/>
               </button>

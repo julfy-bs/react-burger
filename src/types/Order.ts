@@ -1,9 +1,9 @@
 export type Order = {
+  _id: string;
   createdAt: string;
   ingredients: string[];
   name: string;
   number: number;
-  status: 'done' | 'pending' | 'created';
+  status: 'created' | 'done' | 'pending';
   updatedAt: string;
-  _id: string;
 }

@@ -1,5 +1,5 @@
 export type Token = {
-  accessToken: string | null;
-  refreshToken: string | null;
-  expiresAt: string | null;
+  accessToken: null | string;
+  expiresAt: null | string;
+  refreshToken: null | string;
 }

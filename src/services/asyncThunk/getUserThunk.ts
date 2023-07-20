@@ -1,17 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { UserError } from '../../types/UserError';
+import { UserPromise } from '../../types/UserPromise';
 import { getUser } from '../api/profileApi';
 import { AppDispatch, RootState } from '../index';
-import { UserPromise } from '../../types/UserPromise';
-import { UserError } from '../../types/UserError';
 import { updateUser } from '../slices/userSlice';
 
 export const fetchGetUser = createAsyncThunk<
   UserPromise,
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   void,
   {
+    dispatch: AppDispatch
     rejectValue: UserError,
     state: RootState,
-    dispatch: AppDispatch
   }
 >(
   'profile/fetchGetUser',
@@ -21,8 +23,8 @@ export const fetchGetUser = createAsyncThunk<
       const res = await getUser();
       const { user } = res;
       dispatch(updateUser({
-        isLogin: true,
         email: user.email,
+        isLogin: true,
         name: user.name
       }));
       return res;

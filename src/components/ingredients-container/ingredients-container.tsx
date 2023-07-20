@@ -1,14 +1,15 @@
-import React, { forwardRef, ReactNode, Ref } from 'react';
-import styles from './ingredients-container.module.css';
 import clsx from 'clsx';
+import React, { ReactNode, Ref, forwardRef } from 'react';
+
+import styles from './ingredients-container.module.css';
 
 type Props = {
+  children: ReactNode;
   title: string;
   type: string;
-  children: ReactNode;
 }
 
-const IngredientsContainer = forwardRef(({ title, type, children }: Props, ref: Ref<HTMLUListElement>) => {
+const IngredientsContainer = forwardRef(({ children, title, type }: Props, ref: Ref<HTMLUListElement>) => {
   return (
     <>
       <h2
