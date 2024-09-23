@@ -1,6 +1,7 @@
 # [Проект: Stellar Burgers](<https://github.com/julfy-bs/stellar-burgers>)
 
-***
+![image](https://github.com/user-attachments/assets/855f6076-b8ee-492e-ae3f-c894f484fbcd)
+
 "Stellar Burgers" - учебный проект сайта для бургер ресторана.
 
 Работа выполнена на курсе [Web+][yandex-practicum-web-plus] от [Yandex Практикум][yandex-practicum-url] в соответствии
